@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, BarChart3, ListTree, ShoppingBag, Utensils } from "lucide-react";
+import { ArrowRight, BarChart3, ListTree, ShoppingBag, Utensils, Star } from "lucide-react";
 
 const adminCapabilities = [
   {
@@ -25,6 +25,12 @@ const adminCapabilities = [
     description: "Track popular items, revenue, order volume, and status mix across the system.",
     href: "/admin/analytics",
     icon: BarChart3,
+    {
+      title: "Reviews",
+      description: "Moderate customer reviews and manage approval workflow for menu item feedback.",
+      href: "/admin/reviews",
+      icon: Star,
+    },
   },
 ];
 

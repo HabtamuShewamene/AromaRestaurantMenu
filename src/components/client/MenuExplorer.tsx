@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import FilterBar from "@/components/client/FilterBar";
 import MenuCard from "@/components/client/MenuCard";
 import SearchBar from "@/components/client/SearchBar";
+import MenuItemDetail from "@/components/client/MenuItemDetail";
 import { CategoryRecord, CartItemRecord, MenuItemRecord } from "@/types/app";
 
 const CART_STORAGE_KEY = "cafe-menu-cart";
@@ -15,6 +16,7 @@ export default function MenuExplorer() {
   const [activeCategory, setActiveCategory] = useState("All");
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedItem, setSelectedItem] = useState<MenuItemRecord | null>(null);
 
   useEffect(() => {
     const loadData = async () => {
@@ -87,7 +89,9 @@ export default function MenuExplorer() {
   const filterCategories = ["All", ...categories.map((category) => category.name)];
 
   return (
+    <>
     <section className="mx-auto max-w-7xl px-4 pt-32 pb-24">
+                onViewDetails={setSelectedItem}
       <div className="mb-12 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
         <div>
           <p className="mb-3 text-sm uppercase tracking-[0.3em] text-gold-500">Cafe Menu</p>
@@ -119,5 +123,7 @@ export default function MenuExplorer() {
         </div>
       )}
     </section>
+        {selectedItem && <MenuItemDetail item={selectedItem} onClose={() => setSelectedItem(null)} />}
+      </>
   );
 }

@@ -19,6 +19,17 @@ export type MenuItemRecord = {
   updatedAt?: string;
 };
 
+export type ReviewRecord = {
+  _id: string;
+  menuItem: string;
+  name: string;
+  email: string;
+  rating: number;
+  comment: string;
+  isApproved: boolean;
+  createdAt: string;
+};
+
 export type CartItemRecord = {
   id: string;
   menuItem: string;
