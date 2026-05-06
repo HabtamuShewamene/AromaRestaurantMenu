@@ -36,7 +36,39 @@ export default function MenuForm({
   const [categoryName, setCategoryName] = useState("");
   const [isAvailable, setIsAvailable] = useState(initialValues?.isAvailable ?? true);
   const [isSaving, setIsSaving] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState("");
+
+  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    setIsUploading(true);
+    setError("");
+
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const response = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Unable to upload image");
+      }
+
+      setImage(data.imageUrl);
+    } catch (uploadError) {
+      setError(uploadError instanceof Error ? uploadError.message : "Unable to upload image");
+    } finally {
+      setIsUploading(false);
+      event.target.value = "";
+    }
+  };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -121,6 +153,17 @@ export default function MenuForm({
           className="w-full rounded-2xl border border-zinc-800 bg-zinc-950 px-5 py-4 outline-none transition-all focus:border-gold-500"
           required
         />
+      </div>
+      <div className="space-y-2">
+        <label className="block text-sm text-zinc-400">Upload image to Cloudinary</label>
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleImageUpload}
+          disabled={isUploading}
+          className="w-full rounded-2xl border border-zinc-800 bg-zinc-950 px-5 py-3 text-sm file:mr-4 file:rounded-xl file:border-0 file:bg-gold-600 file:px-4 file:py-2 file:font-bold file:text-black"
+        />
+        {isUploading ? <p className="text-sm text-zinc-400">Uploading image...</p> : null}
       </div>
       {!category ? (
         <input
