@@ -1,0 +1,58 @@
+@import "tailwindcss";
+
+@theme {
+  --color-gold-50: #fbf8f1;
+  --color-gold-100: #f5eedc;
+  --color-gold-200: #eaddbc;
+  --color-gold-300: #d8c491;
+  --color-gold-400: #c5a469;
+  --color-gold-500: #b68d40;
+  --color-gold-600: #a47636;
+  --color-gold-700: #895d2f;
+  --color-gold-800: #714c2c;
+  --color-gold-900: #5e4028;
+  --color-gold-950: #352114;
+}
+
+:root {
+  --background: #0a0a0a;
+  --foreground: #fafafa;
+  --card: #141414;
+  --card-foreground: #fafafa;
+  --popover: #0a0a0a;
+  --popover-foreground: #fafafa;
+  --primary: #b68d40;
+  --primary-foreground: #0a0a0a;
+  --secondary: #27272a;
+  --secondary-foreground: #fafafa;
+  --muted: #27272a;
+  --muted-foreground: #a1a1aa;
+  --accent: #27272a;
+  --accent-foreground: #fafafa;
+  --destructive: #7f1d1d;
+  --destructive-foreground: #fafafa;
+  --border: #27272a;
+  --input: #27272a;
+  --ring: #b68d40;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+.glass {
+  @apply bg-white/5 backdrop-blur-md border border-white/10;
+}
+
+.glass-card {
+  @apply bg-zinc-900/40 backdrop-blur-xl border border-zinc-800/50 hover:border-gold-500/30 transition-all duration-300;
+}
+
+.text-gradient {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-gold-300 via-gold-500 to-gold-700;
+}
