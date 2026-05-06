@@ -15,7 +15,7 @@ export async function GET() {
     const filter = session.user.role === "ADMIN" ? {} : { customerEmail: session.user.email };
     const orders = await Order.find(filter).sort({ createdAt: -1 });
     return NextResponse.json(orders);
-  } catch (error) {
+  } catch {
     return NextResponse.json({ message: "Failed to fetch orders" }, { status: 500 });
   }
 }

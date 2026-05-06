@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { CategoryRecord, MenuItemRecord } from "@/types/app";
 
@@ -11,7 +12,7 @@ export default function CategoryManager() {
   const [editingCategory, setEditingCategory] = useState<CategoryRecord | null>(null);
   const [message, setMessage] = useState("");
 
-  const loadData = async () => {
+  const fetchData = async () => {
     const [categoriesResponse, menuResponse] = await Promise.all([
       fetch("/api/categories"),
       fetch("/api/menu"),
@@ -22,13 +23,33 @@ export default function CategoryManager() {
       menuResponse.json(),
     ]);
 
-    setCategories(categoriesData);
-    setMenuItems(menuData);
+    return { categoriesData, menuData };
   };
 
   useEffect(() => {
-    void loadData();
+    let isMounted = true;
+
+    const loadInitialData = async () => {
+      const { categoriesData, menuData } = await fetchData();
+      if (!isMounted) {
+        return;
+      }
+      setCategories(categoriesData);
+      setMenuItems(menuData);
+    };
+
+    void loadInitialData();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
+
+  const loadData = async () => {
+    const { categoriesData, menuData } = await fetchData();
+    setCategories(categoriesData);
+    setMenuItems(menuData);
+  };
 
   const resetForm = () => {
     setName("");
@@ -129,7 +150,11 @@ export default function CategoryManager() {
                   {category.slug}
                 </span>
               </div>
-              {category.image ? <img src={category.image} alt={category.name} className="mb-4 h-36 w-full rounded-2xl object-cover" /> : null}
+              {category.image ? (
+                <div className="relative mb-4 h-36 w-full overflow-hidden rounded-2xl">
+                  <Image src={category.image} alt={category.name} fill sizes="(max-width: 1280px) 50vw, 33vw" className="object-cover" />
+                </div>
+              ) : null}
               <div className="flex gap-3">
                 <button onClick={() => handleEdit(category)} className="rounded-xl border border-white/10 px-4 py-2 text-sm transition-colors hover:border-gold-500 hover:text-gold-500">
                   Edit

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { Minus, Plus, Trash2 } from "lucide-react";
 import { CartItemRecord } from "@/types/app";
 
@@ -32,7 +33,9 @@ export default function Cart({
         {items.map((item) => (
           <div key={item.id} className="flex items-center justify-between rounded-2xl border border-white/5 bg-white/[0.02] p-4">
             <div className="flex items-center gap-4">
-              <img src={item.image} alt={item.name} className="h-16 w-16 rounded-2xl object-cover" />
+              <div className="relative h-16 w-16 overflow-hidden rounded-2xl">
+                <Image src={item.image} alt={item.name} fill sizes="64px" className="object-cover" />
+              </div>
               <div>
                 <h3 className="font-semibold">{item.name}</h3>
                 <p className="text-sm text-zinc-500">{item.category}</p>
@@ -51,7 +54,6 @@ export default function Cart({
                   <Plus className="h-4 w-4" />
                 </button>
               </div>
-              <h3 className="font-semibold">{item.name}</h3>
               <button onClick={() => onRemove(item.id)} className="rounded-full p-2 text-zinc-500 transition-colors hover:bg-red-500/10 hover:text-red-500">
                 <Trash2 className="h-4 w-4" />
               </button>

@@ -16,21 +16,43 @@ export default function AdminMenuManager() {
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
-  const loadData = async () => {
-    setIsLoading(true);
+  const fetchData = async () => {
     const [menuResponse, categoriesResponse] = await Promise.all([
       fetch("/api/menu"),
       fetch("/api/categories"),
     ]);
     const [menuData, categoriesData] = await Promise.all([menuResponse.json(), categoriesResponse.json()]);
+    return { menuData, categoriesData };
+  };
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const loadInitialData = async () => {
+      setIsLoading(true);
+      const { menuData, categoriesData } = await fetchData();
+      if (!isMounted) {
+        return;
+      }
+      setItems(menuData);
+      setCategories(categoriesData);
+      setIsLoading(false);
+    };
+
+    void loadInitialData();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const loadData = async () => {
+    setIsLoading(true);
+    const { menuData, categoriesData } = await fetchData();
     setItems(menuData);
     setCategories(categoriesData);
     setIsLoading(false);
   };
-
-  useEffect(() => {
-    void loadData();
-  }, []);
 
   const saveItem = async (payload: {
     name: string;
@@ -130,6 +152,7 @@ export default function AdminMenuManager() {
       {message ? <div className="rounded-2xl border border-gold-500/20 bg-gold-500/10 p-4 text-sm text-gold-400">{message}</div> : null}
 
       <MenuForm
+        key={editingItem?._id ?? "new-item-form"}
         categories={categories}
         initialValues={editingItem ?? undefined}
         initialCategoryId={editingCategoryId}

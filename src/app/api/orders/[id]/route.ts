@@ -29,7 +29,7 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
     }
 
     return NextResponse.json(order);
-  } catch (error) {
+  } catch {
     return NextResponse.json({ message: "Failed to update order status" }, { status: 500 });
   }
 }

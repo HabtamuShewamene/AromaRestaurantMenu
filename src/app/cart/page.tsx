@@ -1,11 +1,6 @@
 import Footer from "@/components/Layout/Footer";
 import Navbar from "@/components/Layout/Navbar";
-import Cart from "@/components/client/Cart";
-
-const cartItems = [
-  { id: "1", name: "Vanilla Latte", quantity: 2, price: 5.5 },
-  { id: "2", name: "Almond Croissant", quantity: 1, price: 4.5 },
-];
+import CartManager from "@/components/client/CartManager";
 
 export default function CartPage() {
   return (
@@ -15,8 +10,12 @@ export default function CartPage() {
         <div className="mb-10">
           <p className="mb-3 text-sm uppercase tracking-[0.3em] text-gold-500">Cart</p>
           <h1 className="text-5xl font-bold tracking-tight">Review your order before checkout.</h1>
+          <p className="mt-4 max-w-2xl text-zinc-500">
+            Clients can update quantities, remove items, and place orders. Admins can still browse but cannot use
+            this to manage menu data.
+          </p>
         </div>
-        <Cart items={cartItems} />
+        <CartManager />
       </section>
       <Footer />
     </main>

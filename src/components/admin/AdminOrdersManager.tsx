@@ -13,21 +13,41 @@ export default function AdminOrdersManager() {
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
-  const loadOrders = async () => {
-    setIsLoading(true);
+  const fetchOrders = async () => {
     const response = await fetch("/api/orders");
     const data = await response.json();
     if (!response.ok) {
-      setMessage(data.message ?? "Unable to load orders.");
-      setIsLoading(false);
-      return;
+      throw new Error(data.message ?? "Unable to load orders.");
     }
-    setOrders(data);
-    setIsLoading(false);
+    return data as OrderRecord[];
   };
 
   useEffect(() => {
-    void loadOrders();
+    let isMounted = true;
+
+    const loadInitialOrders = async () => {
+      setIsLoading(true);
+      try {
+        const data = await fetchOrders();
+        if (isMounted) {
+          setOrders(data);
+        }
+      } catch (error) {
+        if (isMounted) {
+          setMessage(error instanceof Error ? error.message : "Unable to load orders.");
+        }
+      } finally {
+        if (isMounted) {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    void loadInitialOrders();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   const updateStatus = async (id: string, status: OrderStatus) => {

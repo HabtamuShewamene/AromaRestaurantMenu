@@ -24,7 +24,7 @@ export async function PUT(request: NextRequest, context: RouteContext) {
     }
 
     return NextResponse.json(item);
-  } catch (error) {
+  } catch {
     return NextResponse.json({ message: "Failed to update menu item" }, { status: 500 });
   }
 }
@@ -45,7 +45,7 @@ export async function DELETE(_request: NextRequest, context: RouteContext) {
     }
 
     return NextResponse.json({ message: "Menu item deleted" });
-  } catch (error) {
+  } catch {
     return NextResponse.json({ message: "Failed to delete menu item" }, { status: 500 });
   }
 }

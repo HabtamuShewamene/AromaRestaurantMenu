@@ -45,7 +45,7 @@ export async function GET() {
       popularItems,
       salesByStatus,
     } satisfies AnalyticsRecord);
-  } catch (error) {
+  } catch {
     return NextResponse.json({ message: "Failed to load analytics" }, { status: 500 });
   }
 }

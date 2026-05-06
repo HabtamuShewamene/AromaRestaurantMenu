@@ -1,4 +1,4 @@
-import { Coffee, LayoutDashboard, Utensils, ShoppingBag, Settings } from "lucide-react";
+import { BarChart3, Coffee, LayoutDashboard, ListTree, Settings, ShoppingBag, Utensils } from "lucide-react";
 import Link from "next/link";
 
 export default function AdminLayout({
@@ -16,32 +16,26 @@ export default function AdminLayout({
           </Link>
 
           <nav className="space-y-2">
-            <Link
-              href="/admin/dashboard"
-              className="flex items-center gap-3 rounded-xl bg-gold-600/10 px-4 py-3 font-medium text-gold-500"
-            >
+            <Link href="/admin/dashboard" className="flex items-center gap-3 rounded-xl bg-gold-600/10 px-4 py-3 font-medium text-gold-500">
               <LayoutDashboard className="h-5 w-5" /> Dashboard
             </Link>
-            <Link
-              href="/admin/menu"
-              className="flex items-center gap-3 rounded-xl px-4 py-3 font-medium text-zinc-400 transition-all hover:bg-white/5 hover:text-white"
-            >
+            <Link href="/admin/menu" className="flex items-center gap-3 rounded-xl px-4 py-3 font-medium text-zinc-400 transition-all hover:bg-white/5 hover:text-white">
               <Utensils className="h-5 w-5" /> Manage Menu
             </Link>
-            <Link
-              href="/admin/orders"
-              className="flex items-center gap-3 rounded-xl px-4 py-3 font-medium text-zinc-400 transition-all hover:bg-white/5 hover:text-white"
-            >
+            <Link href="/admin/categories" className="flex items-center gap-3 rounded-xl px-4 py-3 font-medium text-zinc-400 transition-all hover:bg-white/5 hover:text-white">
+              <ListTree className="h-5 w-5" /> Categories
+            </Link>
+            <Link href="/admin/orders" className="flex items-center gap-3 rounded-xl px-4 py-3 font-medium text-zinc-400 transition-all hover:bg-white/5 hover:text-white">
               <ShoppingBag className="h-5 w-5" /> Orders
+            </Link>
+            <Link href="/admin/analytics" className="flex items-center gap-3 rounded-xl px-4 py-3 font-medium text-zinc-400 transition-all hover:bg-white/5 hover:text-white">
+              <BarChart3 className="h-5 w-5" /> Analytics
             </Link>
           </nav>
         </div>
 
         <div className="absolute right-8 bottom-8 left-8">
-          <Link
-            href="/"
-            className="flex items-center gap-3 rounded-xl px-4 py-3 font-medium text-zinc-500 transition-all hover:bg-white/5 hover:text-white"
-          >
+          <Link href="/" className="flex items-center gap-3 rounded-xl px-4 py-3 font-medium text-zinc-500 transition-all hover:bg-white/5 hover:text-white">
             <Settings className="h-5 w-5" /> Storefront
           </Link>
         </div>

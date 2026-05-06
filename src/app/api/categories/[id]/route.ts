@@ -34,7 +34,7 @@ export async function PUT(request: NextRequest, context: RouteContext) {
     }
 
     return NextResponse.json(category);
-  } catch (error) {
+  } catch {
     return NextResponse.json({ message: "Failed to update category" }, { status: 500 });
   }
 }
@@ -62,7 +62,7 @@ export async function DELETE(_request: NextRequest, context: RouteContext) {
     }
 
     return NextResponse.json({ message: "Category deleted" });
-  } catch (error) {
+  } catch {
     return NextResponse.json({ message: "Failed to delete category" }, { status: 500 });
   }
 }
