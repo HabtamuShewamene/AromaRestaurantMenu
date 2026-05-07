@@ -10,12 +10,18 @@ dotenv.config();
 // Connect to database
 connectDB();
 
+// Route files
+const categoryRoutes = require('./routes/categoryRoutes');
+
 const app = express();
 
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// Mount routers
+app.use('/api/categories', categoryRoutes);
 
 // Basic health check route
 app.get('/api/health', (req, res) => {
