@@ -88,7 +88,10 @@ export default function HomePage() {
         </div>
         <div className="hero-content hero-content-left">
           <div className="hero-brandrow">
-            <span className="hero-brand">Aroma Restaurant</span>
+            <div className="hero-brandmark">
+              <img className="hero-logo" src="/aroma-logo.png" alt="Aroma Restaurant logo" />
+              <span className="hero-brand">Aroma Restaurant</span>
+            </div>
             <select className="hero-lang" value={lang} onChange={(event) => setLang(event.target.value)}>
               {languages.map((option) => (
                 <option key={option.code} value={option.code}>
@@ -97,7 +100,6 @@ export default function HomePage() {
               ))}
             </select>
           </div>
-          <h1>Your Table, Your Taste</h1>
         </div>
       </section>
 
