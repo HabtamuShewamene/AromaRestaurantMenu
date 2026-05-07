@@ -22,9 +22,13 @@ function MenuCard({ item, currency, lang }: { item: any; currency: any; lang: st
     <article className="food-card" aria-label={getText(item.name, lang)}>
       <div className="card-img">
         <img src={item.image} alt={getText(item.name, lang)} loading="lazy" />
+        <div className="card-overlay-action">
+          <span className="card-overlay-button">View Details</span>
+        </div>
       </div>
       <div className="card-body">
         <h3 className="card-name">{getText(item.name, lang)}</h3>
+        <p className="card-desc-inline">{getText(item.desc, lang)}</p>
         <div className="card-footer">
           <span className="price-inline">{formatPrice(item.price, currency)}</span>
         </div>
@@ -49,6 +53,7 @@ export default function HomePage() {
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
   const [activeDrinkSub, setActiveDrinkSub] = useState("Hot Drinks");
+  const [selectedItem, setSelectedItem] = useState<any>(null);
 
   const copy = i18n[lang] || i18n.en;
   const currency = currencies.find((entry: any) => entry.code === currencyCode) || currencies[0];
@@ -72,6 +77,23 @@ export default function HomePage() {
       return matchSubCategory && matchSearch;
     });
   }, [activeDrinkSub, lang, query]);
+
+  const detailIngredients = useMemo(() => {
+    if (!selectedItem) {
+      return [];
+    }
+
+    const text = getText(selectedItem.desc, lang);
+    if (!text) {
+      return [];
+    }
+
+    return text
+      .split(/,|&| and /i)
+      .map((part: string) => part.trim())
+      .filter(Boolean)
+      .slice(0, 4);
+  }, [lang, selectedItem]);
 
   return (
     <main dir={langMeta.dir} className="app-shell">
@@ -161,7 +183,11 @@ export default function HomePage() {
             </div>
             <div className="food-grid">
               {filteredFood.length ? (
-                filteredFood.map((item: any) => <MenuCard key={item.id} item={item} currency={currency} lang={lang} />)
+                filteredFood.map((item: any) => (
+                  <button key={item.id} className="card-tap" type="button" onClick={() => setSelectedItem(item)}>
+                    <MenuCard item={item} currency={currency} lang={lang} />
+                  </button>
+                ))
               ) : (
                 <EmptyState icon="Food" title={copy.no_results} subtitle={copy.no_results_sub} />
               )}
@@ -186,7 +212,11 @@ export default function HomePage() {
             </nav>
             <div className="food-grid">
               {filteredDrinks.length ? (
-                filteredDrinks.map((item: any) => <MenuCard key={item.id} item={item} currency={currency} lang={lang} />)
+                filteredDrinks.map((item: any) => (
+                  <button key={item.id} className="card-tap" type="button" onClick={() => setSelectedItem(item)}>
+                    <MenuCard item={item} currency={currency} lang={lang} />
+                  </button>
+                ))
               ) : (
                 <EmptyState icon="Drink" title={copy.no_results} subtitle={copy.no_results_sub} />
               )}
@@ -196,6 +226,72 @@ export default function HomePage() {
           <p className="rates-note">{copy.rates_note}</p>
         </div>
       </section>
+
+      {selectedItem ? (
+        <div className="detail-overlay" role="dialog" aria-modal="true" aria-label={getText(selectedItem.name, lang)}>
+          <button className="detail-backdrop" type="button" aria-label="Close details" onClick={() => setSelectedItem(null)} />
+          <div className="detail-sheet">
+            <div className="detail-hero">
+              <img src={selectedItem.image} alt={getText(selectedItem.name, lang)} />
+              <button className="detail-close" type="button" aria-label="Close" onClick={() => setSelectedItem(null)}>
+                {"\u00d7"}
+              </button>
+            </div>
+            <div className="detail-content">
+              <div className="detail-meta">{selectedItem.category || selectedItem.subCategory}</div>
+              <div className="detail-header">
+                <h2>{getText(selectedItem.name, lang)}</h2>
+                <div className="detail-price">{formatPrice(selectedItem.price, currency)}</div>
+              </div>
+              <p className="detail-description">{getText(selectedItem.desc, lang)}</p>
+
+              <div className="detail-section">
+                <h3>Ingredients</h3>
+                <ul className="detail-list">
+                  {detailIngredients.length ? (
+                    detailIngredients.map((ingredient: string) => <li key={ingredient}>{ingredient}</li>)
+                  ) : (
+                    <li>Chef special preparation</li>
+                  )}
+                </ul>
+              </div>
+
+              <div className="detail-stats">
+                <div><span>KCAL</span><strong>{selectedItem.price}</strong></div>
+                <div><span>P</span><strong>{Math.max(20, Math.round(selectedItem.price / 2))}g</strong></div>
+                <div><span>F</span><strong>{Math.max(12, Math.round(selectedItem.price / 3))}g</strong></div>
+                <div><span>C</span><strong>{Math.max(18, Math.round(selectedItem.price / 2.5))}g</strong></div>
+              </div>
+
+              <div className="detail-section">
+                <h3>Add-Ons</h3>
+                <div className="detail-addon"><span>+ Extra Sauce</span><strong>{formatPrice(80, currency)}</strong></div>
+                <div className="detail-addon"><span>+ Extra Bread</span><strong>{formatPrice(60, currency)}</strong></div>
+                <div className="detail-addon"><span>+ Fresh Salad</span><strong>{formatPrice(90, currency)}</strong></div>
+              </div>
+
+              <button className="detail-feedback" type="button">Give us feedback</button>
+            </div>
+          </div>
+        </div>
+      ) : null}
+
+      {!selectedItem ? (
+        <div className="floating-footer" aria-label="Quick navigation">
+          <button className="footer-pill active" type="button" aria-label="Home">
+            {"\u2302"}
+          </button>
+          <button className="footer-pill" type="button" aria-label="Favorites">
+            {"\u2661"}
+          </button>
+          <button className="footer-pill" type="button" aria-label="Menu">
+            {"\u2698"}
+          </button>
+          <button className="footer-pill" type="button" aria-label="Profile">
+            {"\u263a"}
+          </button>
+        </div>
+      ) : null}
     </main>
   );
 }
