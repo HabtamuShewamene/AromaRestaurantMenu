@@ -25,12 +25,12 @@ const adminCapabilities = [
     description: "Track popular items, revenue, order volume, and status mix across the system.",
     href: "/admin/analytics",
     icon: BarChart3,
-    {
-      title: "Reviews",
-      description: "Moderate customer reviews and manage approval workflow for menu item feedback.",
-      href: "/admin/reviews",
-      icon: Star,
-    },
+  },
+  {
+    title: "Reviews",
+    description: "Moderate customer reviews and manage approval workflow for menu item feedback.",
+    href: "/admin/reviews",
+    icon: Star,
   },
 ];
 

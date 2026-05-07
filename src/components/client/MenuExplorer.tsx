@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react";
 import FilterBar from "@/components/client/FilterBar";
 import MenuCard from "@/components/client/MenuCard";
-import SearchBar from "@/components/client/SearchBar";
 import MenuItemDetail from "@/components/client/MenuItemDetail";
+import SearchBar from "@/components/client/SearchBar";
 import { CategoryRecord, CartItemRecord, MenuItemRecord } from "@/types/app";
 
 const CART_STORAGE_KEY = "cafe-menu-cart";
@@ -90,40 +90,44 @@ export default function MenuExplorer() {
 
   return (
     <>
-    <section className="mx-auto max-w-7xl px-4 pt-32 pb-24">
-                onViewDetails={setSelectedItem}
-      <div className="mb-12 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-        <div>
-          <p className="mb-3 text-sm uppercase tracking-[0.3em] text-gold-500">Cafe Menu</p>
-          <h1 className="text-5xl font-bold tracking-tight">Browse every drink, pastry, and plate.</h1>
-          <p className="mt-4 max-w-2xl text-zinc-500">
-            Clients can search, filter, check stock status, and add available items straight to cart.
-          </p>
+      <section className="mx-auto max-w-7xl px-4 pt-32 pb-24">
+        <div className="mb-12 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+          <div>
+            <p className="mb-3 text-sm uppercase tracking-[0.3em] text-gold-500">Cafe Menu</p>
+            <h1 className="text-5xl font-bold tracking-tight">Browse every drink, pastry, and plate.</h1>
+            <p className="mt-4 max-w-2xl text-zinc-500">
+              Clients can search, filter, check stock status, and add available items straight to cart.
+            </p>
+          </div>
+          <SearchBar value={search} onChange={setSearch} />
         </div>
-        <SearchBar value={search} onChange={setSearch} />
-      </div>
 
-      <div className="mb-10">
-        <FilterBar categories={filterCategories} activeCategory={activeCategory} onSelect={setActiveCategory} />
-      </div>
-
-      {message ? <div className="mb-6 rounded-2xl border border-gold-500/20 bg-gold-500/10 p-4 text-sm text-gold-400">{message}</div> : null}
-
-      {isLoading ? (
-        <p className="text-zinc-500">Loading menu...</p>
-      ) : filteredItems.length === 0 ? (
-        <div className="glass-card rounded-3xl p-10 text-center text-zinc-400">
-          No menu items matched your search or category filter.
+        <div className="mb-10">
+          <FilterBar categories={filterCategories} activeCategory={activeCategory} onSelect={setActiveCategory} />
         </div>
-      ) : (
-        <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
-          {filteredItems.map((item) => (
-            <MenuCard key={item._id} item={item} onAddToCart={addToCart} />
-          ))}
-        </div>
-      )}
-    </section>
-        {selectedItem && <MenuItemDetail item={selectedItem} onClose={() => setSelectedItem(null)} />}
-      </>
+
+        {message ? (
+          <div className="mb-6 rounded-2xl border border-gold-500/20 bg-gold-500/10 p-4 text-sm text-gold-400">
+            {message}
+          </div>
+        ) : null}
+
+        {isLoading ? (
+          <p className="text-zinc-500">Loading menu...</p>
+        ) : filteredItems.length === 0 ? (
+          <div className="glass-card rounded-3xl p-10 text-center text-zinc-400">
+            No menu items matched your search or category filter.
+          </div>
+        ) : (
+          <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
+            {filteredItems.map((item) => (
+              <MenuCard key={item._id} item={item} onAddToCart={addToCart} onViewDetails={setSelectedItem} />
+            ))}
+          </div>
+        )}
+      </section>
+
+      {selectedItem ? <MenuItemDetail item={selectedItem} onClose={() => setSelectedItem(null)} /> : null}
+    </>
   );
 }

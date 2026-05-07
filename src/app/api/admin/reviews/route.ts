@@ -1,9 +1,9 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import dbConnect from "@/lib/mongodb";
 import Review from "@/models/Review";
 import { isAdminRequest } from "@/lib/session";
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const isAdmin = await isAdminRequest();
     if (!isAdmin) {

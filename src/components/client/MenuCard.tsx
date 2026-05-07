@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { Minus, Plus, ShoppingCart, Star } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { MenuItemRecord } from "@/types/app";
 
 type MenuCardProps = {
@@ -11,10 +11,10 @@ type MenuCardProps = {
   onViewDetails?: (item: MenuItemRecord) => void;
 };
 
-export default function MenuCard({ item, onAddToCart }: MenuCardProps) {
+export default function MenuCard({ item, onAddToCart, onViewDetails }: MenuCardProps) {
   const [quantity, setQuantity] = useState(1);
-    const [rating, setRating] = useState(0);
-    const [reviewCount, setReviewCount] = useState(0);
+  const [rating, setRating] = useState(0);
+  const [reviewCount, setReviewCount] = useState(0);
   const categoryName = typeof item.category === "string" ? item.category : item.category.name;
 
   useEffect(() => {
@@ -33,7 +33,10 @@ export default function MenuCard({ item, onAddToCart }: MenuCardProps) {
   }, [item._id]);
 
   return (
-    <article className="glass-card group overflow-hidden rounded-3xl cursor-pointer transition-all hover:border-gold-500/50" onClick={() => onViewDetails?.(item)}>
+    <article
+      className="glass-card group overflow-hidden rounded-3xl cursor-pointer transition-all hover:border-gold-500/50"
+      onClick={() => onViewDetails?.(item)}
+    >
       <div className="relative h-64 overflow-hidden">
         <Image
           src={item.image}
@@ -45,14 +48,15 @@ export default function MenuCard({ item, onAddToCart }: MenuCardProps) {
         <div className="absolute top-4 right-4 rounded-full bg-black/60 px-3 py-1 font-bold text-gold-400 backdrop-blur-md">
           ${item.price.toFixed(2)}
         </div>
-              {reviewCount > 0 && (
-                <div className="absolute bottom-4 left-4 flex items-center gap-2 rounded-full bg-black/60 px-3 py-1 backdrop-blur-md">
-                  <Star className="h-4 w-4" fill="#b68d40" stroke="#b68d40" />
-                  <span className="text-sm font-bold text-gold-400">{rating.toFixed(1)}</span>
-                  <span className="text-xs text-zinc-300">({reviewCount})</span>
-                </div>
-              )}
+        {reviewCount > 0 ? (
+          <div className="absolute bottom-4 left-4 flex items-center gap-2 rounded-full bg-black/60 px-3 py-1 backdrop-blur-md">
+            <Star className="h-4 w-4" fill="#b68d40" stroke="#b68d40" />
+            <span className="text-sm font-bold text-gold-400">{rating.toFixed(1)}</span>
+            <span className="text-xs text-zinc-300">({reviewCount})</span>
+          </div>
+        ) : null}
       </div>
+
       <div className="p-8">
         <div className="mb-3">
           <h3 className="text-2xl font-bold">{item.name}</h3>
@@ -67,9 +71,10 @@ export default function MenuCard({ item, onAddToCart }: MenuCardProps) {
             </span>
           </div>
         </div>
+
         <p className="mb-6 line-clamp-2 text-sm text-zinc-400">{item.description}</p>
-        <div className="flex items-center justify-between" onClick={(e) => e.stopPropagation()}>
-          export default function MenuCard({ item, onAddToCart, onViewDetails }: MenuCardProps) {
+
+        <div className="flex items-center justify-between" onClick={(event) => event.stopPropagation()}>
           <div className="flex items-center gap-4 rounded-full border border-white/5 bg-zinc-800/50 px-4 py-2">
             <button className="hover:text-gold-500" onClick={() => setQuantity((current) => Math.max(1, current - 1))}>
               <Minus className="h-4 w-4" />
@@ -79,6 +84,7 @@ export default function MenuCard({ item, onAddToCart }: MenuCardProps) {
               <Plus className="h-4 w-4" />
             </button>
           </div>
+
           {onAddToCart ? (
             <button
               disabled={!item.isAvailable}

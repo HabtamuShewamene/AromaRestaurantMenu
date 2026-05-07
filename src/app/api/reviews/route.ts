@@ -6,13 +6,6 @@ import MenuItem from "@/models/MenuItem";
 const RATE_LIMIT_WINDOW = 3600000; // 1 hour in milliseconds
 const RATE_LIMIT_MAX_REVIEWS = 3;
 
-// Helper: Get client IP for rate limiting
-function getClientIp(request: NextRequest): string {
-  return request.headers.get("x-forwarded-for")?.split(",")[0] || 
-         request.headers.get("x-real-ip") || 
-         "unknown";
-}
-
 // GET: Fetch approved reviews for a menu item
 export async function GET(request: NextRequest) {
   try {
