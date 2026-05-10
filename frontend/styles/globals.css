@@ -57,6 +57,10 @@ ul { list-style: none; }
   background: rgba(27,58,18,0.97);
 }
 .app-shell {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #122f12 0%, #0f230d 100%);
+}
+
 .header-logo { display: flex; align-items: center; gap: 10px; }
 .header-logo svg { width: 36px; height: 36px; }
 .header-logo .wordmark {
@@ -675,8 +679,6 @@ ul { list-style: none; }
   100% { transform: rotateX(0deg); opacity: 1; }
 }
 
-<<<<<<< HEAD
-=======
 .app-shell {
   min-height: 100vh;
   background: linear-gradient(180deg, #122f12 0%, #0f230d 100%);
@@ -955,8 +957,6 @@ ul { list-style: none; }
   color: #718892;
   padding-top: 0;
 }
-
->>>>>>> b0dc48d (Update frontend menu UI assets and generated build files)
 /* ============================================
    RESPONSIVE
    ============================================ */
