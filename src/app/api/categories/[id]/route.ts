@@ -1,9 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import dbConnect from "@/lib/mongodb";
-import Category from "@/models/Category";
-import MenuItem from "@/models/MenuItem";
-import { isAdminRequest } from "@/lib/session";
-import { slugify } from "@/lib/slugify";
+import prisma from "@/server/db/prisma";
+import { isAdminRequest } from "@/server/auth/session";
+import { slugify } from "@/shared/utils/slugify";
 
 type RouteContext = {
   params: Promise<{ id: string }>;
@@ -16,18 +14,16 @@ export async function PUT(request: NextRequest, context: RouteContext) {
       return NextResponse.json({ message: "Admin access required" }, { status: 403 });
     }
 
-    await dbConnect();
     const { id } = await context.params;
     const body = await request.json();
-    const category = await Category.findByIdAndUpdate(
-      id,
-      {
+    const category = await prisma.category.update({
+      where: { id },
+      data: {
         name: body.name,
         slug: slugify(String(body.slug ?? body.name)),
-        image: body.image,
       },
-      { new: true, runValidators: true }
-    );
+      include: { items: true },
+    });
 
     if (!category) {
       return NextResponse.json({ message: "Category not found" }, { status: 404 });
@@ -46,9 +42,10 @@ export async function DELETE(_request: NextRequest, context: RouteContext) {
       return NextResponse.json({ message: "Admin access required" }, { status: 403 });
     }
 
-    await dbConnect();
     const { id } = await context.params;
-    const menuItemsInCategory = await MenuItem.countDocuments({ category: id });
+    const menuItemsInCategory = await prisma.menuItem.count({
+      where: { categoryId: id },
+    });
     if (menuItemsInCategory > 0) {
       return NextResponse.json(
         { message: "Cannot delete a category that is still assigned to menu items" },
@@ -56,7 +53,9 @@ export async function DELETE(_request: NextRequest, context: RouteContext) {
       );
     }
 
-    const category = await Category.findByIdAndDelete(id);
+    const category = await prisma.category.delete({
+      where: { id },
+    });
     if (!category) {
       return NextResponse.json({ message: "Category not found" }, { status: 404 });
     }

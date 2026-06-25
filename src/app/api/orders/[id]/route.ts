@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import dbConnect from "@/lib/mongodb";
-import Order from "@/models/Order";
-import { isAdminRequest } from "@/lib/session";
+import prisma from "@/server/db/prisma";
+import { isAdminRequest } from "@/server/auth/session";
+import { serializeOrder } from "@/server/db/serializers";
 
 type RouteContext = {
   params: Promise<{ id: string }>;
@@ -14,21 +14,23 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
       return NextResponse.json({ message: "Admin access required" }, { status: 403 });
     }
 
-    await dbConnect();
     const { id } = await context.params;
     const body = await request.json();
 
-    const order = await Order.findByIdAndUpdate(
-      id,
-      { status: body.status },
-      { new: true, runValidators: true }
-    );
+    const order = await prisma.order.update({
+      where: { id },
+      data: { status: body.status },
+      include: {
+        items: { include: { item: true } },
+        user: true,
+      },
+    });
 
     if (!order) {
       return NextResponse.json({ message: "Order not found" }, { status: 404 });
     }
 
-    return NextResponse.json(order);
+    return NextResponse.json(serializeOrder(order));
   } catch {
     return NextResponse.json({ message: "Failed to update order status" }, { status: 500 });
   }

@@ -1,6 +1,6 @@
-import Footer from "@/components/Layout/Footer";
-import Navbar from "@/components/Layout/Navbar";
-import CartManager from "@/components/client/CartManager";
+import Footer from "@/components/layout/Footer";
+import Navbar from "@/components/layout/Navbar";
+import CartManager from "@/features/cart/components/CartManager";
 
 export default function CartPage() {
   return (

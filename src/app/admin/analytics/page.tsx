@@ -1,4 +1,4 @@
-import AnalyticsPanel from "@/components/admin/AnalyticsPanel";
+import AnalyticsPanel from "@/features/admin/components/AnalyticsPanel";
 
 export default function AdminAnalyticsPage() {
   return <AnalyticsPanel />;

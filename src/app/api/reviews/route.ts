@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import dbConnect from "@/lib/mongodb";
-import Review from "@/models/Review";
-import MenuItem from "@/models/MenuItem";
+import prisma from "@/server/db/prisma";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/server/auth/auth-options";
 
 const RATE_LIMIT_WINDOW = 3600000; // 1 hour in milliseconds
 const RATE_LIMIT_MAX_REVIEWS = 3;
@@ -9,8 +9,6 @@ const RATE_LIMIT_MAX_REVIEWS = 3;
 // GET: Fetch approved reviews for a menu item
 export async function GET(request: NextRequest) {
   try {
-    await dbConnect();
-    
     const { searchParams } = new URL(request.url);
     const menuItemId = searchParams.get("menuItemId");
 
@@ -18,10 +16,13 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ message: "menuItemId is required" }, { status: 400 });
     }
 
-    const reviews = await Review.find({
-      menuItem: menuItemId,
-      isApproved: true,
-    }).sort({ createdAt: -1 });
+    const reviews = await prisma.review.findMany({
+      where: {
+        itemId: menuItemId,
+        isApproved: true,
+      },
+      orderBy: { createdAt: 'desc' },
+    });
 
     const avgRating = reviews.length > 0
       ? (reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length).toFixed(1)
@@ -32,16 +33,14 @@ export async function GET(request: NextRequest) {
       averageRating: parseFloat(String(avgRating)),
       totalReviews: reviews.length,
     });
-  } catch {
-    return NextResponse.json({ message: "Failed to fetch reviews" }, { status: 500 });
+  } catch (error) {
+    return NextResponse.json({ message: "Failed to fetch reviews", error }, { status: 500 });
   }
 }
 
 // POST: Submit a new review with rate limiting
 export async function POST(request: NextRequest) {
   try {
-    await dbConnect();
-
     const body = await request.json();
     const { menuItemId, name, email, rating, comment } = body;
 
@@ -58,32 +57,51 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if menu item exists
-    const menuItem = await MenuItem.findById(menuItemId);
+    const menuItem = await prisma.menuItem.findUnique({
+      where: { id: menuItemId }
+    });
+    
     if (!menuItem) {
       return NextResponse.json({ message: "Menu item not found" }, { status: 404 });
     }
 
-    // Rate limiting: Check how many reviews from this email in the last hour
+    const session = await getServerSession(authOptions);
+    const userId = session?.user?.id;
+    
+    // Capture IP address
+    const forwarded = request.headers.get("x-forwarded-for");
+    const ip = forwarded ? forwarded.split(",")[0] : "127.0.0.1";
+
+    // Rate limiting: Check how many reviews from this email or IP in the last hour
     const oneHourAgo = new Date(Date.now() - RATE_LIMIT_WINDOW);
-    const recentReviews = await Review.countDocuments({
-      email,
-      createdAt: { $gte: oneHourAgo },
+    const recentReviews = await prisma.review.count({
+      where: {
+        OR: [
+          { email },
+          { ipAddress: ip }
+        ],
+        createdAt: { gte: oneHourAgo },
+      },
     });
 
     if (recentReviews >= RATE_LIMIT_MAX_REVIEWS) {
       return NextResponse.json(
-        { message: "You can only submit 3 reviews per hour. Please try again later." },
+        { message: "Review limit reached for this hour. Please try again later." },
         { status: 429 }
       );
     }
 
-    const review = await Review.create({
-      menuItem: menuItemId,
-      name: name || "Anonymous",
-      email,
-      rating,
-      comment,
-      isApproved: false,
+    const review = await prisma.review.create({
+      data: {
+        itemId: menuItemId,
+        userId: userId || null,
+        name: name || "Anonymous",
+        email,
+        rating: Number(rating),
+        comment,
+        isApproved: false,
+        ipAddress: ip,
+      },
     });
 
     return NextResponse.json(
@@ -93,7 +111,7 @@ export async function POST(request: NextRequest) {
       },
       { status: 201 }
     );
-  } catch {
-    return NextResponse.json({ message: "Failed to submit review" }, { status: 500 });
+  } catch (error) {
+    return NextResponse.json({ message: "Failed to submit review", error }, { status: 500 });
   }
 }

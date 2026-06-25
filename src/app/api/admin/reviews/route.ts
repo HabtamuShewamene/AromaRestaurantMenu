@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
-import dbConnect from "@/lib/mongodb";
-import Review from "@/models/Review";
-import { isAdminRequest } from "@/lib/session";
+import prisma from "@/server/db/prisma";
+import { isAdminRequest } from "@/server/auth/session";
 
 export async function GET() {
   try {
@@ -10,13 +9,18 @@ export async function GET() {
       return NextResponse.json({ message: "Admin access required" }, { status: 403 });
     }
 
-    await dbConnect();
-
     // Get all reviews (both pending and approved)
-    const reviews = await Review.find().sort({ createdAt: -1 });
+    const reviews = await prisma.review.findMany({
+      include: {
+        item: {
+          select: { name: true }
+        }
+      },
+      orderBy: { createdAt: 'desc' },
+    });
 
     return NextResponse.json(reviews);
-  } catch {
-    return NextResponse.json({ message: "Failed to fetch reviews" }, { status: 500 });
+  } catch (error) {
+    return NextResponse.json({ message: "Failed to fetch reviews", error }, { status: 500 });
   }
 }

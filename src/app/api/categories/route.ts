@@ -1,13 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
-import dbConnect from "@/lib/mongodb";
-import Category from "@/models/Category";
-import { isAdminRequest } from "@/lib/session";
-import { slugify } from "@/lib/slugify";
+import prisma from "@/server/db/prisma";
+import { isAdminRequest } from "@/server/auth/session";
+import { slugify } from "@/shared/utils/slugify";
 
 export async function GET() {
   try {
-    await dbConnect();
-    const categories = await Category.find().sort({ name: 1 });
+    const categories = await prisma.category.findMany({
+      include: {
+        items: {
+          select: { id: true, name: true, price: true, image: true },
+        },
+      },
+    });
     return NextResponse.json(categories);
   } catch (error) {
     return NextResponse.json({ message: "Failed to fetch categories", error }, { status: 500 });
@@ -21,17 +25,14 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ message: "Admin access required" }, { status: 403 });
     }
 
-    await dbConnect();
     const body = await request.json();
     if (!body.name) {
       return NextResponse.json({ message: "Category name is required" }, { status: 400 });
     }
     const slug = slugify(String(body.slug ?? body.name));
 
-    const category = await Category.create({
-      name: body.name,
-      slug,
-      image: body.image,
+    const category = await prisma.category.create({
+      data: { name: body.name, slug, image: body.image },
     });
 
     return NextResponse.json(category, { status: 201 });

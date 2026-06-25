@@ -1,8 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
-import dbConnect from "@/lib/mongodb";
-import Order from "@/models/Order";
-import MenuItem from "@/models/MenuItem";
-import { getAppSession } from "@/lib/session";
+import prisma from "@/server/db/prisma";
+import { getAppSession } from "@/server/auth/session";
+import { serializeOrder } from "@/server/db/serializers";
+
+type OrderCreateItemInput = {
+  itemId: string;
+  name: string;
+  price: number;
+  quantity: number;
+};
 
 export async function GET() {
   try {
@@ -11,10 +17,17 @@ export async function GET() {
       return NextResponse.json({ message: "Sign in required" }, { status: 401 });
     }
 
-    await dbConnect();
-    const filter = session.user.role === "ADMIN" ? {} : { customerEmail: session.user.email };
-    const orders = await Order.find(filter).sort({ createdAt: -1 });
-    return NextResponse.json(orders);
+    const orders = await prisma.order.findMany({
+      where: session.user.role === "ADMIN" ? {} : { user: { email: session.user.email } },
+      include: {
+        items: {
+          include: { item: true },
+        },
+        user: true,
+      },
+      orderBy: { createdAt: 'desc' },
+    });
+    return NextResponse.json(orders.map(serializeOrder));
   } catch {
     return NextResponse.json({ message: "Failed to fetch orders" }, { status: 500 });
   }
@@ -27,18 +40,19 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ message: "Sign in required to place orders" }, { status: 401 });
     }
 
-    await dbConnect();
     const body = await request.json();
     if (!Array.isArray(body.items) || body.items.length === 0) {
       return NextResponse.json({ message: "At least one item is required" }, { status: 400 });
     }
 
-    const menuItemIds = body.items.map((item: { menuItem: string }) => item.menuItem);
-    const menuItems = await MenuItem.find({ _id: { $in: menuItemIds } });
-    const itemMap = new Map(menuItems.map((item) => [item._id.toString(), item]));
+    const menuItemIds = body.items.map((item: { itemId: string }) => item.itemId);
+    const menuItems = await prisma.menuItem.findMany({
+      where: { id: { in: menuItemIds } },
+    });
+    const itemMap = new Map(menuItems.map((item) => [item.id, item]));
 
-    const normalizedItems = body.items.map((item: { menuItem: string; quantity: number }) => {
-      const source = itemMap.get(item.menuItem);
+    const normalizedItems: OrderCreateItemInput[] = body.items.map((item: { itemId: string; quantity: number }) => {
+      const source = itemMap.get(item.itemId);
       if (!source) {
         throw new Error("One or more menu items no longer exist");
       }
@@ -46,10 +60,10 @@ export async function POST(request: NextRequest) {
         throw new Error(`${source.name} is currently unavailable`);
       }
       return {
-        menuItem: source._id,
         name: source.name,
         price: source.price,
         quantity: item.quantity,
+        itemId: source.id,
       };
     });
 
@@ -58,15 +72,37 @@ export async function POST(request: NextRequest) {
       0
     );
 
-    const order = await Order.create({
-      customerName: session.user.name ?? "Cafe Guest",
-      customerEmail: session.user.email,
-      items: normalizedItems,
-      totalAmount,
-      status: "PENDING",
+    // Get or create user
+    const user = await prisma.user.findUnique({
+      where: { email: session.user.email },
+    });
+    
+    if (!user) {
+      return NextResponse.json({ message: "User not found" }, { status: 400 });
+    }
+
+    const order = await prisma.order.create({
+      data: {
+        userId: user.id,
+        customerName: user.name ?? "Customer",
+        customerEmail: user.email,
+        totalAmount,
+        status: "pending",
+        items: {
+          create: normalizedItems.map((item) => ({
+            itemId: item.itemId,
+            quantity: item.quantity,
+            price: item.price,
+          })),
+        },
+      },
+      include: {
+        items: { include: { item: true } },
+        user: true,
+      },
     });
 
-    return NextResponse.json(order, { status: 201 });
+    return NextResponse.json(serializeOrder(order), { status: 201 });
   } catch (error) {
     return NextResponse.json(
       { message: error instanceof Error ? error.message : "Failed to create order" },

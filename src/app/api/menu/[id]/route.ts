@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import dbConnect from "@/lib/mongodb";
-import MenuItem from "@/models/MenuItem";
-import { isAdminRequest } from "@/lib/session";
+import prisma from "@/server/db/prisma";
+import { isAdminRequest } from "@/server/auth/session";
 
 type RouteContext = {
   params: Promise<{ id: string }>;
@@ -14,10 +13,13 @@ export async function PUT(request: NextRequest, context: RouteContext) {
       return NextResponse.json({ message: "Admin access required" }, { status: 403 });
     }
 
-    await dbConnect();
     const { id } = await context.params;
     const updates = await request.json();
-    const item = await MenuItem.findByIdAndUpdate(id, updates, { new: true, runValidators: true });
+    const item = await prisma.menuItem.update({
+      where: { id },
+      data: updates,
+      include: { category: true },
+    });
 
     if (!item) {
       return NextResponse.json({ message: "Menu item not found" }, { status: 404 });
@@ -36,9 +38,10 @@ export async function DELETE(_request: NextRequest, context: RouteContext) {
       return NextResponse.json({ message: "Admin access required" }, { status: 403 });
     }
 
-    await dbConnect();
     const { id } = await context.params;
-    const item = await MenuItem.findByIdAndDelete(id);
+    const item = await prisma.menuItem.delete({
+      where: { id },
+    });
 
     if (!item) {
       return NextResponse.json({ message: "Menu item not found" }, { status: 404 });

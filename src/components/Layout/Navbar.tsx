@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ShoppingCart, User, Coffee, Menu as MenuIcon, X } from "lucide-react";
+import { User, Coffee, Menu as MenuIcon, X } from "lucide-react";
 import { useState } from "react";
 import { signOut, useSession } from "next-auth/react";
 
@@ -23,12 +23,6 @@ export default function Navbar() {
             <Link href="/menu" className="text-sm font-medium transition-colors hover:text-gold-500">
               Menu
             </Link>
-            <Link href="/orders" className="text-sm font-medium transition-colors hover:text-gold-500">
-              Orders
-            </Link>
-            <Link href="/cart" className="text-sm font-medium transition-colors hover:text-gold-500">
-              Cart
-            </Link>
             {role === "ADMIN" && (
               <Link
                 href="/admin/dashboard"
@@ -38,12 +32,6 @@ export default function Navbar() {
               </Link>
             )}
             <div className="ml-4 flex items-center gap-4">
-              <Link href="/cart" className="relative rounded-full p-2 transition-colors hover:bg-white/5">
-                <ShoppingCart className="h-5 w-5" />
-                <span className="absolute top-0 right-0 flex h-4 w-4 items-center justify-center rounded-full bg-gold-600 text-[10px] text-black">
-                  0
-                </span>
-              </Link>
               {session ? (
                 <button onClick={() => signOut()} className="rounded-full p-2 transition-colors hover:bg-white/5">
                   <User className="h-5 w-5 text-gold-500" />
@@ -72,12 +60,6 @@ export default function Navbar() {
           <div className="space-y-4 px-4 pt-2 pb-6">
             <Link href="/menu" className="block py-2 text-lg font-medium">
               Menu
-            </Link>
-            <Link href="/orders" className="block py-2 text-lg font-medium">
-              Orders
-            </Link>
-            <Link href="/cart" className="block py-2 text-lg font-medium">
-              Cart
             </Link>
             {role === "ADMIN" && (
               <Link href="/admin/dashboard" className="block py-2 text-lg font-medium text-gold-400">

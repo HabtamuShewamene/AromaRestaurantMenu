@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import cloudinary from "@/lib/cloudinary";
-import { isAdminRequest } from "@/lib/session";
+import cloudinary from "@/server/integrations/cloudinary";
+import { isAdminRequest } from "@/server/auth/session";
 
 const MAX_UPLOAD_SIZE = 5 * 1024 * 1024;
 
