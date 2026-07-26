@@ -40,9 +40,8 @@ export async function POST(request: NextRequest) {
     const newIngredient = await prisma.ingredient.create({
       data: {
         name,
-        stock: Number(stock) || 0,
+        currentStock: Number(stock) || 0,
         unit,
-        costPerUnit: Number(costPerUnit) || 0,
       },
     });
 

@@ -20,9 +20,8 @@ export async function PUT(
       where: { id },
       data: {
         name,
-        stock: Number(stock),
+        currentStock: Number(stock),
         unit,
-        costPerUnit: Number(costPerUnit),
       },
     });
 

@@ -15,9 +15,25 @@ export async function PUT(request: NextRequest, context: RouteContext) {
 
     const { id } = await context.params;
     const updates = await request.json();
+    const { recipe, categoryName, ...otherUpdates } = updates;
+
+    let ingredientsUpdate = undefined;
+    if (Array.isArray(recipe)) {
+      ingredientsUpdate = {
+        deleteMany: {},
+        create: recipe.map((r: any) => ({
+          ingredientId: r.ingredientId,
+          quantity: Number(r.quantity) || 0
+        }))
+      };
+    }
+
     const item = await prisma.menuItem.update({
       where: { id },
-      data: updates,
+      data: {
+        ...otherUpdates,
+        ...(ingredientsUpdate && { ingredients: ingredientsUpdate })
+      },
       include: { category: true },
     });
 
