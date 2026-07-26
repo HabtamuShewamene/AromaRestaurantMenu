@@ -7,6 +7,7 @@ import { useState, useEffect, useRef } from "react";
 type SearchBarProps = {
   value: string;
   onChange: (value: string) => void;
+  onFilterToggle?: () => void;
   placeholder?: string;
   popularSearches?: string[];
 };
@@ -14,6 +15,7 @@ type SearchBarProps = {
 export default function SearchBar({
   value,
   onChange,
+  onFilterToggle,
   placeholder = "Search dishes, drinks...",
   popularSearches = [],
 }: SearchBarProps) {
@@ -111,7 +113,10 @@ export default function SearchBar({
         <div className="w-px h-5 bg-white/10 flex-shrink-0 mx-1" />
 
         {/* Filter button */}
-        <button className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-xl bg-gold-500/10 border border-gold-500/20 hover:bg-gold-500/20 transition-all">
+        <button 
+          onClick={onFilterToggle}
+          className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-xl bg-gold-500/10 border border-gold-500/20 hover:bg-gold-500/20 transition-all"
+        >
           <SlidersHorizontal className="w-3.5 h-3.5 text-gold-400" />
         </button>
       </div>

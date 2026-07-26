@@ -24,6 +24,10 @@ export type MenuItemRecord = {
   ingredients?: string[];
   allergens?: string[];
   viewCount?: number;
+  vegetarian?: boolean;
+  vegan?: boolean;
+  spicy?: boolean;
+  sugarFree?: boolean;
   createdAt?: string;
   updatedAt?: string;
 };

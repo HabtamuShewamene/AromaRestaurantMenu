@@ -44,6 +44,16 @@ export default function MenuExplorer({ showHero = false }: { showHero?: boolean 
   const [isLoading, setIsLoading] = useState(true);
   const [selectedItem, setSelectedItem] = useState<MenuItemRecord | null>(null);
 
+  const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
+  const [filters, setFilters] = useState({
+    vegetarian: false,
+    vegan: false,
+    spicy: false,
+    sugarFree: false,
+    minPrice: "",
+    maxPrice: ""
+  });
+
   const filterRef = useRef<HTMLDivElement>(null);
   const [filterSticky, setFilterSticky] = useState(false);
 
@@ -96,6 +106,15 @@ export default function MenuExplorer({ showHero = false }: { showHero?: boolean 
       item.name.toLowerCase().includes(q) ||
       item.description.toLowerCase().includes(q) ||
       catName.toLowerCase().includes(q);
+
+    if (filters.vegetarian && !item.vegetarian) return false;
+    if (filters.vegan && !item.vegan) return false;
+    if (filters.spicy && !item.spicy) return false;
+    if (filters.sugarFree && !item.sugarFree) return false;
+    
+    if (filters.minPrice && item.price < parseFloat(filters.minPrice)) return false;
+    if (filters.maxPrice && item.price > parseFloat(filters.maxPrice)) return false;
+
     return matchesCat && matchesSearch;
   });
 
@@ -121,8 +140,81 @@ export default function MenuExplorer({ showHero = false }: { showHero?: boolean 
       {showHero && <HeroSection mode="full" />}
 
       {/* ── Floating Search (overlapping hero bottom) ── */}
-      <div className="relative z-20 px-4 -mt-6 mb-4 max-w-2xl mx-auto">
-        <SearchBar value={search} onChange={setSearch} popularSearches={popularSearches} />
+      <div className="relative z-20 px-4 -mt-6 mb-4 max-w-2xl mx-auto space-y-4">
+        <SearchBar 
+          value={search} 
+          onChange={setSearch} 
+          popularSearches={popularSearches} 
+          onFilterToggle={() => setShowAdvancedFilters(!showAdvancedFilters)}
+        />
+        
+        <AnimatePresence>
+          {showAdvancedFilters && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              className="overflow-hidden"
+            >
+              <div className="p-5 rounded-2xl bg-[#121212] border border-white/10 shadow-2xl space-y-5">
+                
+                {/* Properties */}
+                <div>
+                  <h4 className="text-sm font-semibold text-zinc-400 mb-3 uppercase tracking-wider">Properties & Diet</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {[
+                      { key: 'vegetarian', label: 'Vegetarian', color: 'bg-green-500/10 text-green-400 border-green-500/30' },
+                      { key: 'vegan', label: 'Vegan', color: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30' },
+                      { key: 'spicy', label: 'Spicy', color: 'bg-red-500/10 text-red-400 border-red-500/30' },
+                      { key: 'sugarFree', label: 'Sugar Free', color: 'bg-blue-500/10 text-blue-400 border-blue-500/30' },
+                    ].map(prop => (
+                      <button
+                        key={prop.key}
+                        onClick={() => setFilters({ ...filters, [prop.key]: !filters[prop.key as keyof typeof filters] })}
+                        className={`px-4 py-2 rounded-xl text-sm font-medium border transition-all ${
+                          filters[prop.key as keyof typeof filters] 
+                            ? prop.color 
+                            : 'bg-zinc-900 border-zinc-800 text-zinc-400 hover:bg-zinc-800'
+                        }`}
+                      >
+                        {prop.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Price */}
+                <div>
+                  <h4 className="text-sm font-semibold text-zinc-400 mb-3 uppercase tracking-wider">Price Range</h4>
+                  <div className="flex items-center gap-4">
+                    <div className="relative flex-1">
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500">$</span>
+                      <input 
+                        type="number" 
+                        placeholder="Min"
+                        value={filters.minPrice}
+                        onChange={(e) => setFilters({ ...filters, minPrice: e.target.value })}
+                        className="w-full bg-zinc-900 border border-zinc-800 rounded-xl py-2 pl-7 pr-3 text-white placeholder-zinc-600 outline-none focus:border-gold-500/50"
+                      />
+                    </div>
+                    <span className="text-zinc-600">-</span>
+                    <div className="relative flex-1">
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500">$</span>
+                      <input 
+                        type="number" 
+                        placeholder="Max"
+                        value={filters.maxPrice}
+                        onChange={(e) => setFilters({ ...filters, maxPrice: e.target.value })}
+                        className="w-full bg-zinc-900 border border-zinc-800 rounded-xl py-2 pl-7 pr-3 text-white placeholder-zinc-600 outline-none focus:border-gold-500/50"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
       {/* ── Sticky Filter Bar ── */}
