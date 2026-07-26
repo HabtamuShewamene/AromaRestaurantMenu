@@ -21,6 +21,8 @@ export type MenuItemRecord = {
   image: string;
   isAvailable: boolean;
   category: CategoryRecord | string;
+  ingredients?: string[];
+  allergens?: string[];
   createdAt?: string;
   updatedAt?: string;
 };

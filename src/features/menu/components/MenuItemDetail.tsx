@@ -93,6 +93,36 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
                 </span>
               </div>
               <p className="text-zinc-300">{item.description}</p>
+
+              {/* Ingredients & Allergens */}
+              {((item.ingredients && item.ingredients.length > 0) || (item.allergens && item.allergens.length > 0)) && (
+                <div className="pt-4 space-y-4">
+                  {item.ingredients && item.ingredients.length > 0 && (
+                    <div>
+                      <h4 className="text-sm font-semibold text-zinc-400 mb-2 uppercase tracking-wider">Ingredients</h4>
+                      <div className="flex flex-wrap gap-2">
+                        {item.ingredients.map((ing, i) => (
+                          <span key={i} className="px-3 py-1 bg-zinc-800 text-zinc-300 rounded-full text-sm border border-zinc-700">
+                            {ing}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  {item.allergens && item.allergens.length > 0 && (
+                    <div>
+                      <h4 className="text-sm font-semibold text-red-400/80 mb-2 uppercase tracking-wider">Allergens</h4>
+                      <div className="flex flex-wrap gap-2">
+                        {item.allergens.map((alg, i) => (
+                          <span key={i} className="px-3 py-1 bg-red-500/10 text-red-400 rounded-full text-sm border border-red-500/20">
+                            {alg}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           </div>
 
