@@ -1,4 +1,4 @@
-import Navbar from "@/components/layout/Navbar";
+import Navbar from "@/components/Layout/Navbar";
 import MenuExplorer from "@/features/menu/components/MenuExplorer";
 
 export const metadata = {
