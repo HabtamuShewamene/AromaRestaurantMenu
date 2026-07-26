@@ -22,7 +22,7 @@ export async function PUT(request: NextRequest, context: RouteContext) {
         name: body.name,
         slug: slugify(String(body.slug ?? body.name)),
       },
-      include: { items: true },
+      include: { menuItems: true },
     });
 
     if (!category) {
