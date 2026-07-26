@@ -28,7 +28,9 @@ export default function SearchBar({
     if (saved) {
       try {
         setRecentSearches(JSON.parse(saved));
-      } catch (e) {}
+      } catch {
+        // ignore parse error
+      }
     }
   }, []);
 
@@ -46,7 +48,7 @@ export default function SearchBar({
     onChange(searchTerm);
     if (!searchTerm.trim()) return;
     
-    let updated = [searchTerm.trim(), ...recentSearches.filter(s => s.toLowerCase() !== searchTerm.toLowerCase())].slice(0, 5);
+    const updated = [searchTerm.trim(), ...recentSearches.filter(s => s.toLowerCase() !== searchTerm.toLowerCase())].slice(0, 5);
     setRecentSearches(updated);
     localStorage.setItem("recentSearches", JSON.stringify(updated));
     setIsFocused(false);

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, BarChart3, ListTree, Utensils, Star, ShieldCheck, Clock, Users } from "lucide-react";
+import { ArrowRight, BarChart3, ListTree, Utensils, Star, Clock, Users } from "lucide-react";
 import { useEffect, useState } from "react";
 
 type Stats = {
@@ -148,7 +148,7 @@ export default function AdminDashboardContent() {
   );
 }
 
-function StatCard({ title, value, icon: Icon, color, highlight = false }: any) {
+function StatCard({ title, value, icon: Icon, highlight = false }: { title: string; value: string | number; icon: any; highlight?: boolean; color?: string }) {
   return (
     <div className={`glass-card rounded-3xl p-6 relative overflow-hidden ${highlight ? 'border-amber-500/30 ring-1 ring-amber-500/20' : ''}`}>
       <div className="flex items-center gap-4">
