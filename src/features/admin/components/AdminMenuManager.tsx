@@ -10,6 +10,7 @@ import { CategoryRecord, MenuItemRecord } from "@/shared/types/app";
 export default function AdminMenuManager() {
   const [items, setItems] = useState<MenuItemRecord[]>([]);
   const [categories, setCategories] = useState<CategoryRecord[]>([]);
+  const [ingredients, setIngredients] = useState<any[]>([]);
   const [editingItem, setEditingItem] = useState<MenuItemRecord | null>(null);
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
@@ -17,12 +18,17 @@ export default function AdminMenuManager() {
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchData = async () => {
-    const [menuResponse, categoriesResponse] = await Promise.all([
+    const [menuResponse, categoriesResponse, inventoryResponse] = await Promise.all([
       fetch("/api/menu"),
       fetch("/api/categories"),
+      fetch("/api/admin/inventory"),
     ]);
-    const [menuData, categoriesData] = await Promise.all([menuResponse.json(), categoriesResponse.json()]);
-    return { menuData, categoriesData };
+    const [menuData, categoriesData, inventoryData] = await Promise.all([
+      menuResponse.json(),
+      categoriesResponse.json(),
+      inventoryResponse.json(),
+    ]);
+    return { menuData, categoriesData, inventoryData };
   };
 
   useEffect(() => {
@@ -30,12 +36,13 @@ export default function AdminMenuManager() {
 
     const loadInitialData = async () => {
       setIsLoading(true);
-      const { menuData, categoriesData } = await fetchData();
+      const { menuData, categoriesData, inventoryData } = await fetchData();
       if (!isMounted) {
         return;
       }
       setItems(menuData);
       setCategories(categoriesData);
+      setIngredients(Array.isArray(inventoryData) ? inventoryData : []);
       setIsLoading(false);
     };
 
@@ -48,9 +55,10 @@ export default function AdminMenuManager() {
 
   const loadData = async () => {
     setIsLoading(true);
-    const { menuData, categoriesData } = await fetchData();
+    const { menuData, categoriesData, inventoryData } = await fetchData();
     setItems(menuData);
     setCategories(categoriesData);
+    setIngredients(Array.isArray(inventoryData) ? inventoryData : []);
     setIsLoading(false);
   };
 
@@ -62,6 +70,7 @@ export default function AdminMenuManager() {
     category?: string;
     categoryName?: string;
     isAvailable: boolean;
+    recipe?: any[];
   }) => {
     const response = await fetch(editingItem ? `/api/menu/${editingItem.id}` : "/api/menu", {
       method: editingItem ? "PUT" : "POST",
@@ -154,6 +163,7 @@ export default function AdminMenuManager() {
       <MenuForm
         key={editingItem?.id ?? "new-item-form"}
         categories={categories}
+        ingredients={ingredients}
         initialValues={editingItem ?? undefined}
         initialCategoryId={editingCategoryId}
         submitLabel={editingItem ? "Update Item" : "Create Item"}

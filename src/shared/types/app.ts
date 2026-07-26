@@ -23,6 +23,12 @@ export type IngredientRecord = {
   updatedAt?: string;
 };
 
+export type FoodIngredientRecord = {
+  ingredientId: string;
+  quantity: number;
+  ingredientName?: string;
+};
+
 export type MenuItemRecord = {
   id: string;
   name: string;
@@ -38,6 +44,7 @@ export type MenuItemRecord = {
   vegan?: boolean;
   spicy?: boolean;
   sugarFree?: boolean;
+  recipe?: FoodIngredientRecord[];
   createdAt?: string;
   updatedAt?: string;
 };
