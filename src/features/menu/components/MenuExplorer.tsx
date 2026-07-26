@@ -111,7 +111,7 @@ export default function MenuExplorer({ showHero = false }: { showHero?: boolean 
   });
 
   return (
-    <div className="relative min-h-screen bg-[#080808]">
+    <div id="menu-explorer" className="relative min-h-screen bg-[#080808]">
       {/* ── Hero ── (rendered only when requested) */}
       {showHero && <HeroSection mode="full" />}
 

@@ -1,0 +1,94 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String?
+  email     String   @unique
+  password  String?
+  role      String   @default("CLIENT") // "ADMIN" | "CLIENT"
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Restaurant {
+  id           String   @id @default(uuid())
+  name         String
+  logo         String?
+  coverImage   String?
+  description  String?
+  phone        String?
+  email        String?
+  address      String?
+  openingTime  String?
+  closingTime  String?
+  latitude     Float?
+  longitude    Float?
+  socialLinks  Json?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Category {
+  id          String     @id @default(uuid())
+  name        String
+  image       String?
+  description String?
+  orderIndex  Int        @default(0)
+  status      Boolean    @default(true) // true = active, false = disabled
+  foodItems   FoodItem[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+model FoodItem {
+  id          String   @id @default(uuid())
+  categoryId  String
+  category    Category @relation(fields: [categoryId], references: [id])
+  name        String
+  description String?
+  image       String?
+  price       Float
+  vegetarian  Boolean  @default(false)
+  vegan       Boolean  @default(false)
+  spicy       Boolean  @default(false)
+  sugarFree   Boolean  @default(false)
+  allergens   String[]
+  rating      Float    @default(0)
+  available   Boolean  @default(true)
+  viewCount   Int      @default(0)
+  
+  ingredients FoodIngredient[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Ingredient {
+  id           String   @id @default(uuid())
+  name         String
+  unit         String
+  currentStock Float    @default(0)
+  minimumStock Float    @default(0)
+  
+  foodItems    FoodIngredient[]
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model FoodIngredient {
+  id           String     @id @default(uuid())
+  foodItemId   String
+  ingredientId String
+  quantity     Float      // Quantity required
+  
+  foodItem     FoodItem   @relation(fields: [foodItemId], references: [id], onDelete: Cascade)
+  ingredient   Ingredient @relation(fields: [ingredientId], references: [id], onDelete: Cascade)
+
+  @@unique([foodItemId, ingredientId])
+}
