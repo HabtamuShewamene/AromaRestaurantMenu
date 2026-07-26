@@ -13,6 +13,8 @@ model User {
   email     String   @unique
   password  String?
   role      String   @default("CLIENT") // "ADMIN" | "CLIENT"
+  orders    Order[]
+  reviews   Review[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -38,16 +40,17 @@ model Restaurant {
 model Category {
   id          String     @id @default(uuid())
   name        String
+  slug        String?    @unique
   image       String?
   description String?
   orderIndex  Int        @default(0)
   status      Boolean    @default(true) // true = active, false = disabled
-  foodItems   FoodItem[]
+  menuItems   MenuItem[]
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
 }
 
-model FoodItem {
+model MenuItem {
   id          String   @id @default(uuid())
   categoryId  String
   category    Category @relation(fields: [categoryId], references: [id])
@@ -61,10 +64,12 @@ model FoodItem {
   sugarFree   Boolean  @default(false)
   allergens   String[]
   rating      Float    @default(0)
-  available   Boolean  @default(true)
+  isAvailable Boolean  @default(true)
   viewCount   Int      @default(0)
   
   ingredients FoodIngredient[]
+  orderItems  OrderItem[]
+  reviews     Review[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
@@ -87,8 +92,44 @@ model FoodIngredient {
   ingredientId String
   quantity     Float      // Quantity required
   
-  foodItem     FoodItem   @relation(fields: [foodItemId], references: [id], onDelete: Cascade)
+  foodItem     MenuItem   @relation(fields: [foodItemId], references: [id], onDelete: Cascade)
   ingredient   Ingredient @relation(fields: [ingredientId], references: [id], onDelete: Cascade)
 
   @@unique([foodItemId, ingredientId])
+}
+
+model Order {
+  id            String      @id @default(uuid())
+  userId        String
+  customerName  String
+  customerEmail String
+  totalAmount   Float
+  status        String      @default("pending") // pending, preparing, ready, completed, cancelled
+  user          User        @relation(fields: [userId], references: [id])
+  items         OrderItem[]
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+model OrderItem {
+  id        String   @id @default(uuid())
+  orderId   String
+  itemId    String
+  quantity  Int
+  price     Float
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  item      MenuItem @relation(fields: [itemId], references: [id])
+}
+
+model Review {
+  id         String   @id @default(uuid())
+  userId     String
+  itemId     String
+  rating     Int
+  comment    String?
+  isApproved Boolean  @default(false)
+  user       User     @relation(fields: [userId], references: [id])
+  item       MenuItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }
