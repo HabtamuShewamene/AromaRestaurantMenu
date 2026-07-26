@@ -66,7 +66,7 @@ export async function POST(request: NextRequest) {
     }
 
     const session = await getServerSession(authOptions);
-    const userId = session?.user?.id;
+    const userId = (session?.user as any)?.id;
     
     // Capture IP address
     const forwarded = request.headers.get("x-forwarded-for");

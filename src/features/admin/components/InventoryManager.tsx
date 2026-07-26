@@ -35,16 +35,16 @@ export default function InventoryManager() {
     setEditingId(null);
     setFormData({
       name: "",
-      stock: 0, // Using stock for the form field but mapping to currentStock
+      currentStock: 0,
       unit: "kg",
-      costPerUnit: 0 // Mapping to minimumStock
+      minimumStock: 0
     });
   };
 
   const handleEdit = (item: IngredientRecord) => {
     setIsCreating(false);
     setEditingId(item.id);
-    setFormData({ ...item, stock: item.currentStock, costPerUnit: item.minimumStock });
+    setFormData({ ...item });
   };
 
   const handleCancel = () => {
@@ -128,8 +128,8 @@ export default function InventoryManager() {
               <label className="text-xs font-semibold text-zinc-400 uppercase">Stock</label>
               <input
                 type="number"
-                value={formData.stock || 0}
-                onChange={(e) => setFormData({ ...formData, stock: Number(e.target.value) })}
+                value={formData.currentStock || ""}
+                onChange={(e) => setFormData({ ...formData, currentStock: Number(e.target.value) })}
                 className="w-full rounded-xl border border-zinc-800 bg-zinc-900/50 px-4 py-2 outline-none focus:border-gold-500"
               />
             </div>
@@ -148,8 +148,8 @@ export default function InventoryManager() {
               <input
                 type="number"
                 step="0.01"
-                value={formData.costPerUnit || 0}
-                onChange={(e) => setFormData({ ...formData, costPerUnit: Number(e.target.value) })}
+                value={formData.minimumStock || ""}
+                onChange={(e) => setFormData({ ...formData, minimumStock: Number(e.target.value) })}
                 className="w-full rounded-xl border border-zinc-800 bg-zinc-900/50 px-4 py-2 outline-none focus:border-gold-500"
               />
             </div>
