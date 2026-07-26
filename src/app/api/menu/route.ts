@@ -60,6 +60,12 @@ export async function POST(request: NextRequest) {
     if (!categoryId) {
       return NextResponse.json({ message: "Category is required" }, { status: 400 });
     }
+    
+    // Process recipe
+    const recipeData = Array.isArray(body.recipe) ? body.recipe.map((r: any) => ({
+      ingredientId: r.ingredientId,
+      quantity: Number(r.quantity) || 0
+    })) : [];
 
     const item = await prisma.menuItem.create({
       data: {
@@ -69,6 +75,9 @@ export async function POST(request: NextRequest) {
         categoryId,
         image: body.image,
         isAvailable: body.isAvailable ?? true,
+        ingredients: {
+          create: recipeData
+        }
       },
     });
 
