@@ -1,4 +1,4 @@
-import { BarChart3, Coffee, LayoutDashboard, ListTree, Settings, ShoppingBag, Utensils } from "lucide-react";
+import { BarChart3, Coffee, LayoutDashboard, ListTree, Settings, ShoppingBag, Utensils, Package } from "lucide-react";
 import Link from "next/link";
 
 export default function AdminLayout({
@@ -27,6 +27,9 @@ export default function AdminLayout({
             </Link>
             <Link href="/admin/orders" className="flex items-center gap-3 rounded-xl px-4 py-3 font-medium text-zinc-400 transition-all hover:bg-white/5 hover:text-white">
               <ShoppingBag className="h-5 w-5" /> Orders
+            </Link>
+            <Link href="/admin/inventory" className="flex items-center gap-3 rounded-xl px-4 py-3 font-medium text-zinc-400 transition-all hover:bg-white/5 hover:text-white">
+              <Package className="h-5 w-5" /> Inventory
             </Link>
             <Link href="/admin/analytics" className="flex items-center gap-3 rounded-xl px-4 py-3 font-medium text-zinc-400 transition-all hover:bg-white/5 hover:text-white">
               <BarChart3 className="h-5 w-5" /> Analytics

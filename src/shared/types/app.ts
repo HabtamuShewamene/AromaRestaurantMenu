@@ -13,6 +13,16 @@ export type CategoryRecord = {
   }>;
 };
 
+export type IngredientRecord = {
+  id: string;
+  name: string;
+  stock: number;
+  unit: string;
+  costPerUnit: number;
+  createdAt?: string;
+  updatedAt?: string;
+};
+
 export type MenuItemRecord = {
   id: string;
   name: string;
