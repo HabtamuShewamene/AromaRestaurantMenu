@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ChefHat, MapPin, Phone, Clock, Instagram, Facebook, Twitter } from "lucide-react";
+import { ChefHat, MapPin, Phone, Clock } from "lucide-react";
 import Image from "next/image";
 
 type HeroSectionProps = {
@@ -130,14 +130,14 @@ export default function HeroSection({ mode = "full" }: HeroSectionProps) {
           </button>
 
           <div className="flex items-center gap-5 mt-4">
-            <a href={restaurant.socialLinks.instagram} className="text-zinc-400 hover:text-gold-400 transition-colors">
-              <Instagram className="w-5 h-5" />
+            <a href={restaurant.socialLinks.instagram} className="text-zinc-400 font-bold hover:text-gold-400 transition-colors">
+              IG
             </a>
-            <a href={restaurant.socialLinks.facebook} className="text-zinc-400 hover:text-gold-400 transition-colors">
-              <Facebook className="w-5 h-5" />
+            <a href={restaurant.socialLinks.facebook} className="text-zinc-400 font-bold hover:text-gold-400 transition-colors">
+              FB
             </a>
-            <a href={restaurant.socialLinks.twitter} className="text-zinc-400 hover:text-gold-400 transition-colors">
-              <Twitter className="w-5 h-5" />
+            <a href={restaurant.socialLinks.twitter} className="text-zinc-400 font-bold hover:text-gold-400 transition-colors">
+              X
             </a>
           </div>
         </motion.div>
