@@ -23,6 +23,7 @@ export type MenuItemRecord = {
   category: CategoryRecord | string;
   ingredients?: string[];
   allergens?: string[];
+  viewCount?: number;
   createdAt?: string;
   updatedAt?: string;
 };

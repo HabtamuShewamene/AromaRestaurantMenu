@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ShoppingBag, Sparkles } from "lucide-react";
+import { Sparkles } from "lucide-react";
 import FilterBar from "@/features/menu/components/FilterBar";
 import MenuCard from "@/features/menu/components/MenuCard";
 import MenuItemDetail from "@/features/menu/components/MenuItemDetail";
@@ -110,6 +110,11 @@ export default function MenuExplorer({ showHero = false }: { showHero?: boolean 
     groupedItems[catName].push(item);
   });
 
+  const popularSearches = [...items]
+    .sort((a, b) => (b.viewCount || 0) - (a.viewCount || 0))
+    .slice(0, 5)
+    .map((item) => item.name);
+
   return (
     <div id="menu-explorer" className="relative min-h-screen bg-[#080808]">
       {/* ── Hero ── (rendered only when requested) */}
@@ -117,7 +122,7 @@ export default function MenuExplorer({ showHero = false }: { showHero?: boolean 
 
       {/* ── Floating Search (overlapping hero bottom) ── */}
       <div className="relative z-20 px-4 -mt-6 mb-4 max-w-2xl mx-auto">
-        <SearchBar value={search} onChange={setSearch} />
+        <SearchBar value={search} onChange={setSearch} popularSearches={popularSearches} />
       </div>
 
       {/* ── Sticky Filter Bar ── */}
