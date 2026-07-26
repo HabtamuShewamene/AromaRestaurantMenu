@@ -102,6 +102,48 @@ export async function POST(request: NextRequest) {
       },
     });
 
+    // --- PHASE 10: Automatic Stock Deduction ---
+    try {
+      const ingredientUpdates = new Map<string, number>();
+
+      for (const orderItem of normalizedItems) {
+        const fullMenuItem = await prisma.menuItem.findUnique({
+          where: { id: orderItem.itemId },
+          include: { ingredients: true }
+        });
+
+        if (fullMenuItem && fullMenuItem.ingredients && fullMenuItem.ingredients.length > 0) {
+          for (const recipeIng of fullMenuItem.ingredients) {
+            const currentTotal = ingredientUpdates.get(recipeIng.ingredientId) || 0;
+            ingredientUpdates.set(
+              recipeIng.ingredientId, 
+              currentTotal + (recipeIng.quantity * orderItem.quantity)
+            );
+          }
+        }
+      }
+
+      // Execute stock deduction via transactions
+      const transactionOps = Array.from(ingredientUpdates.entries()).map(([ingredientId, qtyToDeduct]) => {
+        return prisma.ingredient.update({
+          where: { id: ingredientId },
+          data: {
+            currentStock: {
+              decrement: qtyToDeduct
+            }
+          }
+        });
+      });
+
+      if (transactionOps.length > 0) {
+        await prisma.$transaction(transactionOps);
+      }
+    } catch (deductionError) {
+      console.error("Stock deduction failed but order was placed:", deductionError);
+      // We don't fail the order if inventory tracking fails, just log it.
+    }
+    // ------------------------------------------
+
     return NextResponse.json(serializeOrder(order), { status: 201 });
   } catch (error) {
     return NextResponse.json(

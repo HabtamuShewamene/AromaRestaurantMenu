@@ -35,16 +35,16 @@ export default function InventoryManager() {
     setEditingId(null);
     setFormData({
       name: "",
-      stock: 0,
+      stock: 0, // Using stock for the form field but mapping to currentStock
       unit: "kg",
-      costPerUnit: 0
+      costPerUnit: 0 // Mapping to minimumStock
     });
   };
 
   const handleEdit = (item: IngredientRecord) => {
     setIsCreating(false);
     setEditingId(item.id);
-    setFormData({ ...item });
+    setFormData({ ...item, stock: item.currentStock, costPerUnit: item.minimumStock });
   };
 
   const handleCancel = () => {
@@ -144,7 +144,7 @@ export default function InventoryManager() {
               />
             </div>
             <div className="space-y-2">
-              <label className="text-xs font-semibold text-zinc-400 uppercase">Cost per Unit ($)</label>
+              <label className="text-xs font-semibold text-zinc-400 uppercase">Minimum Stock</label>
               <input
                 type="number"
                 step="0.01"
@@ -173,7 +173,7 @@ export default function InventoryManager() {
               <tr>
                 <th className="px-6 py-4">Ingredient Name</th>
                 <th className="px-6 py-4">Current Stock</th>
-                <th className="px-6 py-4">Unit Cost</th>
+                <th className="px-6 py-4">Min Stock</th>
                 <th className="px-6 py-4 text-right">Actions</th>
               </tr>
             </thead>
@@ -196,11 +196,11 @@ export default function InventoryManager() {
                       {item.name}
                     </td>
                     <td className="px-6 py-4">
-                      <span className={`px-2 py-1 rounded-md ${item.stock < 10 ? 'bg-red-500/10 text-red-400' : 'bg-green-500/10 text-green-400'}`}>
-                        {item.stock} {item.unit}
+                      <span className={`px-2 py-1 rounded-md ${item.currentStock < item.minimumStock ? 'bg-red-500/10 text-red-400' : 'bg-green-500/10 text-green-400'}`}>
+                        {item.currentStock} {item.unit}
                       </span>
                     </td>
-                    <td className="px-6 py-4">${item.costPerUnit.toFixed(2)} / {item.unit}</td>
+                    <td className="px-6 py-4">{item.minimumStock} {item.unit}</td>
                     <td className="px-6 py-4 text-right">
                       <div className="flex justify-end gap-2">
                         <button

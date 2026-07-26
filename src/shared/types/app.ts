@@ -16,9 +16,9 @@ export type CategoryRecord = {
 export type IngredientRecord = {
   id: string;
   name: string;
-  stock: number;
+  currentStock: number;
   unit: string;
-  costPerUnit: number;
+  minimumStock: number;
   createdAt?: string;
   updatedAt?: string;
 };
