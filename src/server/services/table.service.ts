@@ -52,6 +52,42 @@ export async function getTableByNumber(tableNumber: number) {
   });
 }
 
+export async function getTableByQrIdentifier(identifier: string) {
+  // Try finding by qrIdentifier first
+  let table = await prisma.diningTable.findUnique({
+    where: { qrIdentifier: identifier },
+    include: {
+      tableSessions: {
+        where: { status: "ACTIVE" },
+        include: {
+          orders: {
+            include: {
+              items: {
+                include: {
+                  item: true,
+                  addons: true,
+                },
+              },
+            },
+          },
+          waiterRequests: true,
+          payments: true,
+        },
+      },
+    },
+  });
+
+  // If not found and identifier is numeric or "table-X", try resolving by number
+  if (!table) {
+    const num = parseInt(identifier.replace(/^table-?/i, ""), 10);
+    if (!isNaN(num)) {
+      table = await getTableByNumber(num);
+    }
+  }
+
+  return table;
+}
+
 export async function getTableById(tableId: string) {
   return prisma.diningTable.findUnique({
     where: { id: tableId },

@@ -7,19 +7,28 @@ export async function GET() {
   try {
     const [items, stats] = await Promise.all([
       prisma.menuItem.findMany({
-        include: { category: true },
-        orderBy: { createdAt: 'desc' },
+        include: {
+          category: true,
+          addonGroups: {
+            include: {
+              options: {
+                orderBy: { orderIndex: "asc" },
+              },
+            },
+          },
+        },
+        orderBy: { createdAt: "desc" },
       }),
       prisma.review.groupBy({
-        by: ['itemId'],
+        by: ["itemId"],
         _avg: { rating: true },
         _count: { rating: true },
         where: { isApproved: true },
-      })
+      }),
     ]);
 
-    const itemsWithStats = items.map(item => {
-      const itemStats = stats.find(s => s.itemId === item.id);
+    const itemsWithStats = items.map((item) => {
+      const itemStats = stats.find((s) => s.itemId === item.id);
       return {
         ...item,
         averageRating: itemStats?._avg.rating ? parseFloat(itemStats._avg.rating.toFixed(1)) : 0,
@@ -60,12 +69,14 @@ export async function POST(request: NextRequest) {
     if (!categoryId) {
       return NextResponse.json({ message: "Category is required" }, { status: 400 });
     }
-    
+
     // Process recipe
-    const recipeData = Array.isArray(body.recipe) ? body.recipe.map((r: any) => ({
-      ingredientId: r.ingredientId,
-      quantity: Number(r.quantity) || 0
-    })) : [];
+    const recipeData = Array.isArray(body.recipe)
+      ? body.recipe.map((r: any) => ({
+          ingredientId: r.ingredientId,
+          quantity: Number(r.quantity) || 0,
+        }))
+      : [];
 
     const item = await prisma.menuItem.create({
       data: {
@@ -75,9 +86,21 @@ export async function POST(request: NextRequest) {
         categoryId,
         image: body.image,
         isAvailable: body.isAvailable ?? true,
+        isFeatured: body.isFeatured ?? false,
+        vegetarian: body.vegetarian ?? false,
+        vegan: body.vegan ?? false,
+        spicy: body.spicy ?? false,
+        sugarFree: body.sugarFree ?? false,
+        allergens: Array.isArray(body.allergens) ? body.allergens : [],
         ingredients: {
-          create: recipeData
-        }
+          create: recipeData,
+        },
+      },
+      include: {
+        category: true,
+        addonGroups: {
+          include: { options: true },
+        },
       },
     });
 
