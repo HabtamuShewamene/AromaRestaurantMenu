@@ -3,7 +3,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import prisma from "@/server/db/prisma";
 import bcrypt from "bcryptjs";
 
-type AppRole = "ADMIN" | "CLIENT";
+type AppRole = "ADMIN" | "CUSTOMER" | "CLIENT";
 
 export const authOptions: NextAuthOptions = {
   providers: [

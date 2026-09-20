@@ -28,71 +28,126 @@ const adapter = new PrismaPg({ connectionString });
 const prisma = new PrismaClient({ adapter });
 
 async function main() {
-  console.log("🌱 Starting Aroma Restaurant database seed...");
+  console.log("🌱 Starting Aroma Restaurant Phase 1 database seed...");
 
-  // 1. Clean existing records
-  await prisma.review.deleteMany({});
+  // 1. Clean existing records in correct order
+  await prisma.payment.deleteMany({});
+  await prisma.waiterRequest.deleteMany({});
+  await prisma.orderItemAddon.deleteMany({});
   await prisma.orderItem.deleteMany({});
   await prisma.order.deleteMany({});
+  await prisma.tableSession.deleteMany({});
+  await prisma.diningTable.deleteMany({});
+  await prisma.addonOption.deleteMany({});
+  await prisma.addonGroup.deleteMany({});
+  await prisma.review.deleteMany({});
   await prisma.foodIngredient.deleteMany({});
   await prisma.menuItem.deleteMany({});
   await prisma.category.deleteMany({});
   await prisma.ingredient.deleteMany({});
+  await prisma.restaurant.deleteMany({});
   await prisma.user.deleteMany({});
 
-  // 2. Create Users
-  const hashedPassword = await bcrypt.hash("Admin@123", 10);
-  const clientPassword = await bcrypt.hash("Client@123", 10);
+  // 2. Create Restaurant profile
+  const restaurant = await prisma.restaurant.create({
+    data: {
+      name: "Aroma Restaurant",
+      description: "Fine Dining, Artisan Coffee & Gourmet Culinary Craftsmanship",
+      coverImage: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1600&q=85",
+      phone: "+1 (555) 342-7662",
+      email: "contact@aromarestaurant.com",
+      address: "450 Grand Avenue, Financial District",
+      openingTime: "08:00 AM",
+      closingTime: "11:30 PM",
+      socialLinks: {
+        instagram: "https://instagram.com/aroma_restaurant",
+        facebook: "https://facebook.com/aroma_restaurant",
+      },
+    },
+  });
+  console.log(`🏛️ Created Restaurant: ${restaurant.name}`);
+
+  // 3. Create Users (ADMIN and CUSTOMER only)
+  const adminPassword = await bcrypt.hash("Admin@123", 10);
+  const customerPassword = await bcrypt.hash("Customer@123", 10);
 
   const admin = await prisma.user.create({
     data: {
-      name: "Aroma Admin",
+      name: "Aroma General Manager",
       email: "admin@aroma.com",
-      password: hashedPassword,
+      password: adminPassword,
       role: "ADMIN",
     },
   });
 
-  const client = await prisma.user.create({
+  const customer = await prisma.user.create({
     data: {
-      name: "John Doe",
-      email: "client@aroma.com",
-      password: clientPassword,
-      role: "CLIENT",
+      name: "Sophia Martinez",
+      email: "customer@aroma.com",
+      password: customerPassword,
+      role: "CUSTOMER",
     },
   });
 
   console.log(`👤 Created Admin: ${admin.email} (Password: Admin@123)`);
-  console.log(`👤 Created Client: ${client.email} (Password: Client@123)`);
+  console.log(`👤 Created Customer: ${customer.email} (Password: Customer@123)`);
 
-  // 3. Create Ingredients
+  // 4. Create Dining Tables (1 through 8)
+  const tables = await Promise.all([
+    prisma.diningTable.create({
+      data: { number: 1, label: "Window Booth 1", capacity: 2, status: "AVAILABLE", qrIdentifier: "table-1", qrCodeUrl: "/table/1" },
+    }),
+    prisma.diningTable.create({
+      data: { number: 2, label: "Window Booth 2", capacity: 2, status: "AVAILABLE", qrIdentifier: "table-2", qrCodeUrl: "/table/2" },
+    }),
+    prisma.diningTable.create({
+      data: { number: 3, label: "Center Dining 3", capacity: 4, status: "AVAILABLE", qrIdentifier: "table-3", qrCodeUrl: "/table/3" },
+    }),
+    prisma.diningTable.create({
+      data: { number: 4, label: "Center Dining 4", capacity: 4, status: "AVAILABLE", qrIdentifier: "table-4", qrCodeUrl: "/table/4" },
+    }),
+    prisma.diningTable.create({
+      data: { number: 5, label: "Terrace Garden 5", capacity: 4, status: "AVAILABLE", qrIdentifier: "table-5", qrCodeUrl: "/table/5" },
+    }),
+    prisma.diningTable.create({
+      data: { number: 6, label: "Terrace Garden 6", capacity: 6, status: "AVAILABLE", qrIdentifier: "table-6", qrCodeUrl: "/table/6" },
+    }),
+    prisma.diningTable.create({
+      data: { number: 7, label: "VIP Private Salon 7", capacity: 8, status: "AVAILABLE", qrIdentifier: "table-7", qrCodeUrl: "/table/7" },
+    }),
+    prisma.diningTable.create({
+      data: { number: 8, label: "Chef's Counter 8", capacity: 2, status: "AVAILABLE", qrIdentifier: "table-8", qrCodeUrl: "/table/8" },
+    }),
+  ]);
+  console.log(`🪑 Created ${tables.length} dining tables with QR codes`);
+
+  // 5. Create Ingredients
   const coffeeBeans = await prisma.ingredient.create({
-    data: { name: "Arabica Coffee Beans", unit: "kg", currentStock: 25.0, minimumStock: 5.0 },
+    data: { name: "Arabica Reserve Coffee Beans", unit: "kg", currentStock: 30.0, minimumStock: 5.0 },
   });
   const milk = await prisma.ingredient.create({
-    data: { name: "Organic Whole Milk", unit: "liters", currentStock: 50.0, minimumStock: 10.0 },
+    data: { name: "Organic Whole Milk", unit: "liters", currentStock: 60.0, minimumStock: 10.0 },
   });
   const oatMilk = await prisma.ingredient.create({
-    data: { name: "Barista Oat Milk", unit: "liters", currentStock: 30.0, minimumStock: 8.0 },
+    data: { name: "Barista Oat Milk", unit: "liters", currentStock: 40.0, minimumStock: 8.0 },
   });
   const matchaPowder = await prisma.ingredient.create({
-    data: { name: "Ceremonial Grade Matcha", unit: "kg", currentStock: 8.0, minimumStock: 2.0 },
+    data: { name: "Ceremonial Uji Matcha", unit: "kg", currentStock: 10.0, minimumStock: 2.0 },
   });
   const butter = await prisma.ingredient.create({
-    data: { name: "French Butter", unit: "kg", currentStock: 20.0, minimumStock: 4.0 },
+    data: { name: "French AOP Butter", unit: "kg", currentStock: 25.0, minimumStock: 4.0 },
   });
   const chocolate = await prisma.ingredient.create({
-    data: { name: "Belgian Dark Chocolate", unit: "kg", currentStock: 15.0, minimumStock: 3.0 },
+    data: { name: "Belgian 70% Dark Chocolate", unit: "kg", currentStock: 20.0, minimumStock: 3.0 },
   });
-
   console.log("📦 Created raw inventory ingredients");
 
-  // 4. Create Categories
+  // 6. Create Categories
   const catCoffee = await prisma.category.create({
     data: {
       name: "Artisan Coffee",
       slug: "artisan-coffee",
-      description: "Hand-crafted specialty espresso and pour-over roasts",
+      description: "Hand-crafted specialty espresso and single-origin roasts",
       image: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=800&q=80",
       orderIndex: 1,
     },
@@ -112,7 +167,7 @@ async function main() {
     data: {
       name: "Bakery & Pastries",
       slug: "bakery-pastries",
-      description: "Freshly baked artisan croissants and desserts",
+      description: "Freshly baked artisan croissants, pastries, and desserts",
       image: "https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=800&q=80",
       orderIndex: 3,
     },
@@ -120,13 +175,13 @@ async function main() {
 
   console.log("📂 Created menu categories");
 
-  // 5. Create Menu Items + Recipes
+  // 7. Create Menu Items + Addon Groups + Recipes
   const espresso = await prisma.menuItem.create({
     data: {
       name: "Signature Double Espresso",
       categoryId: catCoffee.id,
       price: 4.5,
-      description: "Rich, velvety double shot with notes of caramelized dark cocoa and roasted hazelnut.",
+      description: "Rich, velvety double shot with notes of caramelized dark cocoa, roasted hazelnut, and citrus bloom.",
       image: "https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?w=800&q=80",
       vegetarian: true,
       vegan: true,
@@ -135,9 +190,26 @@ async function main() {
       allergens: [],
       rating: 4.9,
       isAvailable: true,
+      isFeatured: true,
       viewCount: 142,
       ingredients: {
         create: [{ ingredientId: coffeeBeans.id, quantity: 0.02 }],
+      },
+      addonGroups: {
+        create: [
+          {
+            name: "Espresso Shots",
+            required: false,
+            minSelect: 0,
+            maxSelect: 2,
+            options: {
+              create: [
+                { name: "Extra Espresso Shot", price: 1.5, orderIndex: 1 },
+                { name: "Decaf Roast", price: 0.5, orderIndex: 2 },
+              ],
+            },
+          },
+        ],
       },
     },
   });
@@ -156,11 +228,42 @@ async function main() {
       allergens: ["Dairy"],
       rating: 4.8,
       isAvailable: true,
+      isFeatured: true,
       viewCount: 98,
       ingredients: {
         create: [
           { ingredientId: coffeeBeans.id, quantity: 0.02 },
           { ingredientId: milk.id, quantity: 0.2 },
+        ],
+      },
+      addonGroups: {
+        create: [
+          {
+            name: "Milk Selection",
+            required: true,
+            minSelect: 1,
+            maxSelect: 1,
+            options: {
+              create: [
+                { name: "Whole Milk (Standard)", price: 0.0, orderIndex: 1 },
+                { name: "Oat Milk (Barista)", price: 0.75, orderIndex: 2 },
+                { name: "Almond Milk", price: 0.75, orderIndex: 3 },
+              ],
+            },
+          },
+          {
+            name: "Syrups & Flavors",
+            required: false,
+            minSelect: 0,
+            maxSelect: 2,
+            options: {
+              create: [
+                { name: "Madagascar Vanilla", price: 0.6, orderIndex: 1 },
+                { name: "Salted Caramel", price: 0.6, orderIndex: 2 },
+                { name: "Hazelnut", price: 0.6, orderIndex: 3 },
+              ],
+            },
+          },
         ],
       },
     },
@@ -180,11 +283,29 @@ async function main() {
       allergens: ["Oats"],
       rating: 4.9,
       isAvailable: true,
+      isFeatured: true,
       viewCount: 85,
       ingredients: {
         create: [
           { ingredientId: matchaPowder.id, quantity: 0.005 },
           { ingredientId: oatMilk.id, quantity: 0.25 },
+        ],
+      },
+      addonGroups: {
+        create: [
+          {
+            name: "Sweetness Level",
+            required: false,
+            minSelect: 0,
+            maxSelect: 1,
+            options: {
+              create: [
+                { name: "Unsweetened (Zero Sugar)", price: 0.0, orderIndex: 1 },
+                { name: "Honey Sweetened", price: 0.5, orderIndex: 2 },
+                { name: "Vanilla Sweetened", price: 0.5, orderIndex: 3 },
+              ],
+            },
+          },
         ],
       },
     },
@@ -204,6 +325,7 @@ async function main() {
       allergens: ["Gluten", "Dairy"],
       rating: 4.7,
       isAvailable: true,
+      isFeatured: false,
       viewCount: 120,
       ingredients: {
         create: [
@@ -214,13 +336,13 @@ async function main() {
     },
   });
 
-  console.log("🍽️ Created sample menu items with recipes");
+  console.log("🍽️ Created dishes with customization add-ons & recipes");
 
-  // 6. Create Approved Sample Reviews
+  // 8. Create Approved Customer Reviews
   await prisma.review.create({
     data: {
       itemId: espresso.id,
-      userId: client.id,
+      userId: customer.id,
       name: "Sophia Martinez",
       email: "sophia@example.com",
       rating: 5,
@@ -240,8 +362,8 @@ async function main() {
     },
   });
 
-  console.log("⭐ Created sample reviews");
-  console.log("✅ Seed completed successfully!");
+  console.log("⭐ Created customer reviews");
+  console.log("✅ Phase 1 database seed completed successfully!");
 }
 
 main()
