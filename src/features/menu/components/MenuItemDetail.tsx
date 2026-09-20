@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { X } from "lucide-react";
+import { X, Plus, Minus, ShoppingBag, Check } from "lucide-react";
 import Image from "next/image";
 import { MenuItemRecord, ReviewRecord } from "@/shared/types/app";
+import { useCart } from "@/components/providers/CartProvider";
 import ReviewDisplay from "@/features/reviews/components/ReviewDisplay";
 import ReviewForm from "@/features/reviews/components/ReviewForm";
 
@@ -13,6 +14,9 @@ type MenuItemDetailProps = {
 };
 
 export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
+  const { addToCart } = useCart();
+  const [quantity, setQuantity] = useState(1);
+  const [justAdded, setJustAdded] = useState(false);
   const [reviews, setReviews] = useState<ReviewRecord[]>([]);
   const [averageRating, setAverageRating] = useState(0);
   const [totalReviews, setTotalReviews] = useState(0);

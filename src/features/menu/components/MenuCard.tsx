@@ -1,10 +1,11 @@
 "use client";
 
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
-import { Star, Flame } from "lucide-react";
+import { motion } from "framer-motion";
+import { Star, Flame, Plus, Check } from "lucide-react";
 import { useState } from "react";
 import { MenuItemRecord } from "@/shared/types/app";
+import { useCart } from "@/components/providers/CartProvider";
 
 type MenuCardProps = {
   item: MenuItemRecord & { averageRating?: number; totalReviews?: number };
@@ -17,12 +18,21 @@ export default function MenuCard({
   onViewDetails,
   index = 0,
 }: MenuCardProps) {
+  const { addToCart } = useCart();
+  const [justAdded, setJustAdded] = useState(false);
   const rating = item.averageRating || 0;
   const reviewCount = item.totalReviews || 0;
 
   const categoryName =
     typeof item.category === "string" ? item.category : item.category.name;
 
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!item.isAvailable) return;
+    addToCart(item, 1);
+    setJustAdded(true);
+    setTimeout(() => setJustAdded(false), 1500);
+  };
 
   return (
     <motion.article
@@ -138,23 +148,42 @@ export default function MenuCard({
         </p>
 
         {/* ── Actions ── */}
-        <div className="mt-auto pt-4 border-t border-white/5 flex items-center justify-between">
+        <div className="mt-auto pt-4 border-t border-white/5 flex items-center justify-between gap-2">
           <button
+            type="button"
             onClick={(e) => {
               e.stopPropagation();
               onViewDetails?.(item);
             }}
-            className="text-xs font-semibold text-gold-400/80 hover:text-gold-400 transition-colors uppercase tracking-widest"
+            className="text-xs font-semibold text-zinc-400 hover:text-white transition-colors uppercase tracking-wider py-1.5 px-2 rounded-lg hover:bg-white/5"
           >
             Details
           </button>
           
-          <div className="flex items-center gap-1">
-            <div className={`w-1.5 h-1.5 rounded-full ${item.isAvailable ? 'bg-green-500' : 'bg-red-500'}`} />
-            <span className="text-[10px] text-zinc-500 uppercase tracking-tighter">
-              {item.isAvailable ? "In Stock" : "Sold Out"}
-            </span>
-          </div>
+          <button
+            type="button"
+            disabled={!item.isAvailable}
+            onClick={handleAddToCart}
+            className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
+              !item.isAvailable
+                ? "bg-zinc-800 text-zinc-500 cursor-not-allowed"
+                : justAdded
+                ? "bg-green-500 text-black shadow-[0_0_12px_rgba(34,197,94,0.4)]"
+                : "bg-gold-500 text-black hover:bg-gold-400 hover:scale-105 active:scale-95 shadow-[0_2px_10px_rgba(182,141,64,0.25)]"
+            }`}
+          >
+            {justAdded ? (
+              <>
+                <Check className="w-3.5 h-3.5 stroke-[2.5]" />
+                <span>Added</span>
+              </>
+            ) : (
+              <>
+                <Plus className="w-3.5 h-3.5 stroke-[2.5]" />
+                <span>Add</span>
+              </>
+            )}
+          </button>
         </div>
       </div>
     </motion.article>
