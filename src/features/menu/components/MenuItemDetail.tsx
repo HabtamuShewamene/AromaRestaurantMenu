@@ -135,8 +135,14 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
     }
   };
 
+  const missingRequiredGroup = (item.addonGroups || []).find(
+    (g) => g.required && (!selectedAddons[g.id] || selectedAddons[g.id].length < Math.max(1, g.minSelect))
+  );
+
+  const canAddToCart = item.isAvailable && !missingRequiredGroup;
+
   const handleAddToCart = () => {
-    if (!item.isAvailable) return;
+    if (!canAddToCart) return;
     addToCart(item, quantity, flattenedAddons, notes.trim());
     setJustAdded(true);
     setTimeout(() => {
@@ -279,11 +285,13 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
 
             <button
               type="button"
-              disabled={!item.isAvailable}
+              disabled={!canAddToCart}
               onClick={handleAddToCart}
               className={`flex-1 min-w-[200px] flex items-center justify-center gap-2 py-3.5 px-6 rounded-2xl font-bold text-sm transition-all shadow-lg ${
                 !item.isAvailable
                   ? "bg-zinc-800 text-zinc-500 cursor-not-allowed"
+                  : missingRequiredGroup
+                  ? "bg-zinc-800 text-zinc-400 border border-gold-500/30 cursor-not-allowed"
                   : justAdded
                   ? "bg-green-500 text-black shadow-[0_0_20px_rgba(34,197,94,0.4)]"
                   : "bg-gold-500 text-black hover:bg-gold-400 hover:scale-[1.02] active:scale-[0.98] shadow-[0_4px_20px_rgba(182,141,64,0.3)]"
@@ -294,6 +302,8 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
                   <Check className="w-4 h-4 stroke-[2.5]" />
                   <span>Added to Cart (${totalPrice.toFixed(2)})</span>
                 </>
+              ) : missingRequiredGroup ? (
+                <span>Please select: {missingRequiredGroup.name}</span>
               ) : (
                 <>
                   <ShoppingBag className="w-4 h-4" />

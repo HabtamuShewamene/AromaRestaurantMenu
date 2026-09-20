@@ -26,9 +26,15 @@ export default function MenuCard({
   const categoryName =
     typeof item.category === "string" ? item.category : item.category.name;
 
+  const hasAddons = Boolean(item.addonGroups && item.addonGroups.length > 0);
+
   const handleAddToCart = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (!item.isAvailable) return;
+    if (hasAddons) {
+      onViewDetails?.(item);
+      return;
+    }
     addToCart(item, 1);
     setJustAdded(true);
     setTimeout(() => setJustAdded(false), 1500);
@@ -54,26 +60,15 @@ export default function MenuCard({
         boxShadow: "0 4px 24px rgba(0,0,0,0.4)",
         transition: "box-shadow 0.4s ease, border-color 0.4s ease",
       }}
-      onMouseEnter={(e) => {
-        const el = e.currentTarget;
-        el.style.boxShadow =
-          "0 20px 60px rgba(0,0,0,0.6), 0 0 0 1px rgba(182,141,64,0.2), 0 0 40px rgba(182,141,64,0.06)";
-        el.style.borderColor = "rgba(182,141,64,0.25)";
-      }}
-      onMouseLeave={(e) => {
-        const el = e.currentTarget;
-        el.style.boxShadow = "0 4px 24px rgba(0,0,0,0.4)";
-        el.style.borderColor = "rgba(255,255,255,0.06)";
-      }}
     >
       {/* ── Food Image ── */}
-      <div className="relative h-40 sm:h-44 overflow-hidden rounded-t-[1.75rem]">
+      <div className="relative h-44 sm:h-48 overflow-hidden rounded-t-[1.75rem]">
         <Image
           src={item.image}
           alt={item.name}
           fill
-          sizes="(max-width: 768px) 50vw, 33vw"
-          className="object-cover transition-transform duration-700 group-hover:scale-110"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+          className="object-cover transition-transform duration-700 group-hover:scale-105"
         />
 
         {/* Dark gradient overlay */}
@@ -81,26 +76,32 @@ export default function MenuCard({
 
         {/* Price badge */}
         <div
-          className="absolute top-3 right-3 px-3 py-1 rounded-full text-sm font-bold text-gold-300"
+          className="absolute top-3 right-3 px-3 py-1 rounded-full text-sm font-bold text-gold-300 font-playfair"
           style={{
-            background: "rgba(8,8,8,0.75)",
+            background: "rgba(8,8,8,0.8)",
             backdropFilter: "blur(12px)",
-            WebkitBackdropFilter: "blur(12px)",
-            border: "1px solid rgba(182,141,64,0.25)",
+            border: "1px solid rgba(182,141,64,0.3)",
           }}
         >
           ${item.price.toFixed(2)}
         </div>
 
-        {/* Availability badge */}
-        <div
-          className={`absolute top-3 left-3 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
-            item.isAvailable
-              ? "bg-green-500/20 text-green-400 border border-green-500/30"
-              : "bg-red-500/20 text-red-400 border border-red-500/30"
-          }`}
-        >
-          {item.isAvailable ? "Available" : "Sold Out"}
+        {/* Availability / Dietary badges */}
+        <div className="absolute top-3 left-3 flex items-center gap-1.5 flex-wrap max-w-[70%]">
+          <span
+            className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
+              item.isAvailable
+                ? "bg-green-500/20 text-green-400 border border-green-500/30"
+                : "bg-red-500/20 text-red-400 border border-red-500/30"
+            }`}
+          >
+            {item.isAvailable ? "Available" : "Sold Out"}
+          </span>
+          {item.isFeatured && (
+            <span className="px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider bg-gold-500/20 text-gold-300 border border-gold-500/40">
+              Chef Pick
+            </span>
+          )}
         </div>
 
         {/* Rating badge */}
@@ -108,7 +109,7 @@ export default function MenuCard({
           <div
             className="absolute bottom-3 left-3 flex items-center gap-1.5 px-2.5 py-1 rounded-full"
             style={{
-              background: "rgba(8,8,8,0.7)",
+              background: "rgba(8,8,8,0.75)",
               backdropFilter: "blur(10px)",
               border: "1px solid rgba(255,255,255,0.1)",
             }}
@@ -120,35 +121,27 @@ export default function MenuCard({
             <span className="text-[10px] text-zinc-500">({reviewCount})</span>
           </div>
         )}
-
-        {/* Popular badge */}
-        {reviewCount > 5 && rating > 4.5 && (
-          <div className="absolute bottom-3 right-3 flex items-center gap-1 px-2 py-1 rounded-full bg-orange-500/20 border border-orange-500/30">
-            <Flame className="w-3 h-3 text-orange-400" />
-            <span className="text-[10px] font-bold text-orange-400">Hot</span>
-          </div>
-        )}
       </div>
 
       {/* ── Card Content ── */}
       <div className="flex flex-col flex-1 p-4 pt-3.5">
         {/* Category */}
-        <p className="text-[10px] uppercase tracking-[0.2em] text-gold-500/70 font-medium mb-1">
+        <p className="text-[10px] uppercase tracking-[0.2em] text-gold-500 font-semibold mb-1">
           {categoryName}
         </p>
 
         {/* Name */}
-        <h3 className="font-semibold text-white text-sm leading-tight mb-1.5 line-clamp-1">
+        <h3 className="font-semibold text-white text-base leading-snug mb-1.5 line-clamp-1 font-playfair">
           {item.name}
         </h3>
 
         {/* Description */}
-        <p className="text-xs text-zinc-500 leading-relaxed line-clamp-2 mb-4 flex-1">
+        <p className="text-xs text-zinc-400 leading-relaxed line-clamp-2 mb-4 flex-1">
           {item.description}
         </p>
 
         {/* ── Actions ── */}
-        <div className="mt-auto pt-4 border-t border-white/5 flex items-center justify-between gap-2">
+        <div className="mt-auto pt-3 border-t border-white/5 flex items-center justify-between gap-2">
           <button
             type="button"
             onClick={(e) => {
@@ -164,7 +157,7 @@ export default function MenuCard({
             type="button"
             disabled={!item.isAvailable}
             onClick={handleAddToCart}
-            className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
+            className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
               !item.isAvailable
                 ? "bg-zinc-800 text-zinc-500 cursor-not-allowed"
                 : justAdded
@@ -176,6 +169,11 @@ export default function MenuCard({
               <>
                 <Check className="w-3.5 h-3.5 stroke-[2.5]" />
                 <span>Added</span>
+              </>
+            ) : hasAddons ? (
+              <>
+                <Plus className="w-3.5 h-3.5 stroke-[2.5]" />
+                <span>Customize</span>
               </>
             ) : (
               <>

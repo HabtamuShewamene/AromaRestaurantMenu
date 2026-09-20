@@ -77,30 +77,30 @@ export default function TableActionBar() {
 
   return (
     <>
-      {/* Sticky Table Banner Header */}
-      <div className="sticky top-20 z-40 bg-[#0e0e0e]/95 backdrop-blur-xl border-b border-gold-500/20 px-4 py-2.5 shadow-xl">
-        <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
+      {/* Table Banner Header */}
+      <div className="pt-20 bg-[#0e0e0e]/95 border-b border-gold-500/20 px-4 py-3 shadow-lg">
+        <div className="max-w-7xl mx-auto flex items-center justify-between gap-3">
           <div className="flex items-center gap-2.5">
-            <span className="flex h-2.5 w-2.5 rounded-full bg-green-500 animate-pulse" />
+            <span className="flex h-2.5 w-2.5 rounded-full bg-green-500 animate-pulse flex-shrink-0" />
             <div>
-              <p className="text-xs sm:text-sm font-bold text-white flex items-center gap-1.5 font-playfair">
+              <p className="text-sm sm:text-base font-bold text-white flex items-center gap-1.5 font-playfair">
                 Table {tableContext.tableNumber}
                 {tableContext.tableLabel && (
-                  <span className="text-[11px] font-normal text-zinc-400 font-sans">
+                  <span className="text-xs font-normal text-zinc-400 font-sans">
                     • {tableContext.tableLabel}
                   </span>
                 )}
               </p>
               <p className="text-[10px] text-gold-400 uppercase tracking-wider font-semibold">
-                Dine-in Active Session
+                Dine-in Table Session
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
             <button
               onClick={() => setShowWaiterModal(true)}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gold-500/10 border border-gold-500/30 text-gold-300 hover:bg-gold-500/20 text-xs font-semibold transition-all hover:scale-105 active:scale-95 shadow-[0_0_12px_rgba(182,141,64,0.1)]"
+              className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-gold-500/10 border border-gold-500/30 text-gold-300 hover:bg-gold-500/20 text-[11px] sm:text-xs font-semibold transition-all hover:scale-105 active:scale-95 shadow-[0_0_12px_rgba(182,141,64,0.1)]"
             >
               <BellRing className="w-3.5 h-3.5 text-gold-400" />
               <span>Call Waiter</span>
@@ -108,7 +108,7 @@ export default function TableActionBar() {
 
             <button
               onClick={() => setShowBillModal(true)}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/5 border border-white/10 text-zinc-300 hover:text-white hover:bg-white/10 text-xs font-semibold transition-all active:scale-95"
+              className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-white/5 border border-white/10 text-zinc-300 hover:text-white hover:bg-white/10 text-[11px] sm:text-xs font-semibold transition-all active:scale-95"
             >
               <Receipt className="w-3.5 h-3.5 text-zinc-400" />
               <span>Request Bill</span>

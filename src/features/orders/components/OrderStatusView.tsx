@@ -45,12 +45,11 @@ export default function OrderStatusView({ initialOrder }: { initialOrder: OrderR
     const interval = setInterval(async () => {
       try {
         setIsRefreshing(true);
-        const res = await fetch(`/api/orders`);
+        const res = await fetch(`/api/orders/${order.id}`);
         if (res.ok) {
-          const allOrders: OrderRecord[] = await res.json();
-          const current = allOrders.find((o) => o.id === order.id);
-          if (current) {
-            setOrder(current);
+          const latest: OrderRecord = await res.json();
+          if (latest && latest.id === order.id) {
+            setOrder(latest);
           }
         }
       } catch (err) {

@@ -151,16 +151,18 @@ export default function Cart({
                     <div className="flex items-center gap-2">
                       <button
                         onClick={() => onDecrease(item.id)}
-                        className="w-6 h-6 flex items-center justify-center rounded-lg bg-zinc-900 border border-zinc-800 hover:bg-gold-500/20 hover:text-gold-400 text-zinc-400 transition-all"
+                        className="w-8 h-8 flex items-center justify-center rounded-xl bg-zinc-900 border border-zinc-800 hover:bg-gold-500/20 hover:text-gold-400 text-zinc-300 active:scale-95 transition-all"
+                        aria-label="Decrease quantity"
                       >
-                        <Minus className="w-3 h-3" />
+                        <Minus className="w-3.5 h-3.5" />
                       </button>
-                      <span className="text-xs font-bold text-white w-4 text-center">{item.quantity}</span>
+                      <span className="text-xs font-bold text-white w-5 text-center">{item.quantity}</span>
                       <button
                         onClick={() => onIncrease(item.id)}
-                        className="w-6 h-6 flex items-center justify-center rounded-lg bg-zinc-900 border border-zinc-800 hover:bg-gold-500/20 hover:text-gold-400 text-zinc-400 transition-all"
+                        className="w-8 h-8 flex items-center justify-center rounded-xl bg-zinc-900 border border-zinc-800 hover:bg-gold-500/20 hover:text-gold-400 text-zinc-300 active:scale-95 transition-all"
+                        aria-label="Increase quantity"
                       >
-                        <Plus className="w-3 h-3" />
+                        <Plus className="w-3.5 h-3.5" />
                       </button>
                     </div>
                   </div>
@@ -170,9 +172,10 @@ export default function Cart({
                     <span className="text-sm font-bold text-gold-400 font-mono">${lineTotal.toFixed(2)}</span>
                     <button
                       onClick={() => onRemove(item.id)}
-                      className="w-6 h-6 flex items-center justify-center rounded-full text-zinc-500 hover:bg-red-500/15 hover:text-red-400 transition-all"
+                      className="w-8 h-8 flex items-center justify-center rounded-full text-zinc-500 hover:bg-red-500/15 hover:text-red-400 transition-all"
+                      aria-label="Remove item"
                     >
-                      <Trash2 className="w-3.5 h-3.5" />
+                      <Trash2 className="w-4 h-4" />
                     </button>
                   </div>
                 </motion.div>

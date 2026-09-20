@@ -4,15 +4,16 @@ import CartManager from "@/features/cart/components/CartManager";
 
 export default function CartPage() {
   return (
-    <main>
+    <main className="min-h-screen bg-[#080808]">
       <Navbar />
-      <section className="mx-auto max-w-5xl px-4 pt-32 pb-24">
-        <div className="mb-10">
-          <p className="mb-3 text-sm uppercase tracking-[0.3em] text-gold-500">Cart</p>
-          <h1 className="text-5xl font-bold tracking-tight">Review your order before checkout.</h1>
-          <p className="mt-4 max-w-2xl text-zinc-500">
-            Clients can update quantities, remove items, and place orders. Admins can still browse but cannot use
-            this to manage menu data.
+      <section className="mx-auto max-w-4xl px-4 pt-28 pb-28 sm:pb-24">
+        <div className="mb-8">
+          <p className="mb-2 text-xs uppercase tracking-[0.3em] text-gold-400 font-semibold">Order Summary</p>
+          <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-white font-playfair">
+            Your Dining Cart
+          </h1>
+          <p className="mt-2 text-sm text-zinc-400">
+            Review your selected dishes and send your order directly to the kitchen.
           </p>
         </div>
         <CartManager />

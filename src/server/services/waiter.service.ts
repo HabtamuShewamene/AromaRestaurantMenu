@@ -1,17 +1,24 @@
 import prisma from "@/server/db/prisma";
+import { getOrCreateActiveSession } from "@/server/services/table.service";
 
 export type CreateWaiterRequestInput = {
   tableId: string;
-  tableSessionId: string;
+  tableSessionId?: string | null;
   type?: "CALL_WAITER" | "REQUEST_BILL" | "REQUEST_WATER" | "REQUEST_CUTLERY" | "CUSTOM";
   note?: string | null;
 };
 
 export async function createWaiterRequest(input: CreateWaiterRequestInput) {
+  let sessionId = input.tableSessionId;
+  if (!sessionId) {
+    const session = await getOrCreateActiveSession(input.tableId);
+    sessionId = session.id;
+  }
+
   return prisma.waiterRequest.create({
     data: {
       tableId: input.tableId,
-      tableSessionId: input.tableSessionId,
+      tableSessionId: sessionId,
       type: input.type || "CALL_WAITER",
       note: input.note || null,
       status: "PENDING",

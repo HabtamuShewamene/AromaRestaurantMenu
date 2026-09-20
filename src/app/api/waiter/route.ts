@@ -14,13 +14,13 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    if (!body.tableId || !body.tableSessionId) {
-      return NextResponse.json({ message: "Table ID and Session ID are required" }, { status: 400 });
+    if (!body.tableId) {
+      return NextResponse.json({ message: "Table ID is required" }, { status: 400 });
     }
 
     const waiterReq = await createWaiterRequest({
       tableId: body.tableId,
-      tableSessionId: body.tableSessionId,
+      tableSessionId: body.tableSessionId || null,
       type: body.type || "CALL_WAITER",
       note: body.note || null,
     });
