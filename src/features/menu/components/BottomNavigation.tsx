@@ -2,19 +2,30 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Home, Heart, UtensilsCrossed, ClipboardList, User } from "lucide-react";
+import { Home, UtensilsCrossed, ShoppingBag, ClipboardList, Shield, User } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-
-const navItems = [
-  { icon: Home, label: "Home", href: "/" },
-  { icon: UtensilsCrossed, label: "Menu", href: "/menu" },
-  { icon: User, label: "Profile", href: "#" },
-];
+import { useSession } from "next-auth/react";
+import { useCart } from "@/components/providers/CartProvider";
 
 export default function BottomNavigation() {
   const pathname = usePathname();
+  const { data: session } = useSession();
+  const { cartCount } = useCart();
   const [ripple, setRipple] = useState<string | null>(null);
+  const role = (session?.user as { role?: string } | undefined)?.role;
+
+  const navItems = [
+    { icon: Home, label: "Home", href: "/" },
+    { icon: UtensilsCrossed, label: "Menu", href: "/menu" },
+    { icon: ShoppingBag, label: "Cart", href: "/cart", badge: cartCount },
+    { icon: ClipboardList, label: "Orders", href: session ? "/orders" : "/login" },
+    {
+      icon: role === "ADMIN" ? Shield : User,
+      label: role === "ADMIN" ? "Admin" : session ? "Account" : "Sign In",
+      href: role === "ADMIN" ? "/admin/dashboard" : session ? "/orders" : "/login",
+    },
+  ];
 
   const handleClick = (label: string) => {
     setRipple(label);
@@ -22,26 +33,17 @@ export default function BottomNavigation() {
   };
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 flex justify-center safe-bottom pb-4 px-4 pointer-events-none">
+    <div className="fixed bottom-0 left-0 right-0 z-50 flex justify-center safe-bottom pb-4 px-4 pointer-events-none md:hidden">
       <motion.nav
         initial={{ y: 100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.6, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
-        className="flex items-center gap-1 px-4 py-3 rounded-[2rem] pointer-events-auto"
-        style={{
-          background: "rgba(14, 14, 14, 0.92)",
-          backdropFilter: "blur(24px) saturate(2)",
-          WebkitBackdropFilter: "blur(24px) saturate(2)",
-          border: "1px solid rgba(255,255,255,0.08)",
-          boxShadow:
-            "0 -4px 40px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04), inset 0 1px 0 rgba(255,255,255,0.06)",
-        }}
+        transition={{ duration: 0.6, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+        className="flex items-center gap-1 px-3 py-2 rounded-[2rem] pointer-events-auto bg-[#0e0e0e]/95 backdrop-blur-2xl border border-white/10 shadow-[0_-4px_40px_rgba(0,0,0,0.8),0_0_0_1px_rgba(255,255,255,0.05)]"
       >
         {navItems.map((item) => {
           const Icon = item.icon;
           const isActive =
-            item.href !== "#" &&
-            (item.href === "/" ? pathname === "/" : pathname.startsWith(item.href));
+            item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
 
           return (
             <Link
@@ -54,12 +56,7 @@ export default function BottomNavigation() {
               {isActive && (
                 <motion.div
                   layoutId="bottom-nav-active"
-                  className="absolute inset-0 rounded-2xl"
-                  style={{
-                    background:
-                      "linear-gradient(135deg, rgba(182,141,64,0.25), rgba(182,141,64,0.1))",
-                    border: "1px solid rgba(182,141,64,0.3)",
-                  }}
+                  className="absolute inset-0 rounded-2xl bg-gold-500/15 border border-gold-500/30"
                   transition={{ type: "spring", stiffness: 400, damping: 30 }}
                 />
               )}
@@ -74,30 +71,37 @@ export default function BottomNavigation() {
                 />
               )}
 
-              {/* Icon */}
+              {/* Icon & Badge */}
               <div className="relative">
                 <Icon
                   className={`w-5 h-5 transition-all duration-300 ${
                     isActive
                       ? "text-gold-400 drop-shadow-[0_0_8px_rgba(182,141,64,0.8)]"
-                      : "text-zinc-500 group-hover:text-zinc-300"
+                      : "text-zinc-400 group-hover:text-zinc-200"
                   }`}
                   strokeWidth={isActive ? 2 : 1.5}
                 />
+                
+                {item.badge !== undefined && item.badge > 0 && (
+                  <span className="absolute -top-1.5 -right-2 flex items-center justify-center min-w-[16px] h-[16px] px-1 text-[9px] font-bold text-black bg-gold-500 rounded-full shadow-[0_0_8px_rgba(182,141,64,0.6)]">
+                    {item.badge}
+                  </span>
+                )}
+
                 {/* Active dot */}
                 {isActive && (
                   <motion.div
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
-                    className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-gold-400"
+                    className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-gold-400"
                   />
                 )}
               </div>
 
               {/* Label */}
               <span
-                className={`text-[9px] mt-1 font-medium tracking-wide transition-colors duration-300 ${
-                  isActive ? "text-gold-400" : "text-zinc-600 group-hover:text-zinc-400"
+                className={`text-[9px] mt-1 font-medium tracking-tight transition-colors duration-300 ${
+                  isActive ? "text-gold-400 font-bold" : "text-zinc-500 group-hover:text-zinc-300"
                 }`}
               >
                 {item.label}

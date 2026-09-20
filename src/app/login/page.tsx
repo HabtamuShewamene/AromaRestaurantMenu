@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { signIn } from "next-auth/react";
-import { Coffee, ArrowRight } from "lucide-react";
+import { ChefHat, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -34,8 +34,13 @@ export default function LoginPage() {
       <div className="w-full max-w-md">
         <div className="mb-12 text-center">
           <Link href="/" className="mb-8 inline-flex items-center gap-2">
-            <Coffee className="h-10 w-10 text-gold-500" />
-            <span className="text-3xl font-bold tracking-tighter text-gradient">ELITE CAFE</span>
+            <div className="flex items-center justify-center w-12 h-12 rounded-2xl bg-gold-500/15 border border-gold-500/30 shadow-[0_0_20px_rgba(182,141,64,0.2)]">
+              <ChefHat className="h-7 w-7 text-gold-400" />
+            </div>
+            <div className="flex flex-col text-left">
+              <span className="text-2xl font-bold tracking-tight text-white font-playfair">AROMA</span>
+              <span className="text-[9px] tracking-[0.25em] text-gold-500 font-semibold uppercase -mt-1">Restaurant</span>
+            </div>
           </Link>
           <h1 className="mb-2 text-4xl font-bold">Welcome Back</h1>
           <p className="text-zinc-500">Sign in to manage your orders or access admin features.</p>
