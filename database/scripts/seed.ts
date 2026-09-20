@@ -9,18 +9,21 @@ const envPath = path.join(process.cwd(), ".env");
 if (fs.existsSync(envPath)) {
   const envContent = fs.readFileSync(envPath, "utf8");
   envContent.split("\n").forEach((line) => {
-    const [key, ...value] = line.split("=");
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith("#")) return;
+    const [key, ...value] = trimmed.split("=");
     if (key && value.length > 0) {
-      process.env[key.trim()] = value.join("=").trim();
+      process.env[key.trim()] = value.join("=").trim().replace(/^["']|["']$/g, "");
     }
   });
 }
 
-const connectionString = process.env.DATABASE_URL;
-if (!connectionString) {
+const rawConnectionString = process.env.DATABASE_URL;
+if (!rawConnectionString) {
   throw new Error("DATABASE_URL is not defined in .env");
 }
 
+const connectionString = rawConnectionString.replace(/^["']|["']$/g, "");
 const adapter = new PrismaPg({ connectionString });
 const prisma = new PrismaClient({ adapter });
 
