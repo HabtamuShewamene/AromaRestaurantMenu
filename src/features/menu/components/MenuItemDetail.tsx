@@ -98,6 +98,57 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
               </div>
               <p className="text-zinc-300">{item.description}</p>
 
+              {/* Add to Cart Section */}
+              <div className="flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-white/5">
+                <div className="flex items-center gap-3 bg-zinc-950 px-3 py-2 rounded-2xl border border-white/10">
+                  <button
+                    type="button"
+                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                    className="w-8 h-8 rounded-xl bg-zinc-900 flex items-center justify-center text-zinc-300 hover:text-white hover:bg-zinc-800 transition-colors"
+                  >
+                    <Minus className="w-4 h-4" />
+                  </button>
+                  <span className="w-8 text-center font-bold text-white text-base">{quantity}</span>
+                  <button
+                    type="button"
+                    onClick={() => setQuantity(quantity + 1)}
+                    className="w-8 h-8 rounded-xl bg-zinc-900 flex items-center justify-center text-zinc-300 hover:text-white hover:bg-zinc-800 transition-colors"
+                  >
+                    <Plus className="w-4 h-4" />
+                  </button>
+                </div>
+
+                <button
+                  type="button"
+                  disabled={!item.isAvailable}
+                  onClick={() => {
+                    if (!item.isAvailable) return;
+                    addToCart(item, quantity);
+                    setJustAdded(true);
+                    setTimeout(() => setJustAdded(false), 2000);
+                  }}
+                  className={`flex-1 min-w-[180px] flex items-center justify-center gap-2 py-3 px-6 rounded-2xl font-bold text-sm transition-all shadow-lg ${
+                    !item.isAvailable
+                      ? "bg-zinc-800 text-zinc-500 cursor-not-allowed"
+                      : justAdded
+                      ? "bg-green-500 text-black shadow-[0_0_20px_rgba(34,197,94,0.4)]"
+                      : "bg-gold-500 text-black hover:bg-gold-400 hover:scale-[1.02] active:scale-[0.98] shadow-[0_4px_20px_rgba(182,141,64,0.3)]"
+                  }`}
+                >
+                  {justAdded ? (
+                    <>
+                      <Check className="w-4 h-4 stroke-[2.5]" />
+                      <span>Added to Cart (${(item.price * quantity).toFixed(2)})</span>
+                    </>
+                  ) : (
+                    <>
+                      <ShoppingBag className="w-4 h-4" />
+                      <span>Add to Cart • ${(item.price * quantity).toFixed(2)}</span>
+                    </>
+                  )}
+                </button>
+              </div>
+
               {/* Ingredients & Allergens */}
               {((item.ingredients && item.ingredients.length > 0) || (item.allergens && item.allergens.length > 0)) && (
                 <div className="pt-4 space-y-4">

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import cloudinary from "@/server/integrations/cloudinary";
+import cloudinary, { isCloudinaryConfigured } from "@/server/integrations/cloudinary";
 import { isAdminRequest } from "@/server/auth/session";
 
 const MAX_UPLOAD_SIZE = 5 * 1024 * 1024;
@@ -9,6 +9,10 @@ export async function POST(request: NextRequest) {
     const isAdmin = await isAdminRequest();
     if (!isAdmin) {
       return NextResponse.json({ message: "Admin access required" }, { status: 403 });
+    }
+
+    if (!isCloudinaryConfigured()) {
+      return NextResponse.json({ message: "Cloudinary is not configured in .env" }, { status: 500 });
     }
 
     const formData = await request.formData();
@@ -31,7 +35,7 @@ export async function POST(request: NextRequest) {
     const base64Image = `data:${file.type};base64,${buffer.toString("base64")}`;
 
     const uploadResult = await cloudinary.uploader.upload(base64Image, {
-      folder: "cafe-menu",
+      folder: "aroma-restaurant-menu",
       resource_type: "image",
     });
 
@@ -39,7 +43,8 @@ export async function POST(request: NextRequest) {
       imageUrl: uploadResult.secure_url,
       publicId: uploadResult.public_id,
     });
-  } catch {
-    return NextResponse.json({ message: "Failed to upload image" }, { status: 500 });
+  } catch (error) {
+    console.error("Cloudinary upload failed:", error);
+    return NextResponse.json({ message: error instanceof Error ? error.message : "Failed to upload image" }, { status: 500 });
   }
 }
