@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { CheckCircle, XCircle, Trash2, Shield, Mail, Globe, Calendar, Info } from "lucide-react";
+import { CheckCircle, XCircle, Trash2, Shield, Mail, Globe, Calendar, Info, Star } from "lucide-react";
 import { ReviewRecord } from "@/shared/types/app";
 
 export default function AdminReviewManager() {
