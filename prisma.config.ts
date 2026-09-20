@@ -7,9 +7,11 @@ const envPath = path.join(process.cwd(), ".env");
 if (fs.existsSync(envPath)) {
   const envContent = fs.readFileSync(envPath, "utf8");
   envContent.split("\n").forEach((line) => {
-    const [key, ...value] = line.split("=");
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith("#")) return;
+    const [key, ...value] = trimmed.split("=");
     if (key && value.length > 0) {
-      process.env[key.trim()] = value.join("=").trim();
+      process.env[key.trim()] = value.join("=").trim().replace(/^["']|["']$/g, "");
     }
   });
 }
