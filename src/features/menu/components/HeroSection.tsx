@@ -67,8 +67,8 @@ export default function HeroSection({ mode = "compact" }: HeroSectionProps) {
           transition={{ duration: 0.6, ease: "easeOut" }}
           className="flex flex-col items-center mb-2 sm:mb-3"
         >
-          <div className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gold-500/20 backdrop-blur-md border border-gold-500/40 mb-1.5 sm:mb-2 shadow-[0_0_20px_rgba(216,196,145,0.2)]">
-            <ChefHat className="w-5 h-5 sm:w-6 sm:h-6 text-gold-400" />
+          <div className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full border border-gold-500/40 mb-1.5 sm:mb-2 shadow-[0_0_20px_rgba(216,196,145,0.2)] overflow-hidden">
+            <img src="/aroma-logo.webp" alt="Aroma Logo" className="w-full h-full object-cover" />
           </div>
           <p className="text-[10px] sm:text-xs uppercase tracking-[0.3em] text-gold-400/90 font-medium mb-0.5">
             Welcome to

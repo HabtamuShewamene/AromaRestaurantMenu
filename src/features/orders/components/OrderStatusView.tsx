@@ -45,7 +45,7 @@ export default function OrderStatusView({ initialOrder }: { initialOrder: OrderR
     const interval = setInterval(async () => {
       try {
         setIsRefreshing(true);
-        const res = await fetch(`/api/orders/${order.id}`);
+        const res = await fetch(`/api/orders/Birr {order.id}`);
         if (res.ok) {
           const latest: OrderRecord = await res.json();
           if (latest && latest.id === order.id) {
@@ -71,7 +71,7 @@ export default function OrderStatusView({ initialOrder }: { initialOrder: OrderR
       {/* Top Navigation */}
       <div className="flex items-center justify-between">
         <Link
-          href={order.tableNumber ? `/table/${order.tableNumber}` : "/menu"}
+          href={order.tableNumber ? `/table/Birr {order.tableNumber}` : "/menu"}
           className="inline-flex items-center gap-2 text-sm text-zinc-400 hover:text-white transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
@@ -99,7 +99,7 @@ export default function OrderStatusView({ initialOrder }: { initialOrder: OrderR
         </h1>
         <p className="text-zinc-400 text-sm max-w-md mx-auto leading-relaxed">
           {order.tableNumber
-            ? `Table ${order.tableNumber} • Dine-in Experience`
+            ? `Table Birr {order.tableNumber} • Dine-in Experience`
             : "Takeaway • Pickup Order"}
         </p>
       </div>
@@ -121,7 +121,7 @@ export default function OrderStatusView({ initialOrder }: { initialOrder: OrderR
               return (
                 <div
                   key={stage.status}
-                  className={`flex items-start gap-4 p-3.5 rounded-2xl transition-all ${
+                  className={`flex items-start gap-4 p-3.5 rounded-2xl transition-all Birr {
                     isCurrent
                       ? "bg-gold-500/10 border border-gold-500/30 shadow-[0_0_20px_rgba(182,141,64,0.1)]"
                       : isPast
@@ -130,7 +130,7 @@ export default function OrderStatusView({ initialOrder }: { initialOrder: OrderR
                   }`}
                 >
                   <div
-                    className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-colors ${
+                    className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-colors Birr {
                       isCurrent
                         ? "bg-gold-500 text-black shadow-[0_0_15px_rgba(182,141,64,0.5)]"
                         : isPast
@@ -144,7 +144,7 @@ export default function OrderStatusView({ initialOrder }: { initialOrder: OrderR
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between">
                       <h3
-                        className={`text-sm font-bold ${
+                        className={`text-sm font-bold Birr {
                           isCurrent ? "text-gold-300" : isPast ? "text-white" : "text-zinc-500"
                         }`}
                       >
@@ -191,7 +191,7 @@ export default function OrderStatusView({ initialOrder }: { initialOrder: OrderR
                   <div className="text-xs text-zinc-400 space-y-0.5 ml-6">
                     {item.addons.map((a, i) => (
                       <p key={i}>
-                        + {a.name} {a.price > 0 ? `($${a.price.toFixed(2)})` : ""}
+                        + {a.name} {a.price > 0 ? `($Birr {a.price.toFixed(2)})` : ""}
                       </p>
                     ))}
                   </div>
@@ -201,7 +201,7 @@ export default function OrderStatusView({ initialOrder }: { initialOrder: OrderR
                 )}
               </div>
               <span className="font-mono text-zinc-300 font-medium">
-                ${(item.price * item.quantity).toFixed(2)}
+                Birr {(item.price * item.quantity).toFixed(2)}
               </span>
             </div>
           ))}
@@ -210,7 +210,7 @@ export default function OrderStatusView({ initialOrder }: { initialOrder: OrderR
         <div className="pt-4 border-t border-white/10 flex items-center justify-between">
           <span className="font-bold text-white text-base">Total</span>
           <span className="font-mono font-bold text-xl text-gold-400 font-playfair">
-            ${order.totalAmount.toFixed(2)}
+            Birr {order.totalAmount.toFixed(2)}
           </span>
         </div>
       </div>
@@ -218,7 +218,7 @@ export default function OrderStatusView({ initialOrder }: { initialOrder: OrderR
       {/* Actions */}
       <div className="flex flex-col sm:flex-row gap-3 pt-2">
         <Link
-          href={order.tableNumber ? `/table/${order.tableNumber}` : "/menu"}
+          href={order.tableNumber ? `/table/Birr {order.tableNumber}` : "/menu"}
           className="flex-1 py-3.5 px-6 rounded-2xl bg-gold-500 text-black font-bold text-sm text-center hover:bg-gold-400 transition-all flex items-center justify-center gap-2"
         >
           <ShoppingBag className="w-4 h-4" />
