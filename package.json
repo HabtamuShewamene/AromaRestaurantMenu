@@ -10,8 +10,13 @@
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "db:push": "prisma db push",
+<<<<<<< HEAD
     "db:seed": "npx tsx prisma/seed.ts",
     "db:studio": "prisma studio"
+=======
+    "db:studio": "prisma studio",
+    "db:seed": "npx tsx database/scripts/seed.ts"
+>>>>>>> d034e7030184471ff69b5318637ae74846dbc349
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.8.0",

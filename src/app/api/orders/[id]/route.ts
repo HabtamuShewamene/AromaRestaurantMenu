@@ -1,11 +1,27 @@
 import { NextRequest, NextResponse } from "next/server";
-import prisma from "@/server/db/prisma";
 import { isAdminRequest } from "@/server/auth/session";
 import { serializeOrder } from "@/server/db/serializers";
+import { getOrderById, updateOrderStatus } from "@/server/services/order.service";
 
 type RouteContext = {
   params: Promise<{ id: string }>;
 };
+
+export async function GET(request: NextRequest, context: RouteContext) {
+  try {
+    const { id } = await context.params;
+    const order = await getOrderById(id);
+    if (!order) {
+      return NextResponse.json({ message: "Order not found" }, { status: 404 });
+    }
+    return NextResponse.json(serializeOrder(order as any));
+  } catch (error) {
+    return NextResponse.json(
+      { message: error instanceof Error ? error.message : "Failed to fetch order" },
+      { status: 500 }
+    );
+  }
+}
 
 export async function PATCH(request: NextRequest, context: RouteContext) {
   try {
@@ -17,21 +33,16 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
     const { id } = await context.params;
     const body = await request.json();
 
-    const order = await prisma.order.update({
-      where: { id },
-      data: { status: body.status },
-      include: {
-        items: { include: { item: true } },
-        user: true,
-      },
-    });
-
-    if (!order) {
-      return NextResponse.json({ message: "Order not found" }, { status: 404 });
+    if (!body.status) {
+      return NextResponse.json({ message: "Status is required" }, { status: 400 });
     }
 
-    return NextResponse.json(serializeOrder(order));
-  } catch {
-    return NextResponse.json({ message: "Failed to update order status" }, { status: 500 });
+    const order = await updateOrderStatus(id, body.status);
+    return NextResponse.json(serializeOrder(order as any));
+  } catch (error) {
+    return NextResponse.json(
+      { message: error instanceof Error ? error.message : "Failed to update order status" },
+      { status: 500 }
+    );
   }
 }

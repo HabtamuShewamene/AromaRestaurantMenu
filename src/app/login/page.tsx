@@ -2,7 +2,11 @@
 
 import { useState } from "react";
 import { signIn } from "next-auth/react";
+<<<<<<< HEAD
 import { Coffee, ArrowRight, UserPlus, LogIn } from "lucide-react";
+=======
+import { ChefHat, ArrowRight } from "lucide-react";
+>>>>>>> d034e7030184471ff69b5318637ae74846dbc349
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -84,10 +88,22 @@ export default function LoginPage() {
       <div className="absolute top-1/2 left-1/2 -z-10 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gold-900/10 blur-[120px]" />
 
       <div className="w-full max-w-md">
+<<<<<<< HEAD
         <div className="mb-10 text-center">
           <Link href="/" className="mb-6 inline-flex items-center gap-2">
             <Coffee className="h-10 w-10 text-gold-500" />
             <span className="text-3xl font-bold tracking-tighter text-gradient">ELITE CAFE</span>
+=======
+        <div className="mb-12 text-center">
+          <Link href="/" className="mb-8 inline-flex items-center gap-2">
+            <div className="flex items-center justify-center w-12 h-12 rounded-2xl bg-gold-500/15 border border-gold-500/30 shadow-[0_0_20px_rgba(182,141,64,0.2)]">
+              <ChefHat className="h-7 w-7 text-gold-400" />
+            </div>
+            <div className="flex flex-col text-left">
+              <span className="text-2xl font-bold tracking-tight text-white font-playfair">AROMA</span>
+              <span className="text-[9px] tracking-[0.25em] text-gold-500 font-semibold uppercase -mt-1">Restaurant</span>
+            </div>
+>>>>>>> d034e7030184471ff69b5318637ae74846dbc349
           </Link>
           <h1 className="mb-2 text-4xl font-bold text-white">
             {isRegister ? "Create Account" : "Welcome Back"}
@@ -200,6 +216,16 @@ export default function LoginPage() {
               )}
             </button>
           </form>
+<<<<<<< HEAD
+=======
+
+          <div className="mt-8 text-center text-sm text-zinc-500">
+            Don&apos;t have an account?{" "}
+            <Link href="/signup" className="font-bold text-gold-500 hover:underline">
+              Sign up now
+            </Link>
+          </div>
+>>>>>>> d034e7030184471ff69b5318637ae74846dbc349
         </div>
       </div>
     </div>

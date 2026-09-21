@@ -21,12 +21,19 @@ export default function MenuItemCard({ item, onEdit, onDelete, onToggleAvailabil
       </div>
       <div className="mb-4 flex items-start justify-between gap-4">
         <div>
-          <h3 className="text-xl font-bold">{item.name}</h3>
-          <p className="text-sm text-zinc-500">{categoryName}</p>
+          <h3 className="text-xl font-bold text-white">{item.name}</h3>
+          <div className="flex items-center gap-2 mt-1">
+            <p className="text-sm text-zinc-500">{categoryName}</p>
+            {item.addonGroups && item.addonGroups.length > 0 && (
+              <span className="text-[10px] font-bold text-gold-400 bg-gold-500/10 px-2 py-0.5 rounded-full border border-gold-500/20">
+                {item.addonGroups.length} Addon Group{item.addonGroups.length !== 1 ? "s" : ""}
+              </span>
+            )}
+          </div>
         </div>
         <span
           className={`rounded-full px-3 py-1 text-xs font-bold ${
-            item.isAvailable ? "bg-green-500/10 text-green-500" : "bg-red-500/10 text-red-500"
+            item.isAvailable ? "bg-green-500/10 text-green-500 border border-green-500/30" : "bg-red-500/10 text-red-500 border border-red-500/30"
           }`}
         >
           {item.isAvailable ? "Available" : "Hidden"}

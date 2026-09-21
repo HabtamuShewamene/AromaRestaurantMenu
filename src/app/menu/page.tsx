@@ -2,8 +2,8 @@ import Navbar from "@/components/Layout/Navbar";
 import MenuExplorer from "@/features/menu/components/MenuExplorer";
 
 export const metadata = {
-  title: "Elite Café | Luxury Menu",
-  description: "Explore our premium selection of dishes and beverages.",
+  title: "Aroma Restaurant | Fine Dining Menu",
+  description: "Explore our premium selection of dishes, culinary creations, and handcrafted beverages.",
 };
 
 export default function MenuPage() {

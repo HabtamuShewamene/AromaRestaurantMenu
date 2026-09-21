@@ -18,10 +18,10 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "Elite Café | Luxury Dining Experience",
+  title: "Aroma Restaurant Menu | Luxury Dining Experience",
   description:
     "Indulge in an extraordinary culinary journey. Explore our curated menu of premium dishes and crafted beverages.",
-  keywords: "luxury cafe, premium dining, hotel menu, fine dining",
+  keywords: "luxury cafe, premium dining, hotel menu, fine dining, aroma restaurant",
 };
 
 export default function RootLayout({
@@ -30,7 +30,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" className="dark" data-scroll-behavior="smooth">
       <body
         className={`${inter.variable} ${playfair.variable} font-inter bg-[#080808] text-zinc-100 min-h-screen antialiased`}
       >

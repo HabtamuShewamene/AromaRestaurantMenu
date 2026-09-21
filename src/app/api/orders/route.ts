@@ -1,33 +1,32 @@
 import { NextRequest, NextResponse } from "next/server";
-import prisma from "@/server/db/prisma";
 import { getAppSession } from "@/server/auth/session";
 import { serializeOrder } from "@/server/db/serializers";
+import { createOrder, getOrders } from "@/server/services/order.service";
 
-type OrderCreateItemInput = {
-  itemId: string;
-  name: string;
-  price: number;
-  quantity: number;
-};
-
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
     const session = await getAppSession();
-    if (!session?.user?.email) {
-      return NextResponse.json({ message: "Sign in required" }, { status: 401 });
+    const { searchParams } = new URL(request.url);
+    const tableId = searchParams.get("tableId") || undefined;
+    const tableSessionId = searchParams.get("tableSessionId") || undefined;
+
+    // Admin can see all orders; authenticated customer sees their own; guest can query by tableSessionId
+    if (session?.user?.role === "ADMIN") {
+      const orders = await getOrders({ tableId, tableSessionId });
+      return NextResponse.json(orders.map(serializeOrder));
     }
 
-    const orders = await prisma.order.findMany({
-      where: session.user.role === "ADMIN" ? {} : { user: { email: session.user.email } },
-      include: {
-        items: {
-          include: { item: true },
-        },
-        user: true,
-      },
-      orderBy: { createdAt: 'desc' },
-    });
-    return NextResponse.json(orders.map(serializeOrder));
+    if (session?.user?.id) {
+      const orders = await getOrders({ userId: session.user.id });
+      return NextResponse.json(orders.map(serializeOrder));
+    }
+
+    if (tableSessionId) {
+      const orders = await getOrders({ tableSessionId });
+      return NextResponse.json(orders.map(serializeOrder));
+    }
+
+    return NextResponse.json({ message: "Sign in or active table session required" }, { status: 401 });
   } catch {
     return NextResponse.json({ message: "Failed to fetch orders" }, { status: 500 });
   }
@@ -36,119 +35,26 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const session = await getAppSession();
-    if (!session?.user?.email) {
-      return NextResponse.json({ message: "Sign in required to place orders" }, { status: 401 });
-    }
-
     const body = await request.json();
-    if (!Array.isArray(body.items) || body.items.length === 0) {
-      return NextResponse.json({ message: "At least one item is required" }, { status: 400 });
-    }
 
-    const menuItemIds = body.items.map((item: { itemId: string }) => item.itemId);
-    const menuItems = await prisma.menuItem.findMany({
-      where: { id: { in: menuItemIds } },
+    const order = await createOrder({
+      userId: session?.user?.id || null,
+      tableId: body.tableId || null,
+      tableNumber: body.tableNumber ? Number(body.tableNumber) : null,
+      tableSessionId: body.tableSessionId || null,
+      customerName: body.customerName || session?.user?.name || null,
+      customerEmail: body.customerEmail || session?.user?.email || null,
+      customerPhone: body.customerPhone || null,
+      orderType: body.orderType || (body.tableId || body.tableNumber ? "DINE_IN" : "TAKEAWAY"),
+      notes: body.notes || null,
+      items: body.items || [],
     });
-    const itemMap = new Map(menuItems.map((item) => [item.id, item]));
-
-    const normalizedItems: OrderCreateItemInput[] = body.items.map((item: { itemId: string; quantity: number }) => {
-      const source = itemMap.get(item.itemId);
-      if (!source) {
-        throw new Error("One or more menu items no longer exist");
-      }
-      if (!source.isAvailable) {
-        throw new Error(`${source.name} is currently unavailable`);
-      }
-      return {
-        name: source.name,
-        price: source.price,
-        quantity: item.quantity,
-        itemId: source.id,
-      };
-    });
-
-    const totalAmount = normalizedItems.reduce(
-      (sum: number, item: { price: number; quantity: number }) => sum + item.price * item.quantity,
-      0
-    );
-
-    // Get or create user
-    const user = await prisma.user.findUnique({
-      where: { email: session.user.email },
-    });
-    
-    if (!user) {
-      return NextResponse.json({ message: "User not found" }, { status: 400 });
-    }
-
-    const order = await prisma.order.create({
-      data: {
-        userId: user.id,
-        customerName: user.name ?? "Customer",
-        customerEmail: user.email,
-        totalAmount,
-        status: "pending",
-        items: {
-          create: normalizedItems.map((item) => ({
-            itemId: item.itemId,
-            quantity: item.quantity,
-            price: item.price,
-          })),
-        },
-      },
-      include: {
-        items: { include: { item: true } },
-        user: true,
-      },
-    });
-
-    // --- PHASE 10: Automatic Stock Deduction ---
-    try {
-      const ingredientUpdates = new Map<string, number>();
-
-      for (const orderItem of normalizedItems) {
-        const fullMenuItem = await prisma.menuItem.findUnique({
-          where: { id: orderItem.itemId },
-          include: { ingredients: true }
-        });
-
-        if (fullMenuItem && fullMenuItem.ingredients && fullMenuItem.ingredients.length > 0) {
-          for (const recipeIng of fullMenuItem.ingredients) {
-            const currentTotal = ingredientUpdates.get(recipeIng.ingredientId) || 0;
-            ingredientUpdates.set(
-              recipeIng.ingredientId, 
-              currentTotal + (recipeIng.quantity * orderItem.quantity)
-            );
-          }
-        }
-      }
-
-      // Execute stock deduction via transactions
-      const transactionOps = Array.from(ingredientUpdates.entries()).map(([ingredientId, qtyToDeduct]) => {
-        return prisma.ingredient.update({
-          where: { id: ingredientId },
-          data: {
-            currentStock: {
-              decrement: qtyToDeduct
-            }
-          }
-        });
-      });
-
-      if (transactionOps.length > 0) {
-        await prisma.$transaction(transactionOps);
-      }
-    } catch (deductionError) {
-      console.error("Stock deduction failed but order was placed:", deductionError);
-      // We don't fail the order if inventory tracking fails, just log it.
-    }
-    // ------------------------------------------
 
     return NextResponse.json(serializeOrder(order), { status: 201 });
   } catch (error) {
     return NextResponse.json(
       { message: error instanceof Error ? error.message : "Failed to create order" },
-      { status: 500 }
+      { status: 400 }
     );
   }
 }

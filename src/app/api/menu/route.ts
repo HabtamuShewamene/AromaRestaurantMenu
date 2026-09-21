@@ -9,6 +9,7 @@ export async function GET() {
       prisma.menuItem.findMany({
         include: {
           category: true,
+<<<<<<< HEAD
           ingredients: {
             include: {
               ingredient: true,
@@ -16,17 +17,28 @@ export async function GET() {
           },
         },
         orderBy: { createdAt: 'desc' },
+=======
+          addonGroups: {
+            include: {
+              options: {
+                orderBy: { orderIndex: "asc" },
+              },
+            },
+          },
+        },
+        orderBy: { createdAt: "desc" },
+>>>>>>> d034e7030184471ff69b5318637ae74846dbc349
       }),
       prisma.review.groupBy({
-        by: ['itemId'],
+        by: ["itemId"],
         _avg: { rating: true },
         _count: { rating: true },
         where: { isApproved: true },
-      })
+      }),
     ]);
 
-    const itemsWithStats = items.map(item => {
-      const itemStats = stats.find(s => s.itemId === item.id);
+    const itemsWithStats = items.map((item) => {
+      const itemStats = stats.find((s) => s.itemId === item.id);
       return {
         ...item,
         averageRating: itemStats?._avg.rating ? parseFloat(itemStats._avg.rating.toFixed(1)) : 0,
@@ -74,12 +86,14 @@ export async function POST(request: NextRequest) {
     if (!categoryId) {
       return NextResponse.json({ message: "Category is required" }, { status: 400 });
     }
-    
+
     // Process recipe
-    const recipeData = Array.isArray(body.recipe) ? body.recipe.map((r: any) => ({
-      ingredientId: r.ingredientId,
-      quantity: Number(r.quantity) || 0
-    })) : [];
+    const recipeData = Array.isArray(body.recipe)
+      ? body.recipe.map((r: any) => ({
+          ingredientId: r.ingredientId,
+          quantity: Number(r.quantity) || 0,
+        }))
+      : [];
 
     // Process allergens
     const allergens = Array.isArray(body.allergens) 
@@ -96,14 +110,29 @@ export async function POST(request: NextRequest) {
         categoryId,
         image: body.image,
         isAvailable: body.isAvailable ?? true,
+<<<<<<< HEAD
         vegetarian: Boolean(body.vegetarian),
         vegan: Boolean(body.vegan),
         spicy: Boolean(body.spicy),
         sugarFree: Boolean(body.sugarFree),
         allergens,
+=======
+        isFeatured: body.isFeatured ?? false,
+        vegetarian: body.vegetarian ?? false,
+        vegan: body.vegan ?? false,
+        spicy: body.spicy ?? false,
+        sugarFree: body.sugarFree ?? false,
+        allergens: Array.isArray(body.allergens) ? body.allergens : [],
+>>>>>>> d034e7030184471ff69b5318637ae74846dbc349
         ingredients: {
-          create: recipeData
-        }
+          create: recipeData,
+        },
+      },
+      include: {
+        category: true,
+        addonGroups: {
+          include: { options: true },
+        },
       },
       include: {
         category: true,

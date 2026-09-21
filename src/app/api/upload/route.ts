@@ -1,5 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
+<<<<<<< HEAD
 import { getCloudinary, isCloudinaryConfigured } from "@/server/integrations/cloudinary";
+=======
+import cloudinary, { isCloudinaryConfigured } from "@/server/integrations/cloudinary";
+>>>>>>> d034e7030184471ff69b5318637ae74846dbc349
 import { isAdminRequest } from "@/server/auth/session";
 
 const MAX_UPLOAD_SIZE = 5 * 1024 * 1024;
@@ -12,10 +16,14 @@ export async function POST(request: NextRequest) {
     }
 
     if (!isCloudinaryConfigured()) {
+<<<<<<< HEAD
       return NextResponse.json(
         { message: "Cloudinary is not configured. Please verify CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, and CLOUDINARY_API_SECRET in .env" },
         { status: 503 }
       );
+=======
+      return NextResponse.json({ message: "Cloudinary is not configured in .env" }, { status: 500 });
+>>>>>>> d034e7030184471ff69b5318637ae74846dbc349
     }
 
     const formData = await request.formData();
@@ -39,7 +47,7 @@ export async function POST(request: NextRequest) {
 
     const cloudinary = getCloudinary();
     const uploadResult = await cloudinary.uploader.upload(base64Image, {
-      folder: "cafe-menu",
+      folder: "aroma-restaurant-menu",
       resource_type: "image",
     });
 
@@ -48,7 +56,12 @@ export async function POST(request: NextRequest) {
       publicId: uploadResult.public_id,
     });
   } catch (error) {
+<<<<<<< HEAD
     const message = error instanceof Error ? error.message : "Failed to upload image";
     return NextResponse.json({ message }, { status: 500 });
+=======
+    console.error("Cloudinary upload failed:", error);
+    return NextResponse.json({ message: error instanceof Error ? error.message : "Failed to upload image" }, { status: 500 });
+>>>>>>> d034e7030184471ff69b5318637ae74846dbc349
   }
 }

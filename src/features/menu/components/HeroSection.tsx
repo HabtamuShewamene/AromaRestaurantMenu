@@ -8,15 +8,16 @@ type HeroSectionProps = {
   mode?: "compact" | "full";
 };
 
-// Mock data for Phase 2 - will be replaced by database data in the future
+// Restaurant branding details
 const restaurant = {
-  name: "Elite Café",
-  coverImage: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1400&q=90",
-  description: "Curated flavors crafted for every moment. Experience luxury dining at its finest.",
+  name: "Aroma Restaurant",
+  tagline: "Fine Dining & Artisan Culinary Experience",
+  coverImage: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1600&q=85",
+  description: "Experience exceptional gourmet cuisine, handcrafted beverages, and unforgettable culinary craftsmanship in an atmosphere of refined luxury.",
   openingTime: "08:00 AM",
-  closingTime: "11:00 PM",
-  address: "123 Luxury Avenue, Metropolis",
-  phone: "+1 (555) 123-4567",
+  closingTime: "11:30 PM",
+  address: "450 Grand Avenue, Financial District",
+  phone: "+1 (555) 342-7662",
   socialLinks: { 
     instagram: "#", 
     facebook: "#", 
