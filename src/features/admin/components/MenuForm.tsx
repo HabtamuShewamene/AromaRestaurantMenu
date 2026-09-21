@@ -17,6 +17,11 @@ type MenuFormProps = {
     category?: string;
     categoryName?: string;
     isAvailable: boolean;
+    vegetarian?: boolean;
+    vegan?: boolean;
+    spicy?: boolean;
+    sugarFree?: boolean;
+    allergens?: string[];
     recipe?: FoodIngredientRecord[];
   }) => Promise<void>;
   onCancel?: () => void;
@@ -38,6 +43,13 @@ export default function MenuForm({
   const [category, setCategory] = useState(initialCategoryId);
   const [categoryName, setCategoryName] = useState("");
   const [isAvailable, setIsAvailable] = useState(initialValues?.isAvailable ?? true);
+
+  // Dietary & Allergens
+  const [vegetarian, setVegetarian] = useState(initialValues?.vegetarian ?? false);
+  const [vegan, setVegan] = useState(initialValues?.vegan ?? false);
+  const [spicy, setSpicy] = useState(initialValues?.spicy ?? false);
+  const [sugarFree, setSugarFree] = useState(initialValues?.sugarFree ?? false);
+  const [allergens, setAllergens] = useState(initialValues?.allergens?.join(", ") ?? "");
   
   // Recipe state
   const [recipe, setRecipe] = useState<FoodIngredientRecord[]>(initialValues?.recipe ?? []);
@@ -101,6 +113,11 @@ export default function MenuForm({
     setError("");
 
     try {
+      const allergensArray = allergens
+        .split(",")
+        .map(a => a.trim())
+        .filter(Boolean);
+
       await onSubmit({
         name,
         price: Number(price),
@@ -109,6 +126,11 @@ export default function MenuForm({
         category: category || undefined,
         categoryName: category ? undefined : categoryName || undefined,
         isAvailable,
+        vegetarian,
+        vegan,
+        spicy,
+        sugarFree,
+        allergens: allergensArray,
         recipe,
       });
 
@@ -120,6 +142,11 @@ export default function MenuForm({
         setCategory("");
         setCategoryName("");
         setIsAvailable(true);
+        setVegetarian(false);
+        setVegan(false);
+        setSpicy(false);
+        setSugarFree(false);
+        setAllergens("");
         setRecipe([]);
       }
     } catch (submitError) {
@@ -133,7 +160,7 @@ export default function MenuForm({
     <form onSubmit={handleSubmit} className="glass-card space-y-6 rounded-3xl p-8">
       <div>
         <h2 className="text-2xl font-bold">{initialValues?.id ? "Edit Menu Item" : "Create Menu Item"}</h2>
-        <p className="mt-2 text-sm text-zinc-500">Add products, change pricing, and build recipes.</p>
+        <p className="mt-2 text-sm text-zinc-500">Add products, configure dietary preferences, and build recipes.</p>
       </div>
       
       {error ? <p className="rounded-2xl border border-red-500/20 bg-red-500/10 p-4 text-sm text-red-500">{error}</p> : null}
@@ -159,7 +186,7 @@ export default function MenuForm({
               type="number"
               value={price}
               onChange={(event) => setPrice(event.target.value)}
-              placeholder="Price"
+              placeholder="Price ($)"
               className="w-full rounded-2xl border border-zinc-800 bg-zinc-950 px-5 py-4 outline-none transition-all focus:border-gold-500"
               min="0"
               step="0.01"
@@ -171,9 +198,9 @@ export default function MenuForm({
               className="w-full rounded-2xl border border-zinc-800 bg-zinc-950 px-5 py-4 outline-none transition-all focus:border-gold-500"
             >
               <option value="">Create from new category</option>
-              {categories.map((category) => (
-                <option key={category.id} value={category.id}>
-                  {category.name}
+              {categories.map((cat) => (
+                <option key={cat.id} value={cat.id}>
+                  {cat.name}
                 </option>
               ))}
             </select>
@@ -187,6 +214,39 @@ export default function MenuForm({
               required
             />
           ) : null}
+
+          {/* Dietary Properties */}
+          <div className="rounded-2xl border border-zinc-800 bg-zinc-900/50 p-5 space-y-4">
+            <h3 className="text-sm font-semibold text-zinc-300 uppercase tracking-wider">Dietary Properties</h3>
+            <div className="grid grid-cols-2 gap-3">
+              {[
+                { label: "Vegetarian", checked: vegetarian, setChecked: setVegetarian, color: "text-green-400" },
+                { label: "Vegan", checked: vegan, setChecked: setVegan, color: "text-emerald-400" },
+                { label: "Spicy", checked: spicy, setChecked: setSpicy, color: "text-red-400" },
+                { label: "Sugar Free", checked: sugarFree, setChecked: setSugarFree, color: "text-blue-400" },
+              ].map((item) => (
+                <label key={item.label} className="flex items-center gap-2 text-sm text-zinc-300 cursor-pointer select-none">
+                  <input
+                    type="checkbox"
+                    checked={item.checked}
+                    onChange={(e) => item.setChecked(e.target.checked)}
+                    className="rounded border-zinc-700 bg-zinc-950 text-gold-500 focus:ring-gold-500"
+                  />
+                  <span className={item.checked ? item.color : "text-zinc-400"}>{item.label}</span>
+                </label>
+              ))}
+            </div>
+
+            <div className="pt-2">
+              <label className="block text-xs text-zinc-400 mb-1 uppercase tracking-wider">Allergens (comma-separated)</label>
+              <input
+                value={allergens}
+                onChange={(e) => setAllergens(e.target.value)}
+                placeholder="e.g. Dairy, Nuts, Gluten"
+                className="w-full rounded-xl border border-zinc-800 bg-zinc-950 px-4 py-2.5 text-sm outline-none focus:border-gold-500"
+              />
+            </div>
+          </div>
         </div>
 
         <div className="space-y-6">
@@ -205,9 +265,9 @@ export default function MenuForm({
               accept="image/*"
               onChange={handleImageUpload}
               disabled={isUploading}
-              className="w-full text-sm file:mr-4 file:rounded-xl file:border-0 file:bg-gold-600 file:px-4 file:py-2 file:font-bold file:text-black hover:file:bg-gold-500 transition-all"
+              className="w-full text-sm file:mr-4 file:rounded-xl file:border-0 file:bg-gold-600 file:px-4 file:py-2 file:font-bold file:text-black hover:file:bg-gold-500 transition-all cursor-pointer"
             />
-            {isUploading ? <p className="text-sm text-gold-500 mt-2">Uploading image...</p> : null}
+            {isUploading ? <p className="text-sm text-gold-500 mt-2 animate-pulse">Uploading image to Cloudinary...</p> : null}
           </div>
 
           {/* Recipe Builder */}
@@ -221,7 +281,7 @@ export default function MenuForm({
                    const ing = ingredients?.find(x => x.id === r.ingredientId);
                    return (
                      <li key={i} className="flex items-center justify-between bg-zinc-950 p-3 rounded-xl border border-white/5 text-sm">
-                       <span className="font-medium text-zinc-200">{ing?.name || "Unknown"}</span>
+                       <span className="font-medium text-zinc-200">{ing?.name || r.ingredientName || "Unknown"}</span>
                        <div className="flex items-center gap-4">
                          <span className="text-gold-400 font-mono">{r.quantity} {ing?.unit}</span>
                          <button type="button" onClick={() => setRecipe(recipe.filter((_, idx) => idx !== i))} className="text-red-500/80 hover:text-red-400 transition-colors">
@@ -258,15 +318,12 @@ export default function MenuForm({
       </div>
 
       <div className="flex items-center justify-between border-t border-white/5 pt-6 mt-4">
-        <label className="flex items-center gap-3 text-sm text-zinc-300 cursor-pointer group">
-          <div className={`w-5 h-5 rounded border flex items-center justify-center transition-colors ${isAvailable ? 'bg-gold-500 border-gold-500' : 'bg-zinc-900 border-zinc-700 group-hover:border-zinc-500'}`}>
-            {isAvailable && <span className="text-black text-xs font-bold">✓</span>}
-          </div>
+        <label className="flex items-center gap-3 text-sm text-zinc-300 cursor-pointer group select-none">
           <input
             type="checkbox"
             checked={isAvailable}
             onChange={(event) => setIsAvailable(event.target.checked)}
-            className="hidden"
+            className="rounded border-zinc-700 bg-zinc-950 text-gold-500 focus:ring-gold-500 w-5 h-5"
           />
           Item is available for clients
         </label>

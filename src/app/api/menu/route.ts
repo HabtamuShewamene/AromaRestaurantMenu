@@ -7,7 +7,14 @@ export async function GET() {
   try {
     const [items, stats] = await Promise.all([
       prisma.menuItem.findMany({
-        include: { category: true },
+        include: {
+          category: true,
+          ingredients: {
+            include: {
+              ingredient: true,
+            },
+          },
+        },
         orderBy: { createdAt: 'desc' },
       }),
       prisma.review.groupBy({
@@ -24,6 +31,13 @@ export async function GET() {
         ...item,
         averageRating: itemStats?._avg.rating ? parseFloat(itemStats._avg.rating.toFixed(1)) : 0,
         totalReviews: itemStats?._count.rating || 0,
+        ingredientNames: item.ingredients.map(fi => fi.ingredient?.name).filter(Boolean),
+        recipe: item.ingredients.map(fi => ({
+          ingredientId: fi.ingredientId,
+          quantity: fi.quantity,
+          ingredientName: fi.ingredient?.name,
+          unit: fi.ingredient?.unit,
+        })),
       };
     });
 
@@ -67,6 +81,13 @@ export async function POST(request: NextRequest) {
       quantity: Number(r.quantity) || 0
     })) : [];
 
+    // Process allergens
+    const allergens = Array.isArray(body.allergens) 
+      ? body.allergens.map((a: string) => a.trim()).filter(Boolean)
+      : typeof body.allergens === "string" 
+      ? body.allergens.split(",").map((a: string) => a.trim()).filter(Boolean)
+      : [];
+
     const item = await prisma.menuItem.create({
       data: {
         name: body.name,
@@ -75,14 +96,26 @@ export async function POST(request: NextRequest) {
         categoryId,
         image: body.image,
         isAvailable: body.isAvailable ?? true,
+        vegetarian: Boolean(body.vegetarian),
+        vegan: Boolean(body.vegan),
+        spicy: Boolean(body.spicy),
+        sugarFree: Boolean(body.sugarFree),
+        allergens,
         ingredients: {
           create: recipeData
         }
       },
+      include: {
+        category: true,
+        ingredients: {
+          include: { ingredient: true }
+        }
+      }
     });
 
     return NextResponse.json(item, { status: 201 });
-  } catch {
-    return NextResponse.json({ message: "Failed to create menu item" }, { status: 500 });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Failed to create menu item";
+    return NextResponse.json({ message }, { status: 500 });
   }
 }

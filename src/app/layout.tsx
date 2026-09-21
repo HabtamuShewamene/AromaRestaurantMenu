@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import NextAuthProvider from "@/components/providers/SessionProvider";
+import { CartProvider } from "@/components/providers/CartProvider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -34,7 +35,9 @@ export default function RootLayout({
         className={`${inter.variable} ${playfair.variable} font-inter bg-[#080808] text-zinc-100 min-h-screen antialiased`}
       >
         <NextAuthProvider>
-          {children}
+          <CartProvider>
+            {children}
+          </CartProvider>
         </NextAuthProvider>
       </body>
     </html>

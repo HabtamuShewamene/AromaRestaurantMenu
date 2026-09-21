@@ -15,7 +15,7 @@ export async function PUT(request: NextRequest, context: RouteContext) {
 
     const { id } = await context.params;
     const updates = await request.json();
-    const { recipe, categoryName, ...otherUpdates } = updates;
+    const { recipe, categoryName, allergens: rawAllergens, ...otherUpdates } = updates;
 
     let ingredientsUpdate = undefined;
     if (Array.isArray(recipe)) {
@@ -28,13 +28,28 @@ export async function PUT(request: NextRequest, context: RouteContext) {
       };
     }
 
+    let allergens = undefined;
+    if (rawAllergens !== undefined) {
+      allergens = Array.isArray(rawAllergens)
+        ? rawAllergens.map((a: string) => a.trim()).filter(Boolean)
+        : typeof rawAllergens === "string"
+        ? rawAllergens.split(",").map((a: string) => a.trim()).filter(Boolean)
+        : [];
+    }
+
     const item = await prisma.menuItem.update({
       where: { id },
       data: {
         ...otherUpdates,
+        ...(allergens !== undefined && { allergens }),
         ...(ingredientsUpdate && { ingredients: ingredientsUpdate })
       },
-      include: { category: true },
+      include: {
+        category: true,
+        ingredients: {
+          include: { ingredient: true }
+        }
+      },
     });
 
     if (!item) {
@@ -42,8 +57,9 @@ export async function PUT(request: NextRequest, context: RouteContext) {
     }
 
     return NextResponse.json(item);
-  } catch {
-    return NextResponse.json({ message: "Failed to update menu item" }, { status: 500 });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Failed to update menu item";
+    return NextResponse.json({ message }, { status: 500 });
   }
 }
 
@@ -64,7 +80,8 @@ export async function DELETE(_request: NextRequest, context: RouteContext) {
     }
 
     return NextResponse.json({ message: "Menu item deleted" });
-  } catch {
-    return NextResponse.json({ message: "Failed to delete menu item" }, { status: 500 });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Failed to delete menu item";
+    return NextResponse.json({ message }, { status: 500 });
   }
 }
