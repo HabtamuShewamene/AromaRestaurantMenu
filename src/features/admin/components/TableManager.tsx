@@ -12,7 +12,6 @@ import {
   X,
   Printer,
   Ban,
-  Receipt,
 } from "lucide-react";
 import Link from "next/link";
 import { DiningTableRecord } from "@/shared/types/app";
@@ -152,7 +151,7 @@ export default function TableManager() {
                 {activeSession ? (
                   <div className="p-3.5 rounded-2xl bg-zinc-950 border border-white/5 space-y-1.5 text-xs">
                     <div className="flex justify-between text-zinc-400">
-                      <span>Running Bill:</span>
+                      <span>Session Total:</span>
                       <span className="font-mono font-bold text-gold-400 text-sm">
                         ${sessionTotal.toFixed(2)}
                       </span>

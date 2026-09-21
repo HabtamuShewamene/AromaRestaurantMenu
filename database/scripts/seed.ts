@@ -31,7 +31,6 @@ async function main() {
   console.log("🌱 Starting Aroma Restaurant Phase 1 database seed...");
 
   // 1. Clean existing records in correct order
-  await prisma.payment.deleteMany({});
   await prisma.waiterRequest.deleteMany({});
   await prisma.orderItemAddon.deleteMany({});
   await prisma.orderItem.deleteMany({});

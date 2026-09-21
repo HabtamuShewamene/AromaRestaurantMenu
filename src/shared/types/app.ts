@@ -39,6 +39,11 @@ export type MenuItemIngredientRecord = {
   ingredient: IngredientRecord;
 };
 
+export type FoodIngredientRecord = {
+  ingredientId: string;
+  quantity: number;
+};
+
 export type MenuItemRecord = {
   id: string;
   name: string;
@@ -58,6 +63,7 @@ export type MenuItemRecord = {
   allergens?: string[];
   addonGroups?: AddonGroupRecord[];
   ingredients?: MenuItemIngredientRecord[];
+  recipe?: FoodIngredientRecord[];
   createdAt?: string;
   updatedAt?: string;
 };

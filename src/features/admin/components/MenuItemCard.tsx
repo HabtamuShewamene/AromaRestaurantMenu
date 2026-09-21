@@ -14,10 +14,14 @@ export default function MenuItemCard({ item, onEdit, onDelete, onToggleAvailabil
 
   return (
     <article className="glass-card rounded-3xl p-5">
-      <div className="mb-4 overflow-hidden rounded-2xl">
-        <div className="relative h-44 w-full">
-          <Image src={item.image} alt={item.name} fill sizes="(max-width: 1280px) 50vw, 33vw" className="object-cover" />
-        </div>
+      <div className="mb-4 overflow-hidden rounded-2xl relative h-44 w-full">
+        <Image
+          src={item.image || "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800&q=80"}
+          alt={item.name}
+          fill
+          sizes="(max-width: 1280px) 50vw, 33vw"
+          className="object-cover"
+        />
       </div>
       <div className="mb-4 flex items-start justify-between gap-4">
         <div>
