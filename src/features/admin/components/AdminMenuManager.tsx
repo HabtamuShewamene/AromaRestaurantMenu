@@ -123,7 +123,7 @@ export default function AdminMenuManager() {
     const matchesSearch =
       query.length === 0 ||
       item.name.toLowerCase().includes(query) ||
-      item.description.toLowerCase().includes(query) ||
+      (item.description ? item.description.toLowerCase().includes(query) : false) ||
       categoryName.toLowerCase().includes(query);
 
     return matchesCategory && matchesSearch;

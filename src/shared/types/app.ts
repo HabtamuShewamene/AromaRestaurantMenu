@@ -1,37 +1,15 @@
-export type Role = "ADMIN" | "CUSTOMER" | "CLIENT";
-
 export type CategoryRecord = {
   id: string;
   name: string;
-  slug: string;
-  image?: string;
-  items?: Array<{
-    id: string;
-    name: string;
-    price: number;
-    image?: string | null;
-  }>;
-};
-
-export type IngredientRecord = {
-  id: string;
-  name: string;
-  currentStock: number;
-  unit: string;
-  minimumStock: number;
-  createdAt?: string;
-  updatedAt?: string;
-};
-
-export type FoodIngredientRecord = {
-  ingredientId: string;
-  quantity: number;
-  ingredientName?: string;
+  slug?: string | null;
+  image?: string | null;
+  description?: string | null;
+  orderIndex: number;
+  status: boolean;
 };
 
 export type AddonOptionRecord = {
   id: string;
-  addonGroupId?: string;
   name: string;
   price: number;
   isAvailable: boolean;
@@ -40,7 +18,6 @@ export type AddonOptionRecord = {
 
 export type AddonGroupRecord = {
   id: string;
-  menuItemId?: string;
   name: string;
   required: boolean;
   minSelect: number;
@@ -48,50 +25,55 @@ export type AddonGroupRecord = {
   options: AddonOptionRecord[];
 };
 
+export type IngredientRecord = {
+  id: string;
+  name: string;
+  unit: string;
+  currentStock: number;
+  minimumStock: number;
+};
+
+export type MenuItemIngredientRecord = {
+  id: string;
+  quantity: number;
+  ingredient: IngredientRecord;
+};
+
+export type FoodIngredientRecord = {
+  ingredientId: string;
+  quantity: number;
+};
+
 export type MenuItemRecord = {
   id: string;
   name: string;
+  description?: string | null;
   price: number;
-  description: string;
-  image: string;
-  isAvailable: boolean;
-  isFeatured?: boolean;
+  image?: string | null;
   category: CategoryRecord | string;
-  ingredients?: string[];
-  allergens?: string[];
+  categoryId: string;
+  isAvailable: boolean;
+  isFeatured: boolean;
+  rating?: number;
   viewCount?: number;
   vegetarian?: boolean;
   vegan?: boolean;
   spicy?: boolean;
   sugarFree?: boolean;
-  recipe?: FoodIngredientRecord[];
+  allergens?: string[];
   addonGroups?: AddonGroupRecord[];
+  ingredients?: MenuItemIngredientRecord[];
+  recipe?: FoodIngredientRecord[];
   createdAt?: string;
-  updatedAt?: string;
-};
-
-export type ReviewRecord = {
-  id: string;
-  itemId: string;
-  item?: {
-    id?: string;
-    name: string;
-  };
-  name: string;
-  email: string;
-  rating: number;
-  comment: string;
-  isApproved: boolean;
-  createdAt: string;
   updatedAt?: string;
 };
 
 export type OrderItemAddonRecord = {
   id?: string;
-  addonOptionId?: string;
+  addonOptionId?: string | null;
   name: string;
   price: number;
-  quantity: number;
+  quantity?: number;
 };
 
 export type CartItemRecord = {
@@ -100,11 +82,28 @@ export type CartItemRecord = {
   name: string;
   price: number;
   quantity: number;
-  image: string;
+  image?: string | null;
   category: string;
   isAvailable: boolean;
   addons?: OrderItemAddonRecord[];
   notes?: string;
+};
+
+export type ReviewRecord = {
+  id: string;
+  userId?: string | null;
+  itemId: string;
+  name: string;
+  email: string;
+  rating: number;
+  comment?: string | null;
+  isApproved: boolean;
+  createdAt: string;
+  item?: {
+    id: string;
+    name: string;
+    image?: string | null;
+  };
 };
 
 export type OrderStatus =
@@ -122,8 +121,6 @@ export type OrderStatus =
   | "cancelled";
 
 export type OrderType = "DINE_IN" | "TAKEAWAY";
-export type PaymentStatus = "PENDING" | "COMPLETED" | "REFUNDED" | "FAILED";
-export type PaymentMethod = "CASH" | "CARD" | "DIGITAL";
 
 export type TableStatus = "AVAILABLE" | "OCCUPIED" | "RESERVED" | "OUT_OF_SERVICE";
 export type TableSessionStatus = "ACTIVE" | "COMPLETED" | "CANCELLED";
@@ -161,9 +158,7 @@ export type TableSessionRecord = {
   closedAt?: string | null;
   orders?: OrderRecord[];
   waiterRequests?: WaiterRequestRecord[];
-  payments?: PaymentRecord[];
   totalAmount?: number;
-  paidAmount?: number;
   createdAt?: string;
 };
 
@@ -177,17 +172,6 @@ export type WaiterRequestRecord = {
   status: WaiterRequestStatus;
   createdAt: string;
   updatedAt?: string;
-};
-
-export type PaymentRecord = {
-  id: string;
-  tableSessionId: string;
-  orderId?: string | null;
-  amount: number;
-  method: PaymentMethod;
-  status: PaymentStatus;
-  reference?: string | null;
-  createdAt: string;
 };
 
 export type OrderItemRecord = {
@@ -211,7 +195,6 @@ export type OrderRecord = {
   customerPhone?: string | null;
   orderType?: OrderType;
   status: OrderStatus;
-  paymentStatus?: PaymentStatus;
   totalAmount: number;
   notes?: string | null;
   items: OrderItemRecord[];

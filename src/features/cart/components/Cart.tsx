@@ -118,7 +118,13 @@ export default function Cart({
                 >
                   {/* Image */}
                   <div className="relative w-14 h-14 sm:w-16 sm:h-16 rounded-xl overflow-hidden flex-shrink-0 mt-0.5">
-                    <Image src={item.image} alt={item.name} fill sizes="64px" className="object-cover" />
+                    <Image
+                      src={item.image || "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800&q=80"}
+                      alt={item.name}
+                      fill
+                      sizes="64px"
+                      className="object-cover"
+                    />
                   </div>
 
                   {/* Details */}

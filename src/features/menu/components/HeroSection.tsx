@@ -25,18 +25,14 @@ const restaurant = {
   }
 };
 
-export default function HeroSection({ mode = "full" }: HeroSectionProps) {
+export default function HeroSection({ mode = "compact" }: HeroSectionProps) {
   const scrollToMenu = () => {
     document.getElementById("menu-explorer")?.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
     <section
-      className={`relative w-full overflow-hidden rounded-b-[2.5rem] ${
-        mode === "compact"
-          ? "h-[50vh] min-h-[380px] max-h-[620px]"
-          : "h-[85vh] min-h-[600px] max-h-[900px]"
-      }`}
+      className="relative w-full overflow-hidden rounded-b-[2rem] sm:rounded-b-[2.5rem] h-[46vh] min-h-[300px] sm:min-h-[360px] max-h-[440px]"
     >
       {/* Background Image */}
       <div className="absolute inset-0">
@@ -51,7 +47,7 @@ export default function HeroSection({ mode = "full" }: HeroSectionProps) {
       </div>
 
       {/* Layered gradient overlays for text readability */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/40 to-[#080808]" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/85 via-black/50 to-[#080808]" />
       
       {/* Radial gradient for focus */}
       <div
@@ -62,32 +58,32 @@ export default function HeroSection({ mode = "full" }: HeroSectionProps) {
       />
 
       {/* Main hero content container */}
-      <div className="absolute inset-0 flex flex-col items-center justify-center px-4 sm:px-6 z-10 pt-16">
+      <div className="absolute inset-0 flex flex-col items-center justify-center px-4 sm:px-6 z-10 pt-10 sm:pt-14">
         
         {/* Logo and Name */}
         <motion.div
-          initial={{ opacity: 0, y: -20 }}
+          initial={{ opacity: 0, y: -15 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="flex flex-col items-center mb-6"
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="flex flex-col items-center mb-2 sm:mb-3"
         >
-          <div className="flex items-center justify-center w-16 h-16 rounded-full bg-gold-500/20 backdrop-blur-md border border-gold-500/40 mb-4 shadow-[0_0_30px_rgba(216,196,145,0.2)]">
-            <ChefHat className="w-8 h-8 text-gold-400" />
+          <div className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full border border-gold-500/40 mb-1.5 sm:mb-2 shadow-[0_0_20px_rgba(216,196,145,0.2)] overflow-hidden">
+            <img src="/aroma-logo.webp" alt="Aroma Logo" className="w-full h-full object-cover" />
           </div>
-          <p className="text-xs uppercase tracking-[0.4em] text-gold-400/90 font-medium mb-1">
+          <p className="text-[10px] sm:text-xs uppercase tracking-[0.3em] text-gold-400/90 font-medium mb-0.5">
             Welcome to
           </p>
-          <h1 className="font-playfair text-4xl md:text-6xl lg:text-7xl font-bold text-white tracking-wide text-center">
+          <h1 className="font-playfair text-2xl sm:text-4xl md:text-5xl font-bold text-white tracking-wide text-center">
             {restaurant.name}
           </h1>
         </motion.div>
 
         {/* Description */}
         <motion.p
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="text-center text-zinc-300 text-base md:text-lg max-w-2xl leading-relaxed mb-8 font-light"
+          transition={{ duration: 0.6, delay: 0.15 }}
+          className="text-center text-zinc-300 text-xs sm:text-sm max-w-xl leading-relaxed mb-2.5 sm:mb-3.5 font-light line-clamp-2 px-2"
         >
           {restaurant.description}
         </motion.p>
@@ -96,48 +92,48 @@ export default function HeroSection({ mode = "full" }: HeroSectionProps) {
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="flex flex-wrap items-center justify-center gap-4 md:gap-8 mb-10 text-sm text-zinc-300 bg-black/30 backdrop-blur-md px-6 py-4 rounded-2xl border border-white/5"
+          transition={{ duration: 0.5, delay: 0.3 }}
+          className="flex flex-wrap items-center justify-center gap-2.5 sm:gap-6 mb-3 sm:mb-4 text-[11px] sm:text-xs text-zinc-300 bg-black/40 backdrop-blur-md px-3.5 sm:px-5 py-1.5 sm:py-2 rounded-xl border border-white/5"
         >
-          <div className="flex items-center gap-2">
-            <Clock className="w-4 h-4 text-gold-400" />
+          <div className="flex items-center gap-1.5">
+            <Clock className="w-3.5 h-3.5 text-gold-400" />
             <span>{restaurant.openingTime} - {restaurant.closingTime}</span>
           </div>
-          <div className="hidden md:block w-px h-4 bg-white/10" />
-          <div className="flex items-center gap-2">
-            <MapPin className="w-4 h-4 text-gold-400" />
+          <div className="hidden sm:block w-px h-3 bg-white/10" />
+          <div className="hidden xs:flex items-center gap-1.5">
+            <MapPin className="w-3.5 h-3.5 text-gold-400" />
             <span>{restaurant.address}</span>
           </div>
-          <div className="hidden md:block w-px h-4 bg-white/10" />
-          <div className="flex items-center gap-2">
-            <Phone className="w-4 h-4 text-gold-400" />
+          <div className="hidden md:block w-px h-3 bg-white/10" />
+          <div className="hidden md:flex items-center gap-1.5">
+            <Phone className="w-3.5 h-3.5 text-gold-400" />
             <span>{restaurant.phone}</span>
           </div>
         </motion.div>
 
         {/* Social Links & CTA */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          className="flex flex-col items-center gap-6"
+          transition={{ duration: 0.6, delay: 0.4 }}
+          className="flex items-center gap-4"
         >
           <button 
             onClick={scrollToMenu}
-            className="group relative overflow-hidden rounded-full bg-gold-500 text-black px-8 py-3.5 font-medium tracking-wide transition-transform hover:scale-105 active:scale-95"
+            className="group relative overflow-hidden rounded-full bg-gold-500 text-black px-5 sm:px-7 py-2 sm:py-2.5 text-xs sm:text-sm font-bold tracking-wide transition-transform hover:scale-105 active:scale-95 shadow-[0_2px_15px_rgba(182,141,64,0.3)]"
           >
             <span className="relative z-10">View Menu</span>
             <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
           </button>
 
-          <div className="flex items-center gap-5 mt-4">
-            <a href={restaurant.socialLinks.instagram} className="text-zinc-400 font-bold hover:text-gold-400 transition-colors">
+          <div className="flex items-center gap-3 text-xs">
+            <a href={restaurant.socialLinks.instagram} className="text-zinc-400 font-bold hover:text-gold-400 transition-colors text-[11px]">
               IG
             </a>
-            <a href={restaurant.socialLinks.facebook} className="text-zinc-400 font-bold hover:text-gold-400 transition-colors">
+            <a href={restaurant.socialLinks.facebook} className="text-zinc-400 font-bold hover:text-gold-400 transition-colors text-[11px]">
               FB
             </a>
-            <a href={restaurant.socialLinks.twitter} className="text-zinc-400 font-bold hover:text-gold-400 transition-colors">
+            <a href={restaurant.socialLinks.twitter} className="text-zinc-400 font-bold hover:text-gold-400 transition-colors text-[11px]">
               X
             </a>
           </div>
@@ -145,7 +141,7 @@ export default function HeroSection({ mode = "full" }: HeroSectionProps) {
       </div>
 
       {/* Bottom fade blend */}
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#080808] to-transparent pointer-events-none" />
+      <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-[#080808] to-transparent pointer-events-none" />
     </section>
   );
 }

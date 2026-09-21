@@ -249,16 +249,9 @@ export default function TableActionBar() {
               ) : (
                 <div className="space-y-4">
                   <p className="text-sm text-zinc-300 leading-relaxed">
-                    Ready to settle your dining check? We will notify the staff to print and bring your bill to{" "}
+                    Ready for the bill? We will notify our restaurant staff to bring your check to{" "}
                     <strong className="text-gold-400">Table {tableContext.tableNumber}</strong>.
                   </p>
-
-                  <div className="p-4 rounded-2xl bg-zinc-950 border border-zinc-800 space-y-2 text-xs">
-                    <div className="flex justify-between text-zinc-400">
-                      <span>Payment methods supported:</span>
-                      <span className="text-zinc-200 font-medium">Cash • Card • Digital</span>
-                    </div>
-                  </div>
 
                   <button
                     disabled={isSubmitting}

@@ -20,8 +20,8 @@ export default function Navbar() {
         <div className="flex h-20 items-center justify-between">
           {/* Brand Logo */}
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="flex items-center justify-center w-10 h-10 rounded-2xl bg-gold-500/15 border border-gold-500/30 group-hover:bg-gold-500/25 transition-all shadow-[0_0_20px_rgba(182,141,64,0.2)]">
-              <ChefHat className="h-5 w-5 text-gold-400" />
+            <div className="flex items-center justify-center w-10 h-10 rounded-2xl border border-gold-500/30 group-hover:border-gold-400 transition-all shadow-[0_0_20px_rgba(182,141,64,0.2)] overflow-hidden">
+              <img src="/aroma-logo.webp" alt="Aroma Logo" className="w-full h-full object-cover" />
             </div>
             <div className="flex flex-col">
               <span className="text-xl font-bold tracking-tight text-white font-playfair group-hover:text-gold-300 transition-colors">
@@ -62,12 +62,20 @@ export default function Navbar() {
               </Link>
             )}
             {role === "ADMIN" && (
-              <Link
-                href="/admin/dashboard"
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gold-500/10 border border-gold-500/30 text-xs font-bold text-gold-400 hover:bg-gold-500/20 transition-all"
-              >
-                <Shield className="h-3.5 w-3.5" /> Admin Panel
-              </Link>
+              <div className="flex items-center gap-2">
+                <Link
+                  href="/kitchen"
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-xs font-bold text-amber-400 hover:bg-amber-500/20 transition-all"
+                >
+                  <ChefHat className="h-3.5 w-3.5" /> Kitchen KDS
+                </Link>
+                <Link
+                  href="/admin/dashboard"
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gold-500/10 border border-gold-500/30 text-xs font-bold text-gold-400 hover:bg-gold-500/20 transition-all"
+                >
+                  <Shield className="h-3.5 w-3.5" /> Admin
+                </Link>
+              </div>
             )}
 
             <div className="ml-2 flex items-center gap-3 border-l border-white/10 pl-6">

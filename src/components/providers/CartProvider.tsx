@@ -105,7 +105,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       return [
         ...prev,
         {
-          id: crypto.randomUUID(),
+          id: (Date.now().toString(36) + Math.random().toString(36).slice(2)),
           itemId: item.id,
           name: item.name,
           price: item.price,

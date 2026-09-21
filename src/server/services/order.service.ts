@@ -109,7 +109,6 @@ export async function createOrder(input: CreateOrderInput) {
       customerPhone: input.customerPhone || null,
       orderType: input.orderType || (resolvedTableId ? "DINE_IN" : "TAKEAWAY"),
       status: "NEW",
-      paymentStatus: "PENDING",
       totalAmount: Math.round(orderTotal * 100) / 100,
       notes: input.notes || null,
       items: {
@@ -176,20 +175,6 @@ export async function createOrder(input: CreateOrderInput) {
   return order;
 }
 
-const VALID_STATUS_TRANSITIONS: Record<string, string[]> = {
-  NEW: ["CONFIRMED", "PREPARING", "CANCELLED"],
-  CONFIRMED: ["PREPARING", "CANCELLED"],
-  PREPARING: ["READY", "CANCELLED"],
-  READY: ["SERVED", "COMPLETED", "CANCELLED"],
-  SERVED: ["COMPLETED"],
-  COMPLETED: [],
-  CANCELLED: [],
-  // Legacy aliases
-  pending: ["preparing", "ready", "completed", "cancelled"],
-  preparing: ["ready", "completed", "cancelled"],
-  ready: ["completed", "cancelled"],
-};
-
 export async function updateOrderStatus(orderId: string, nextStatus: string) {
   const current = await prisma.order.findUnique({
     where: { id: orderId },
@@ -200,9 +185,7 @@ export async function updateOrderStatus(orderId: string, nextStatus: string) {
   }
 
   const normalizedNext = nextStatus.toUpperCase();
-  const currentNorm = current.status.toUpperCase();
 
-  // Validate or allow admin override
   return prisma.order.update({
     where: { id: orderId },
     data: { status: normalizedNext },
@@ -263,8 +246,26 @@ export async function getOrderById(orderId: string) {
       },
       table: true,
       tableSession: true,
-      payments: true,
       user: true,
     },
+  });
+}
+
+export async function getKitchenOrders() {
+  return prisma.order.findMany({
+    where: {
+      status: { in: ["NEW", "CONFIRMED", "PREPARING", "READY", "pending", "preparing", "ready"] },
+    },
+    include: {
+      items: {
+        include: {
+          item: true,
+          addons: true,
+        },
+      },
+      table: true,
+      tableSession: true,
+    },
+    orderBy: { createdAt: "asc" }, // FIFO: Oldest orders first
   });
 }

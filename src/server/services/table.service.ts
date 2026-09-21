@@ -19,7 +19,6 @@ export async function getAllTables() {
           waiterRequests: {
             where: { status: { in: ["PENDING", "IN_PROGRESS"] } },
           },
-          payments: true,
         },
       },
     },
@@ -45,7 +44,6 @@ export async function getTableByNumber(tableNumber: number) {
             },
           },
           waiterRequests: true,
-          payments: true,
         },
       },
     },
@@ -71,7 +69,6 @@ export async function getTableByQrIdentifier(identifier: string) {
             },
           },
           waiterRequests: true,
-          payments: true,
         },
       },
     },
@@ -126,7 +123,6 @@ export async function getOrCreateActiveSession(tableId: string, guestCount: numb
         },
       },
       waiterRequests: true,
-      payments: true,
     },
   });
 
@@ -146,7 +142,6 @@ export async function getOrCreateActiveSession(tableId: string, guestCount: numb
         table: true,
         orders: true,
         waiterRequests: true,
-        payments: true,
       },
     }),
     prisma.diningTable.update({

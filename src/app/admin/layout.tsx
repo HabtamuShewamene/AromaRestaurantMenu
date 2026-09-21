@@ -11,7 +11,6 @@ import {
   Star,
   QrCode,
   BellRing,
-  Receipt,
   Store,
 } from "lucide-react";
 import Link from "next/link";
@@ -28,10 +27,10 @@ export default function AdminLayout({
     {
       label: "Operations",
       items: [
+        { label: "Kitchen Display", href: "/kitchen", icon: ChefHat },
         { label: "Live Orders", href: "/admin/orders", icon: ShoppingBag },
         { label: "Tables & QR", href: "/admin/tables", icon: QrCode },
         { label: "Waiter Requests", href: "/admin/waiter-requests", icon: BellRing },
-        { label: "Billing & Settle", href: "/admin/billing", icon: Receipt },
       ],
     },
     {
