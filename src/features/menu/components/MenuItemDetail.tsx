@@ -119,7 +119,7 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
   };
 
   const flattenedAddons: OrderItemAddonRecord[] = Object.values(selectedAddons).flat();
-  const addonsTotalUnit = flattenedAddons.reduce((sum, a) => sum + a.price * a.quantity, 0);
+  const addonsTotalUnit = flattenedAddons.reduce((sum, a) => sum + a.price * (a.quantity || 1), 0);
   const unitPrice = item.price + addonsTotalUnit;
   const totalPrice = unitPrice * quantity;
 
@@ -169,7 +169,13 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
           {/* Item Image and Info */}
           <div className="space-y-4">
             <div className="relative h-64 w-full overflow-hidden rounded-2xl">
-              <Image src={item.image} alt={item.name} fill sizes="600px" className="object-cover" />
+              <Image
+                src={item.image || "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800&q=80"}
+                alt={item.name}
+                fill
+                sizes="600px"
+                className="object-cover"
+              />
             </div>
 
             <div className="space-y-2">

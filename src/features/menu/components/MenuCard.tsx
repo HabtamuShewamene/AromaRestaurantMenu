@@ -64,7 +64,7 @@ export default function MenuCard({
       {/* ── Food Image ── */}
       <div className="relative h-44 sm:h-48 overflow-hidden rounded-t-[1.75rem]">
         <Image
-          src={item.image}
+          src={item.image || "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800&q=80"}
           alt={item.name}
           fill
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"

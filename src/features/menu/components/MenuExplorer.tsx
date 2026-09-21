@@ -104,7 +104,7 @@ export default function MenuExplorer({ showHero = false }: { showHero?: boolean 
     const matchesSearch =
       q.length === 0 ||
       item.name.toLowerCase().includes(q) ||
-      item.description.toLowerCase().includes(q) ||
+      (item.description ? item.description.toLowerCase().includes(q) : false) ||
       catName.toLowerCase().includes(q);
 
     if (filters.vegetarian && !item.vegetarian) return false;
