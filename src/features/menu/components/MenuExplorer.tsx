@@ -15,17 +15,17 @@ import { CategoryRecord, MenuItemRecord } from "@/shared/types/app";
 function SkeletonCard() {
   return (
     <div
-      className="rounded-[1.75rem] overflow-hidden"
+      className="rounded-2xl sm:rounded-[1.75rem] overflow-hidden"
       style={{ background: "rgba(16,16,16,0.9)", border: "1px solid rgba(255,255,255,0.05)" }}
     >
-      <div className="skeleton h-44 w-full" />
-      <div className="p-4 space-y-3">
-        <div className="skeleton h-3 w-16 rounded-full" />
-        <div className="skeleton h-4 w-3/4 rounded-full" />
-        <div className="skeleton h-3 w-full rounded-full" />
-        <div className="skeleton h-3 w-2/3 rounded-full" />
-        <div className="flex justify-end mt-2">
-          <div className="skeleton h-9 w-20 rounded-full" />
+      <div className="skeleton h-32 sm:h-44 w-full" />
+      <div className="p-2.5 sm:p-4 space-y-2 sm:space-y-3">
+        <div className="skeleton h-2.5 sm:h-3 w-12 sm:w-16 rounded-full" />
+        <div className="skeleton h-3.5 sm:h-4 w-3/4 rounded-full" />
+        <div className="skeleton h-2.5 sm:h-3 w-full rounded-full" />
+        <div className="skeleton h-2.5 sm:h-3 w-2/3 rounded-full" />
+        <div className="flex justify-end mt-1.5 sm:mt-2">
+          <div className="skeleton h-7 sm:h-9 w-16 sm:w-20 rounded-lg sm:rounded-full" />
         </div>
       </div>
     </div>
@@ -258,7 +258,7 @@ export default function MenuExplorer({ showHero = false }: { showHero?: boolean 
       {/* ── Menu Content Grid ── */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-48">
         {isLoading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6 mt-6">
+          <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6 mt-4 sm:mt-6">
             {Array.from({ length: 8 }).map((_, i) => (
               <SkeletonCard key={i} />
             ))}
@@ -306,7 +306,7 @@ export default function MenuExplorer({ showHero = false }: { showHero?: boolean 
                 </div>
 
                 {/* Cards Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
+                <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6">
                   {categoryItems.map((item, i) => (
                     <MenuCard
                       key={item.id}

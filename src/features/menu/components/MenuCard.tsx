@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { Star, Flame, Plus, Check } from "lucide-react";
+import { Star, Plus, Check } from "lucide-react";
 import { useState } from "react";
 import { MenuItemRecord } from "@/shared/types/app";
 import { useCart } from "@/components/providers/CartProvider";
@@ -42,54 +42,54 @@ export default function MenuCard({
 
   return (
     <motion.article
-      initial={{ opacity: 0, y: 32 }}
+      initial={{ opacity: 0, y: 24 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{
-        duration: 0.5,
-        delay: index * 0.07,
+        duration: 0.4,
+        delay: index * 0.05,
         ease: [0.22, 1, 0.36, 1],
       }}
-      whileHover={{ y: -4 }}
+      whileHover={{ y: -3 }}
       onClick={() => onViewDetails?.(item)}
-      className="group relative cursor-pointer overflow-hidden rounded-[1.75rem] flex flex-col"
+      className="group relative cursor-pointer overflow-hidden rounded-2xl sm:rounded-[1.75rem] flex flex-col h-full"
       style={{
         background: "rgba(16, 16, 16, 0.9)",
         backdropFilter: "blur(20px)",
         WebkitBackdropFilter: "blur(20px)",
         border: "1px solid rgba(255,255,255,0.06)",
-        boxShadow: "0 4px 24px rgba(0,0,0,0.4)",
+        boxShadow: "0 4px 20px rgba(0,0,0,0.4)",
         transition: "box-shadow 0.4s ease, border-color 0.4s ease",
       }}
     >
       {/* ── Food Image ── */}
-      <div className="relative h-44 sm:h-48 overflow-hidden rounded-t-[1.75rem]">
+      <div className="relative h-32 sm:h-44 md:h-48 overflow-hidden rounded-t-2xl sm:rounded-t-[1.75rem]">
         <Image
           src={item.image || "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800&q=80"}
           alt={item.name}
           fill
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+          sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
           className="object-cover transition-transform duration-700 group-hover:scale-105"
         />
 
         {/* Dark gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
 
         {/* Price badge */}
         <div
-          className="absolute top-3 right-3 px-3 py-1 rounded-full text-sm font-bold text-gold-300 font-playfair"
+          className="absolute top-2 sm:top-3 right-2 sm:right-3 px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-xs sm:text-sm font-bold text-gold-300 font-playfair shadow-md"
           style={{
-            background: "rgba(8,8,8,0.8)",
+            background: "rgba(8,8,8,0.85)",
             backdropFilter: "blur(12px)",
-            border: "1px solid rgba(182,141,64,0.3)",
+            border: "1px solid rgba(182,141,64,0.35)",
           }}
         >
           ${item.price.toFixed(2)}
         </div>
 
         {/* Availability / Dietary badges */}
-        <div className="absolute top-3 left-3 flex items-center gap-1.5 flex-wrap max-w-[70%]">
+        <div className="absolute top-2 sm:top-3 left-2 sm:left-3 flex items-center gap-1 flex-wrap max-w-[65%]">
           <span
-            className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
+            className={`px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold uppercase tracking-wider ${
               item.isAvailable
                 ? "bg-green-500/20 text-green-400 border border-green-500/30"
                 : "bg-red-500/20 text-red-400 border border-red-500/30"
@@ -98,7 +98,7 @@ export default function MenuCard({
             {item.isAvailable ? "Available" : "Sold Out"}
           </span>
           {item.isFeatured && (
-            <span className="px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider bg-gold-500/20 text-gold-300 border border-gold-500/40">
+            <span className="hidden xs:inline-block px-1.5 py-0.5 rounded-full text-[8px] sm:text-[9px] font-bold uppercase tracking-wider bg-gold-500/20 text-gold-300 border border-gold-500/40">
               Chef Pick
             </span>
           )}
@@ -107,48 +107,48 @@ export default function MenuCard({
         {/* Rating badge */}
         {reviewCount > 0 && (
           <div
-            className="absolute bottom-3 left-3 flex items-center gap-1.5 px-2.5 py-1 rounded-full"
+            className="absolute bottom-2 left-2 flex items-center gap-1 px-2 py-0.5 rounded-full"
             style={{
-              background: "rgba(8,8,8,0.75)",
+              background: "rgba(8,8,8,0.8)",
               backdropFilter: "blur(10px)",
               border: "1px solid rgba(255,255,255,0.1)",
             }}
           >
-            <Star className="w-3 h-3 fill-gold-400 text-gold-400" />
-            <span className="text-xs font-bold text-gold-400">
+            <Star className="w-2.5 h-2.5 sm:w-3 sm:h-3 fill-gold-400 text-gold-400" />
+            <span className="text-[10px] sm:text-xs font-bold text-gold-400">
               {rating.toFixed(1)}
             </span>
-            <span className="text-[10px] text-zinc-500">({reviewCount})</span>
+            <span className="text-[9px] text-zinc-500">({reviewCount})</span>
           </div>
         )}
       </div>
 
       {/* ── Card Content ── */}
-      <div className="flex flex-col flex-1 p-4 pt-3.5">
+      <div className="flex flex-col flex-1 p-2.5 sm:p-4 pt-2.5 sm:pt-3.5">
         {/* Category */}
-        <p className="text-[10px] uppercase tracking-[0.2em] text-gold-500 font-semibold mb-1">
+        <p className="text-[9px] sm:text-[10px] uppercase tracking-[0.15em] sm:tracking-[0.2em] text-gold-500 font-semibold mb-0.5 truncate">
           {categoryName}
         </p>
 
         {/* Name */}
-        <h3 className="font-semibold text-white text-base leading-snug mb-1.5 line-clamp-1 font-playfair">
+        <h3 className="font-semibold text-white text-xs sm:text-base leading-snug mb-1 line-clamp-1 font-playfair group-hover:text-gold-300 transition-colors">
           {item.name}
         </h3>
 
         {/* Description */}
-        <p className="text-xs text-zinc-400 leading-relaxed line-clamp-2 mb-4 flex-1">
+        <p className="text-[10px] sm:text-xs text-zinc-400 leading-relaxed line-clamp-2 mb-2.5 sm:mb-4 flex-1">
           {item.description}
         </p>
 
         {/* ── Actions ── */}
-        <div className="mt-auto pt-3 border-t border-white/5 flex items-center justify-between gap-2">
+        <div className="mt-auto pt-2 sm:pt-3 border-t border-white/5 flex items-center justify-between gap-1.5">
           <button
             type="button"
             onClick={(e) => {
               e.stopPropagation();
               onViewDetails?.(item);
             }}
-            className="text-xs font-semibold text-zinc-400 hover:text-white transition-colors uppercase tracking-wider py-1.5 px-2 rounded-lg hover:bg-white/5"
+            className="text-[10px] sm:text-xs font-semibold text-zinc-400 hover:text-white transition-colors uppercase tracking-wider py-1 px-1 sm:px-2 rounded hover:bg-white/5"
           >
             Details
           </button>
@@ -157,27 +157,27 @@ export default function MenuCard({
             type="button"
             disabled={!item.isAvailable}
             onClick={handleAddToCart}
-            className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+            className={`flex items-center justify-center gap-1 px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-lg sm:rounded-xl text-[10px] sm:text-xs font-bold transition-all ${
               !item.isAvailable
                 ? "bg-zinc-800 text-zinc-500 cursor-not-allowed"
                 : justAdded
                 ? "bg-green-500 text-black shadow-[0_0_12px_rgba(34,197,94,0.4)]"
-                : "bg-gold-500 text-black hover:bg-gold-400 hover:scale-105 active:scale-95 shadow-[0_2px_10px_rgba(182,141,64,0.25)]"
+                : "bg-gold-500 text-black hover:bg-gold-400 hover:scale-[1.03] active:scale-95 shadow-[0_2px_10px_rgba(182,141,64,0.25)]"
             }`}
           >
             {justAdded ? (
               <>
-                <Check className="w-3.5 h-3.5 stroke-[2.5]" />
+                <Check className="w-3 h-3 sm:w-3.5 sm:h-3.5 stroke-[2.5]" />
                 <span>Added</span>
               </>
             ) : hasAddons ? (
               <>
-                <Plus className="w-3.5 h-3.5 stroke-[2.5]" />
+                <Plus className="w-3 h-3 sm:w-3.5 sm:h-3.5 stroke-[2.5]" />
                 <span>Customize</span>
               </>
             ) : (
               <>
-                <Plus className="w-3.5 h-3.5 stroke-[2.5]" />
+                <Plus className="w-3 h-3 sm:w-3.5 sm:h-3.5 stroke-[2.5]" />
                 <span>Add</span>
               </>
             )}

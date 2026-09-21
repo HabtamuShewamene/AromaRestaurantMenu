@@ -45,5 +45,4 @@ npm run db:studio
 
 ## Notes
 
-- `src/server/legacy` contains the older Mongo/Mongoose layer kept only for reference during the Prisma/Postgres transition.
 - Shared frontend types now follow the active Prisma `id` / `itemId` shape instead of the older Mongo `_id` structure.

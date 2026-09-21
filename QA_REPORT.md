@@ -4,7 +4,7 @@
 
 The V1 backend ordering workflow is functional in the configured development database and the production build succeeds. Seven concrete defects were found and fixed: active payment-model residue in the duplicate root schema, missing server-side quantity/add-on validation, client-controlled add-on pricing, illegal order-status transitions, unauthenticated order-detail exposure, unauthenticated waiter-request listing, and unprotected direct admin/kitchen page navigation. Malformed order IDs also produced 500 responses and were corrected to 400.
 
-The system is not certified production-ready. Live browser/DOM testing could not be completed because no connected browser surface was available in this session. Lint remains failing with pre-existing errors, and the full responsive/concurrency/customer-to-admin regression remains pending browser verification.
+The system is not certified production-ready. Live browser/DOM testing could not be completed because no connected browser surface was available in this session. Lint remains failing with 48 errors, and the full responsive/concurrency/customer-to-admin regression remains pending browser verification.
 
 ## 2. Test Environment
 
@@ -13,6 +13,7 @@ The system is not certified production-ready. Live browser/DOM testing could not
 - Runtime: Node/npm with Prisma 7.8.0, TypeScript 5, React 19.2.4
 - Browser: unavailable; browser discovery returned no connected surfaces
 - Test date: 2026-09-22 (Africa/Addis_Ababa)
+- Security audit: `npm audit --omit=dev` reports 17 production dependency vulnerabilities, including critical advisories affecting the current Next.js and next-auth versions; automatic remediation would require dependency upgrades and was not applied blindly.
 
 ## 3. Feature Test Matrix
 
@@ -137,6 +138,7 @@ Static code inspection found polling in the kitchen and customer order component
 - `npm run build`: PASS after fixes
 - `npx tsx scripts/test_v1.ts`: PASS
 - `npm run lint`: FAIL — 48 errors and 22 warnings remain, including explicit `any`, React effect warnings, and unescaped entities.
+- `npm audit --omit=dev`: FAIL — 17 vulnerabilities (5 moderate, 10 high, 2 critical).
 
 ## 11. Remaining Issues
 
@@ -145,6 +147,9 @@ Static code inspection found polling in the kitchen and customer order component
 - Inventory deduction should be made atomic with order creation and guarded against concurrent overselling.
 - Automated negative tests for invalid transitions, forged add-ons, duplicate submissions, and cross-customer access should be added.
 - The smoke run created a development order and waiter request; review or clean these records in the development database before release testing.
+- Durable server-side idempotency is not implemented for refresh/double-submit scenarios.
+- Inventory deduction is prevalidated but is not yet transactionally coupled to order creation under concurrent requests.
+- Current Next.js/next-auth dependency versions require security upgrades before production deployment.
 
 ## 12. Final Assessment
 

@@ -92,7 +92,8 @@ export default function KitchenDisplay() {
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(true);
-  const [currentTime, setCurrentTime] = useState<Date>(new Date());
+  // Keep the first render deterministic: Date.now() differs between SSR and hydration.
+  const [currentTime, setCurrentTime] = useState<Date | null>(null);
   const [actionInProgress, setActionInProgress] = useState<string | null>(null);
   const [newOrderAlert, setNewOrderAlert] = useState<string | null>(null);
 
@@ -254,7 +255,9 @@ export default function KitchenDisplay() {
           <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-zinc-900/90 border border-zinc-800 text-zinc-300 font-mono">
             <Clock className="w-3.5 h-3.5 text-gold-400" />
             <span>
-              {currentTime.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" })}
+              {currentTime
+                ? currentTime.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" })
+                : "--:--:--"}
             </span>
           </div>
 
@@ -411,7 +414,7 @@ export default function KitchenDisplay() {
               const isPreparing = statusNorm === "PREPARING";
               const isReady = statusNorm === "READY";
 
-              const minutesElapsed = getMinutesElapsed(order.createdAt, currentTime);
+              const minutesElapsed = currentTime ? getMinutesElapsed(order.createdAt, currentTime) : 0;
               const isUrgent = minutesElapsed >= 15;
               const orderRef = order.id.slice(-6).toUpperCase();
 
@@ -452,7 +455,7 @@ export default function KitchenDisplay() {
                         }`}
                       >
                         <Timer className="w-3.5 h-3.5" />
-                        <span>{formatElapsedTime(order.createdAt, currentTime)}</span>
+                        <span>{currentTime ? formatElapsedTime(order.createdAt, currentTime) : "—"}</span>
                       </div>
                     </div>
 
