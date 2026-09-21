@@ -1,5 +1,5 @@
-import Footer from "@/components/Layout/Footer";
-import Navbar from "@/components/Layout/Navbar";
+import Footer from "@/components/layout/Footer";
+import Navbar from "@/components/layout/Navbar";
 import HeroSection from "@/features/menu/components/HeroSection";
 import MenuExplorer from "@/features/menu/components/MenuExplorer";
 

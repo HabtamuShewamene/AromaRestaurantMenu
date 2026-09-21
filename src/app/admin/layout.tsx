@@ -1,20 +1,5 @@
 "use client";
 
-<<<<<<< HEAD
-import { BarChart3, Coffee, LayoutDashboard, ListTree, Settings, ShoppingBag, Utensils, Package, Star } from "lucide-react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-
-const navItems = [
-  { name: "Dashboard", href: "/admin/dashboard", icon: LayoutDashboard },
-  { name: "Manage Menu", href: "/admin/menu", icon: Utensils },
-  { name: "Categories", href: "/admin/categories", icon: ListTree },
-  { name: "Orders", href: "/admin/orders", icon: ShoppingBag },
-  { name: "Inventory", href: "/admin/inventory", icon: Package },
-  { name: "Reviews", href: "/admin/reviews", icon: Star },
-  { name: "Analytics", href: "/admin/analytics", icon: BarChart3 },
-];
-=======
 import {
   BarChart3,
   ChefHat,
@@ -31,7 +16,6 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
->>>>>>> d034e7030184471ff69b5318637ae74846dbc349
 
 export default function AdminLayout({
   children,
@@ -40,40 +24,11 @@ export default function AdminLayout({
 }) {
   const pathname = usePathname();
 
-<<<<<<< HEAD
-  return (
-    <div className="flex min-h-screen bg-[#050505]">
-      <aside className="fixed z-40 h-full w-64 border-r border-white/5 bg-zinc-950/50 backdrop-blur-xl">
-        <div className="p-8">
-          <Link href="/admin/dashboard" className="mb-10 flex items-center gap-2">
-            <Coffee className="h-6 w-6 text-gold-500" />
-            <span className="text-xl font-bold tracking-tighter text-gradient">ADMIN PORTAL</span>
-          </Link>
-
-          <nav className="space-y-1.5">
-            {navItems.map((item) => {
-              const Icon = item.icon;
-              const isActive = pathname === item.href;
-              return (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className={`flex items-center gap-3 rounded-xl px-4 py-3 font-medium transition-all ${
-                    isActive
-                      ? "bg-gold-500/10 text-gold-400 font-semibold border border-gold-500/20"
-                      : "text-zinc-400 hover:bg-white/5 hover:text-white"
-                  }`}
-                >
-                  <Icon className={`h-5 w-5 ${isActive ? "text-gold-400" : "text-zinc-400"}`} />
-                  {item.name}
-                </Link>
-              );
-            })}
-=======
   const navGroups = [
     {
       label: "Operations",
       items: [
+        { label: "Kitchen Display", href: "/kitchen", icon: ChefHat },
         { label: "Live Orders", href: "/admin/orders", icon: ShoppingBag },
         { label: "Tables & QR", href: "/admin/tables", icon: QrCode },
         { label: "Waiter Requests", href: "/admin/waiter-requests", icon: BellRing },
@@ -142,7 +97,6 @@ export default function AdminLayout({
                 })}
               </div>
             ))}
->>>>>>> d034e7030184471ff69b5318637ae74846dbc349
           </nav>
         </div>
 

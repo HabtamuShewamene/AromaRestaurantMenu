@@ -1,11 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-<<<<<<< HEAD
-import { X, Flame, Leaf, Sparkles } from "lucide-react";
-=======
 import { X, Plus, Minus, ShoppingBag, Check } from "lucide-react";
->>>>>>> d034e7030184471ff69b5318637ae74846dbc349
 import Image from "next/image";
 import { MenuItemRecord, ReviewRecord, OrderItemAddonRecord } from "@/shared/types/app";
 import { useCart } from "@/components/providers/CartProvider";
@@ -13,7 +9,7 @@ import ReviewDisplay from "@/features/reviews/components/ReviewDisplay";
 import ReviewForm from "@/features/reviews/components/ReviewForm";
 
 type MenuItemDetailProps = {
-  item: MenuItemRecord & { ingredientNames?: string[] };
+  item: MenuItemRecord;
   onClose: () => void;
 };
 
@@ -139,19 +135,6 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
     }
   };
 
-<<<<<<< HEAD
-  const ingredientsList = item.ingredientNames && item.ingredientNames.length > 0
-    ? item.ingredientNames
-    : Array.isArray(item.ingredients)
-    ? item.ingredients.map((ing: any) => typeof ing === "string" ? ing : ing.ingredient?.name || ing.name).filter(Boolean)
-    : [];
-
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4">
-      <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-3xl bg-zinc-900 border border-zinc-800">
-        <div className="sticky top-0 z-10 flex items-center justify-between border-b border-zinc-800 bg-zinc-900/95 px-6 py-4 backdrop-blur-md">
-          <h2 className="text-2xl font-bold text-white">{item.name}</h2>
-=======
   const missingRequiredGroup = (item.addonGroups || []).find(
     (g) => g.required && (!selectedAddons[g.id] || selectedAddons[g.id].length < Math.max(1, g.minSelect))
   );
@@ -174,7 +157,6 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
         {/* Sticky Modal Header */}
         <div className="sticky top-0 z-20 flex items-center justify-between border-b border-white/10 bg-[#111111]/95 px-6 py-4 backdrop-blur-md">
           <h2 className="text-xl font-bold text-white font-playfair">{item.name}</h2>
->>>>>>> d034e7030184471ff69b5318637ae74846dbc349
           <button
             onClick={onClose}
             className="rounded-full p-2 text-zinc-400 hover:bg-white/10 hover:text-white transition-all"
@@ -190,94 +172,22 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
               <Image src={item.image} alt={item.name} fill sizes="600px" className="object-cover" />
             </div>
 
-            <div className="space-y-3">
+            <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-xs uppercase tracking-[0.2em] text-gold-500 font-semibold">{categoryName}</p>
-<<<<<<< HEAD
-                  <p className="text-3xl font-bold text-gold-400">${item.price.toFixed(2)}</p>
-=======
                   <p className="text-3xl font-bold text-gold-400 font-playfair">${item.price.toFixed(2)}</p>
->>>>>>> d034e7030184471ff69b5318637ae74846dbc349
                 </div>
                 <span
                   className={`rounded-full px-3.5 py-1.5 font-bold text-xs uppercase tracking-wider ${
                     item.isAvailable
-<<<<<<< HEAD
-                      ? "bg-green-500/10 text-green-400 border border-green-500/20"
-                      : "bg-red-500/10 text-red-400 border border-red-500/20"
-=======
                       ? "bg-green-500/15 text-green-400 border border-green-500/30"
                       : "bg-red-500/15 text-red-400 border border-red-500/30"
->>>>>>> d034e7030184471ff69b5318637ae74846dbc349
                   }`}
                 >
                   {item.isAvailable ? "In Stock" : "Sold Out"}
                 </span>
               </div>
-<<<<<<< HEAD
-
-              <p className="text-zinc-300 leading-relaxed">{item.description}</p>
-
-              {/* Dietary Tags */}
-              <div className="flex flex-wrap gap-2 pt-2">
-                {item.vegetarian && (
-                  <span className="flex items-center gap-1 px-3 py-1 bg-green-500/10 text-green-400 rounded-full text-xs font-semibold border border-green-500/20">
-                    <Leaf className="w-3 h-3" /> Vegetarian
-                  </span>
-                )}
-                {item.vegan && (
-                  <span className="flex items-center gap-1 px-3 py-1 bg-emerald-500/10 text-emerald-400 rounded-full text-xs font-semibold border border-emerald-500/20">
-                    <Leaf className="w-3 h-3" /> Vegan
-                  </span>
-                )}
-                {item.spicy && (
-                  <span className="flex items-center gap-1 px-3 py-1 bg-red-500/10 text-red-400 rounded-full text-xs font-semibold border border-red-500/20">
-                    <Flame className="w-3 h-3" /> Spicy
-                  </span>
-                )}
-                {item.sugarFree && (
-                  <span className="flex items-center gap-1 px-3 py-1 bg-blue-500/10 text-blue-400 rounded-full text-xs font-semibold border border-blue-500/20">
-                    <Sparkles className="w-3 h-3" /> Sugar Free
-                  </span>
-                )}
-              </div>
-
-              {/* Ingredients & Allergens */}
-              {(ingredientsList.length > 0 || (item.allergens && item.allergens.length > 0)) && (
-                <div className="pt-4 space-y-4 border-t border-zinc-800">
-                  {ingredientsList.length > 0 && (
-                    <div>
-                      <h4 className="text-xs font-semibold text-zinc-400 mb-2 uppercase tracking-wider">Ingredients</h4>
-                      <div className="flex flex-wrap gap-2">
-                        {ingredientsList.map((ing: string, i: number) => (
-                          <span key={i} className="px-3 py-1 bg-zinc-800/80 text-zinc-300 rounded-full text-xs border border-zinc-700">
-                            {ing}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                  {item.allergens && item.allergens.length > 0 && (
-                    <div>
-                      <h4 className="text-xs font-semibold text-red-400/80 mb-2 uppercase tracking-wider">Allergens</h4>
-                      <div className="flex flex-wrap gap-2">
-                        {item.allergens.map((alg: string, i: number) => (
-                          <span key={i} className="px-3 py-1 bg-red-500/10 text-red-400 rounded-full text-xs font-medium border border-red-500/20">
-                            {alg}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Reviews Section */}
-          <div className="border-t border-zinc-800 pt-6">
-=======
               <p className="text-zinc-300 text-sm leading-relaxed">{item.description}</p>
             </div>
           </div>
@@ -426,7 +336,6 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
 
           {/* Customer Reviews */}
           <div className="border-t border-white/10 pt-6">
->>>>>>> d034e7030184471ff69b5318637ae74846dbc349
             <h3 className="mb-4 text-lg font-bold text-white">⭐ Customer Reviews</h3>
             {isLoading ? (
               <p className="text-zinc-500 text-sm">Loading reviews...</p>

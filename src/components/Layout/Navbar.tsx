@@ -62,12 +62,20 @@ export default function Navbar() {
               </Link>
             )}
             {role === "ADMIN" && (
-              <Link
-                href="/admin/dashboard"
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gold-500/10 border border-gold-500/30 text-xs font-bold text-gold-400 hover:bg-gold-500/20 transition-all"
-              >
-                <Shield className="h-3.5 w-3.5" /> Admin Panel
-              </Link>
+              <div className="flex items-center gap-2">
+                <Link
+                  href="/kitchen"
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-xs font-bold text-amber-400 hover:bg-amber-500/20 transition-all"
+                >
+                  <ChefHat className="h-3.5 w-3.5" /> Kitchen KDS
+                </Link>
+                <Link
+                  href="/admin/dashboard"
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gold-500/10 border border-gold-500/30 text-xs font-bold text-gold-400 hover:bg-gold-500/20 transition-all"
+                >
+                  <Shield className="h-3.5 w-3.5" /> Admin
+                </Link>
+              </div>
             )}
 
             <div className="ml-2 flex items-center gap-3 border-l border-white/10 pl-6">

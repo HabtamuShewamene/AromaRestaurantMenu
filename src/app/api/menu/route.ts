@@ -9,15 +9,6 @@ export async function GET() {
       prisma.menuItem.findMany({
         include: {
           category: true,
-<<<<<<< HEAD
-          ingredients: {
-            include: {
-              ingredient: true,
-            },
-          },
-        },
-        orderBy: { createdAt: 'desc' },
-=======
           addonGroups: {
             include: {
               options: {
@@ -27,7 +18,6 @@ export async function GET() {
           },
         },
         orderBy: { createdAt: "desc" },
->>>>>>> d034e7030184471ff69b5318637ae74846dbc349
       }),
       prisma.review.groupBy({
         by: ["itemId"],
@@ -43,13 +33,6 @@ export async function GET() {
         ...item,
         averageRating: itemStats?._avg.rating ? parseFloat(itemStats._avg.rating.toFixed(1)) : 0,
         totalReviews: itemStats?._count.rating || 0,
-        ingredientNames: item.ingredients.map(fi => fi.ingredient?.name).filter(Boolean),
-        recipe: item.ingredients.map(fi => ({
-          ingredientId: fi.ingredientId,
-          quantity: fi.quantity,
-          ingredientName: fi.ingredient?.name,
-          unit: fi.ingredient?.unit,
-        })),
       };
     });
 
@@ -95,13 +78,6 @@ export async function POST(request: NextRequest) {
         }))
       : [];
 
-    // Process allergens
-    const allergens = Array.isArray(body.allergens) 
-      ? body.allergens.map((a: string) => a.trim()).filter(Boolean)
-      : typeof body.allergens === "string" 
-      ? body.allergens.split(",").map((a: string) => a.trim()).filter(Boolean)
-      : [];
-
     const item = await prisma.menuItem.create({
       data: {
         name: body.name,
@@ -110,20 +86,12 @@ export async function POST(request: NextRequest) {
         categoryId,
         image: body.image,
         isAvailable: body.isAvailable ?? true,
-<<<<<<< HEAD
-        vegetarian: Boolean(body.vegetarian),
-        vegan: Boolean(body.vegan),
-        spicy: Boolean(body.spicy),
-        sugarFree: Boolean(body.sugarFree),
-        allergens,
-=======
         isFeatured: body.isFeatured ?? false,
         vegetarian: body.vegetarian ?? false,
         vegan: body.vegan ?? false,
         spicy: body.spicy ?? false,
         sugarFree: body.sugarFree ?? false,
         allergens: Array.isArray(body.allergens) ? body.allergens : [],
->>>>>>> d034e7030184471ff69b5318637ae74846dbc349
         ingredients: {
           create: recipeData,
         },
@@ -134,17 +102,10 @@ export async function POST(request: NextRequest) {
           include: { options: true },
         },
       },
-      include: {
-        category: true,
-        ingredients: {
-          include: { ingredient: true }
-        }
-      }
     });
 
     return NextResponse.json(item, { status: 201 });
-  } catch (error) {
-    const message = error instanceof Error ? error.message : "Failed to create menu item";
-    return NextResponse.json({ message }, { status: 500 });
+  } catch {
+    return NextResponse.json({ message: "Failed to create menu item" }, { status: 500 });
   }
 }

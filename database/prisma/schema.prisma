@@ -1,0 +1,248 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String?
+  email     String   @unique
+  password  String?
+  role      String   @default("CUSTOMER") // "ADMIN" | "CUSTOMER" (backward-compatible with "CLIENT")
+  orders    Order[]
+  reviews   Review[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Restaurant {
+  id           String   @id @default(uuid())
+  name         String
+  logo         String?
+  coverImage   String?
+  description  String?
+  phone        String?
+  email        String?
+  address      String?
+  openingTime  String?
+  closingTime  String?
+  latitude     Float?
+  longitude    Float?
+  socialLinks  Json?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model DiningTable {
+  id             String          @id @default(uuid())
+  number         Int             @unique
+  label          String?         // e.g. "Window Booth 1", "Terrace T2"
+  capacity       Int             @default(2)
+  status         String          @default("AVAILABLE") // "AVAILABLE" | "OCCUPIED" | "RESERVED" | "OUT_OF_SERVICE"
+  qrIdentifier   String?         @unique // e.g. "table-1", "table-2"
+  qrCodeUrl      String?
+  tableSessions  TableSession[]
+  orders         Order[]
+  waiterRequests WaiterRequest[]
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+}
+
+model TableSession {
+  id             String          @id @default(uuid())
+  tableId        String
+  table          DiningTable     @relation(fields: [tableId], references: [id], onDelete: Cascade)
+  status         String          @default("ACTIVE") // "ACTIVE" | "COMPLETED" | "CANCELLED"
+  guestCount     Int             @default(1)
+  openedAt       DateTime        @default(now())
+  closedAt       DateTime?
+  orders         Order[]
+  waiterRequests WaiterRequest[]
+  payments       Payment[]
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+}
+
+model Category {
+  id          String     @id @default(uuid())
+  name        String
+  slug        String?    @unique
+  image       String?
+  description String?
+  orderIndex  Int        @default(0)
+  status      Boolean    @default(true) // true = active, false = disabled
+  menuItems   MenuItem[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+model MenuItem {
+  id          String           @id @default(uuid())
+  categoryId  String
+  category    Category         @relation(fields: [categoryId], references: [id])
+  name        String
+  description String?
+  image       String?
+  price       Float
+  isAvailable Boolean          @default(true)
+  isFeatured  Boolean          @default(false)
+  vegetarian  Boolean          @default(false)
+  vegan       Boolean          @default(false)
+  spicy       Boolean          @default(false)
+  sugarFree   Boolean          @default(false)
+  allergens   String[]
+  rating      Float            @default(0)
+  viewCount   Int              @default(0)
+  
+  addonGroups AddonGroup[]
+  ingredients FoodIngredient[]
+  orderItems  OrderItem[]
+  reviews     Review[]
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+}
+
+model AddonGroup {
+  id          String        @id @default(uuid())
+  menuItemId  String
+  menuItem    MenuItem      @relation(fields: [menuItemId], references: [id], onDelete: Cascade)
+  name        String        // e.g. "Milk Choice", "Extra Toppings", "Preparation"
+  required    Boolean       @default(false)
+  minSelect   Int           @default(0)
+  maxSelect   Int           @default(1)
+  options     AddonOption[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
+model AddonOption {
+  id           String      @id @default(uuid())
+  addonGroupId String
+  addonGroup   AddonGroup  @relation(fields: [addonGroupId], references: [id], onDelete: Cascade)
+  name         String      // e.g. "Oat Milk", "Extra Cheese"
+  price        Float       @default(0)
+  isAvailable  Boolean     @default(true)
+  orderIndex   Int         @default(0)
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+}
+
+model Ingredient {
+  id           String           @id @default(uuid())
+  name         String
+  unit         String
+  currentStock Float            @default(0)
+  minimumStock Float            @default(0)
+  
+  foodItems    FoodIngredient[]
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+}
+
+model FoodIngredient {
+  id           String     @id @default(uuid())
+  foodItemId   String
+  ingredientId String
+  quantity     Float      // Quantity required
+  
+  foodItem     MenuItem   @relation(fields: [foodItemId], references: [id], onDelete: Cascade)
+  ingredient   Ingredient @relation(fields: [ingredientId], references: [id], onDelete: Cascade)
+
+  @@unique([foodItemId, ingredientId])
+}
+
+model Order {
+  id             String          @id @default(uuid())
+  userId         String?
+  tableId        String?
+  tableSessionId String?
+  customerName   String?
+  customerEmail  String?
+  customerPhone  String?
+  orderType      String          @default("DINE_IN") // "DINE_IN" | "TAKEAWAY"
+  status         String          @default("NEW") // "NEW" | "CONFIRMED" | "PREPARING" | "READY" | "SERVED" | "COMPLETED" | "CANCELLED"
+  paymentStatus  String          @default("PENDING") // "PENDING" | "COMPLETED" | "REFUNDED"
+  totalAmount    Float
+  notes          String?
+  
+  user           User?           @relation(fields: [userId], references: [id])
+  table          DiningTable?    @relation(fields: [tableId], references: [id])
+  tableSession   TableSession?   @relation(fields: [tableSessionId], references: [id])
+  items          OrderItem[]
+  payments       Payment[]
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+}
+
+model OrderItem {
+  id        String           @id @default(uuid())
+  orderId   String
+  itemId    String
+  quantity  Int
+  price     Float            // Unit price at time of order
+  notes     String?
+  
+  order     Order            @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  item      MenuItem         @relation(fields: [itemId], references: [id])
+  addons    OrderItemAddon[]
+}
+
+model OrderItemAddon {
+  id            String    @id @default(uuid())
+  orderItemId   String
+  addonOptionId String?
+  name          String    // Snapshot of option name
+  price         Float     @default(0) // Snapshot of option price
+  quantity      Int       @default(1)
+  
+  orderItem     OrderItem @relation(fields: [orderItemId], references: [id], onDelete: Cascade)
+}
+
+model WaiterRequest {
+  id             String        @id @default(uuid())
+  tableSessionId String
+  tableId        String
+  type           String        @default("CALL_WAITER") // "CALL_WAITER" | "REQUEST_BILL" | "REQUEST_WATER" | "REQUEST_CUTLERY" | "CUSTOM"
+  note           String?
+  status         String        @default("PENDING") // "PENDING" | "IN_PROGRESS" | "RESOLVED" | "CANCELLED"
+  
+  tableSession   TableSession  @relation(fields: [tableSessionId], references: [id], onDelete: Cascade)
+  table          DiningTable   @relation(fields: [tableId], references: [id], onDelete: Cascade)
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+}
+
+model Payment {
+  id             String        @id @default(uuid())
+  tableSessionId String
+  orderId        String?
+  amount         Float
+  method         String        @default("CASH") // "CASH" | "CARD" | "DIGITAL"
+  status         String        @default("PENDING") // "PENDING" | "COMPLETED" | "REFUNDED" | "FAILED"
+  reference      String?
+  
+  tableSession   TableSession  @relation(fields: [tableSessionId], references: [id], onDelete: Cascade)
+  order          Order?        @relation(fields: [orderId], references: [id])
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+}
+
+model Review {
+  id         String   @id @default(uuid())
+  userId     String?
+  itemId     String
+  name       String   @default("Anonymous")
+  email      String
+  ipAddress  String?
+  rating     Int
+  comment    String?
+  isApproved Boolean  @default(false)
+  user       User?    @relation(fields: [userId], references: [id])
+  item       MenuItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}

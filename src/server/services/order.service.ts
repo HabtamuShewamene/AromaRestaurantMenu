@@ -268,3 +268,22 @@ export async function getOrderById(orderId: string) {
     },
   });
 }
+
+export async function getKitchenOrders() {
+  return prisma.order.findMany({
+    where: {
+      status: { in: ["NEW", "CONFIRMED", "PREPARING", "READY", "pending", "preparing", "ready"] },
+    },
+    include: {
+      items: {
+        include: {
+          item: true,
+          addons: true,
+        },
+      },
+      table: true,
+      tableSession: true,
+    },
+    orderBy: { createdAt: "asc" }, // FIFO: Oldest orders first
+  });
+}
