@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { isAdminRequest } from "@/server/auth/session";
+import { getAppSession, isAdminRequest } from "@/server/auth/session";
 import { serializeOrder } from "@/server/db/serializers";
 import { getOrderById, updateOrderStatus } from "@/server/services/order.service";
 
@@ -10,9 +10,18 @@ type RouteContext = {
 export async function GET(request: NextRequest, context: RouteContext) {
   try {
     const { id } = await context.params;
+    if (!/^[0-9a-f-]{36}$/i.test(id)) return NextResponse.json({ message: "Invalid order ID" }, { status: 400 });
     const order = await getOrderById(id);
     if (!order) {
       return NextResponse.json({ message: "Order not found" }, { status: 404 });
+    }
+    const session = await getAppSession();
+    const isAdmin = session?.user?.role === "ADMIN";
+    const requestedSession = new URL(request.url).searchParams.get("tableSessionId");
+    const ownsOrder = Boolean(session?.user?.id && order.userId === session.user.id);
+    const hasTableAccess = Boolean(requestedSession && requestedSession === order.tableSessionId);
+    if (!isAdmin && !ownsOrder && !hasTableAccess) {
+      return NextResponse.json({ message: "Order access denied" }, { status: 403 });
     }
     return NextResponse.json(serializeOrder(order as any));
   } catch (error) {

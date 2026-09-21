@@ -1,5 +1,3 @@
-"use client";
-
 import {
   BarChart3,
   ChefHat,
@@ -14,14 +12,16 @@ import {
   Store,
 } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { redirect } from "next/navigation";
+import { getAppSession } from "@/server/auth/session";
 
-export default function AdminLayout({
+export default async function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const pathname = usePathname();
+  const session = await getAppSession();
+  if (session?.user?.role !== "ADMIN") redirect("/login?callbackUrl=/admin");
 
   const navGroups = [
     {
@@ -76,7 +76,7 @@ export default function AdminLayout({
                 </p>
                 {group.items.map((item) => {
                   const Icon = item.icon;
-                  const isActive = pathname === item.href || (item.href !== "/admin" && pathname.startsWith(item.href));
+                  const isActive = false;
 
                   return (
                     <Link

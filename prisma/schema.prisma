@@ -62,7 +62,6 @@ model TableSession {
   closedAt       DateTime?
   orders         Order[]
   waiterRequests WaiterRequest[]
-  payments       Payment[]
   createdAt      DateTime        @default(now())
   updatedAt      DateTime        @updatedAt
 }
@@ -165,7 +164,6 @@ model Order {
   customerPhone  String?
   orderType      String          @default("DINE_IN") // "DINE_IN" | "TAKEAWAY"
   status         String          @default("NEW") // "NEW" | "CONFIRMED" | "PREPARING" | "READY" | "SERVED" | "COMPLETED" | "CANCELLED"
-  paymentStatus  String          @default("PENDING") // "PENDING" | "COMPLETED" | "REFUNDED"
   totalAmount    Float
   notes          String?
   
@@ -173,7 +171,6 @@ model Order {
   table          DiningTable?    @relation(fields: [tableId], references: [id])
   tableSession   TableSession?   @relation(fields: [tableSessionId], references: [id])
   items          OrderItem[]
-  payments       Payment[]
   createdAt      DateTime        @default(now())
   updatedAt      DateTime        @updatedAt
 }
@@ -212,21 +209,6 @@ model WaiterRequest {
   
   tableSession   TableSession  @relation(fields: [tableSessionId], references: [id], onDelete: Cascade)
   table          DiningTable   @relation(fields: [tableId], references: [id], onDelete: Cascade)
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
-}
-
-model Payment {
-  id             String        @id @default(uuid())
-  tableSessionId String
-  orderId        String?
-  amount         Float
-  method         String        @default("CASH") // "CASH" | "CARD" | "DIGITAL"
-  status         String        @default("PENDING") // "PENDING" | "COMPLETED" | "REFUNDED" | "FAILED"
-  reference      String?
-  
-  tableSession   TableSession  @relation(fields: [tableSessionId], references: [id], onDelete: Cascade)
-  order          Order?        @relation(fields: [orderId], references: [id])
   createdAt      DateTime      @default(now())
   updatedAt      DateTime      @updatedAt
 }
