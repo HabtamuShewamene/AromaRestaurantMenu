@@ -8,7 +8,6 @@ type OrderWithRelations = {
   customerPhone?: string | null;
   orderType?: string | null;
   status: string;
-  paymentStatus?: string | null;
   totalAmount: number;
   notes?: string | null;
   createdAt: Date;
@@ -48,7 +47,6 @@ export function serializeOrder(order: OrderWithRelations) {
     orderType: order.orderType ?? "DINE_IN",
     totalAmount: order.totalAmount,
     status: order.status,
-    paymentStatus: order.paymentStatus ?? "PENDING",
     notes: order.notes ?? null,
     createdAt: order.createdAt.toISOString(),
     updatedAt: order.updatedAt.toISOString(),
