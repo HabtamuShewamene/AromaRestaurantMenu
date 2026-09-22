@@ -4,12 +4,11 @@ import { useEffect, useState, useCallback } from "react";
 import OrderCard from "@/features/admin/components/OrderCard";
 import FilterBar from "@/features/menu/components/FilterBar";
 import { OrderRecord, OrderStatus } from "@/shared/types/app";
-import { ShoppingBag, Clock, ChefHat, BellRing, RefreshCw } from "lucide-react";
+import { RefreshCw } from "lucide-react";
 
 const ORDER_FILTERS = [
   "All",
   "NEW",
-  "CONFIRMED",
   "PREPARING",
   "READY",
   "SERVED",
@@ -32,27 +31,27 @@ export default function AdminOrdersManager() {
         setOrders(data);
       }
     } catch {
-      // Background poll failure silent
+      // background failure silent
     }
   }, []);
 
-  // Initial load
   useEffect(() => {
+    let isMounted = true;
     const load = async () => {
       setIsLoading(true);
       await fetchOrders();
-      setIsLoading(false);
+      if (isMounted) setIsLoading(false);
     };
     void load();
+    return () => { isMounted = false; };
   }, [fetchOrders]);
 
-  // Live polling every 5 seconds
   useEffect(() => {
     const interval = setInterval(async () => {
       setIsRefreshing(true);
       await fetchOrders();
       setIsRefreshing(false);
-    }, 5000);
+    }, 10000); // 10s polling for orders is safe
     return () => clearInterval(interval);
   }, [fetchOrders]);
 
@@ -80,87 +79,54 @@ export default function AdminOrdersManager() {
     }
   };
 
-  const filteredOrders =
-    activeFilter === "All"
-      ? orders
-      : orders.filter((order) => {
-          const norm = order.status.toUpperCase();
-          if (activeFilter === "NEW") return norm === "NEW" || norm === "PENDING";
-          return norm === activeFilter;
-        });
-
-  const newOrdersCount = orders.filter((o) => ["NEW", "PENDING"].includes(o.status.toUpperCase())).length;
-  const preparingCount = orders.filter((o) => o.status.toUpperCase() === "PREPARING").length;
-  const readyCount = orders.filter((o) => o.status.toUpperCase() === "READY").length;
+  const filteredOrders = activeFilter === "All"
+    ? orders
+    : orders.filter((order) => {
+        const norm = order.status.toUpperCase();
+        if (activeFilter === "NEW") return norm === "NEW" || norm === "PENDING" || norm === "CONFIRMED";
+        return norm === activeFilter;
+      });
 
   return (
-    <div className="space-y-8">
-      {/* Header */}
-      <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+    <div className="min-h-screen pb-12">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 md:mb-8 sticky top-0 md:relative z-20 bg-background/95 backdrop-blur-md pt-2 pb-4 border-b border-border md:border-none">
         <div>
-          <div className="flex items-center gap-3 mb-1">
-            <h1 className="text-3xl sm:text-4xl font-bold text-white font-playfair">
-              Live Order Management
-            </h1>
-            {isRefreshing && (
-              <RefreshCw className="w-4 h-4 text-gold-400 animate-spin" />
-            )}
+          <div className="flex items-center gap-3">
+            <h1 className="text-2xl md:text-3xl font-extrabold text-foreground tracking-tight">Orders</h1>
+            {isRefreshing && <RefreshCw className="w-4 h-4 text-primary animate-spin" />}
           </div>
-          <p className="text-zinc-400 text-sm">
-            Monitor incoming table guest & customer orders and advance them through the kitchen & serving stages.
+          <p className="text-sm text-muted-foreground mt-1 hidden sm:block">
+            Monitor and process incoming guest requests.
           </p>
-        </div>
-
-        {/* Quick Operational Counters */}
-        <div className="grid grid-cols-3 gap-3">
-          <div className="glass-card rounded-2xl p-4 border border-blue-500/20 bg-blue-500/5">
-            <div className="flex items-center gap-1.5 text-xs text-blue-400 font-semibold mb-1">
-              <Clock className="w-3.5 h-3.5" /> New
-            </div>
-            <p className="text-2xl font-bold text-white font-mono">{newOrdersCount}</p>
-          </div>
-
-          <div className="glass-card rounded-2xl p-4 border border-amber-500/20 bg-amber-500/5">
-            <div className="flex items-center gap-1.5 text-xs text-amber-400 font-semibold mb-1">
-              <ChefHat className="w-3.5 h-3.5" /> In Prep
-            </div>
-            <p className="text-2xl font-bold text-white font-mono">{preparingCount}</p>
-          </div>
-
-          <div className="glass-card rounded-2xl p-4 border border-green-500/20 bg-green-500/5">
-            <div className="flex items-center gap-1.5 text-xs text-green-400 font-semibold mb-1">
-              <BellRing className="w-3.5 h-3.5" /> Ready
-            </div>
-            <p className="text-2xl font-bold text-white font-mono">{readyCount}</p>
-          </div>
         </div>
       </div>
 
-      {/* Filter Tabs */}
-      <FilterBar
-        categories={ORDER_FILTERS}
-        activeCategory={activeFilter}
-        onSelect={setActiveFilter}
-      />
+      <div className="mb-6 overflow-x-auto no-scrollbar pb-2">
+        <FilterBar categories={ORDER_FILTERS} activeCategory={activeFilter} onSelect={setActiveFilter} />
+      </div>
 
       {message && (
-        <div className="rounded-2xl border border-gold-500/20 bg-gold-500/10 p-4 text-sm text-gold-300 animate-fade-in">
+        <div className="mb-6 p-4 rounded-xl bg-primary/10 border border-primary/20 text-primary text-sm font-bold animate-fade-in">
           {message}
         </div>
       )}
 
       {isLoading ? (
-        <div className="py-16 text-center text-zinc-500">Loading orders...</div>
+        <div className="grid gap-5 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+          {[1,2,3].map(i => <div key={i} className="h-64 rounded-3xl bg-[#242424] animate-pulse" />)}
+        </div>
       ) : filteredOrders.length === 0 ? (
-        <div className="glass-card rounded-3xl p-12 text-center text-zinc-400 space-y-2">
-          <ShoppingBag className="w-8 h-8 text-zinc-600 mx-auto" />
-          <p className="font-semibold text-white">No orders in this status</p>
-          <p className="text-xs text-zinc-500">New customer orders will appear here automatically in real time.</p>
+        <div className="flex flex-col items-center justify-center py-20 px-4 text-center rounded-3xl border border-dashed border-[#3A3D40] bg-[#242424]/50">
+          <div className="w-16 h-16 rounded-full bg-[#3A3D40] flex items-center justify-center mb-4 text-2xl">📝</div>
+          <h3 className="text-xl font-bold text-[#F7F7F2]">No orders found</h3>
+          <p className="text-[#A7ABB0] text-sm max-w-md mt-2">
+            No orders match the current filter criteria.
+          </p>
         </div>
       ) : (
-        <div className="grid gap-6 lg:grid-cols-2">
-          {filteredOrders.map((order) => (
-            <OrderCard key={order.id} order={order} onStatusChange={updateStatus} />
+        <div className="grid gap-5 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+          {filteredOrders.map(order => (
+            <OrderCard key={order.id} order={order} onUpdateStatus={updateStatus} />
           ))}
         </div>
       )}

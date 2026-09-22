@@ -14,3 +14,12 @@ export async function isAdminRequest() {
   const role = await getUserRole();
   return role === "ADMIN";
 }
+
+export async function requireAdmin() {
+  const session = await getAppSession();
+  if (session?.user?.role !== "ADMIN") {
+    const { redirect } = await import("next/navigation");
+    redirect("/login");
+  }
+  return session;
+}

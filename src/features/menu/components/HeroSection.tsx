@@ -1,8 +1,19 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { ChefHat, MapPin, Phone, Clock } from "lucide-react";
 import Image from "next/image";
+
+const HERO_IMAGES = [
+  "/slider-0.jpeg",
+  "/slider-1.jpeg",
+  "/slider-2.jpeg",
+  "/slider-3.jpeg",
+  "/slider-4.jpeg",
+  "/slider-5.jpeg",
+  "/slider-6.jpeg"
+];
 
 type HeroSectionProps = {
   mode?: "compact" | "full";
@@ -26,6 +37,15 @@ const restaurant = {
 };
 
 export default function HeroSection({ mode = "compact" }: HeroSectionProps) {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % HERO_IMAGES.length);
+    }, 5000); // Change image every 5 seconds
+    return () => clearInterval(interval);
+  }, []);
+
   const scrollToMenu = () => {
     document.getElementById("menu-explorer")?.scrollIntoView({ behavior: "smooth" });
   };
@@ -34,20 +54,25 @@ export default function HeroSection({ mode = "compact" }: HeroSectionProps) {
     <section
       className="relative w-full overflow-hidden rounded-b-[2rem] sm:rounded-b-[2.5rem] h-[46vh] min-h-[300px] sm:min-h-[360px] max-h-[440px]"
     >
-      {/* Background Image */}
-      <div className="absolute inset-0">
-        <Image
-          src={restaurant.coverImage}
-          alt={restaurant.name}
-          fill
-          priority
-          className="object-cover scale-105 transition-transform duration-[20s] ease-out hover:scale-100"
-          sizes="100vw"
-        />
+      {/* Background Image Slider */}
+      <div className="absolute inset-0 bg-black">
+        {HERO_IMAGES.map((src, index) => (
+          <Image
+            key={src}
+            src={src}
+            alt={`${restaurant.name} Atmosphere ${index + 1}`}
+            fill
+            priority={index === 0}
+            className={`object-cover transition-opacity duration-[1500ms] ease-in-out ${
+              index === currentImageIndex ? "opacity-100 scale-105" : "opacity-0 scale-100"
+            }`}
+            sizes="100vw"
+          />
+        ))}
       </div>
 
       {/* Layered gradient overlays for text readability */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/85 via-black/50 to-[#080808]" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/85 via-black/50 to-[#171918]" />
       
       {/* Radial gradient for focus */}
       <div
@@ -67,49 +92,15 @@ export default function HeroSection({ mode = "compact" }: HeroSectionProps) {
           transition={{ duration: 0.6, ease: "easeOut" }}
           className="flex flex-col items-center mb-2 sm:mb-3"
         >
-          <div className="flex items-center justify-center w-20 h-20 sm:w-24 sm:h-24 md:w-32 md:h-32 mb-2 sm:mb-4 relative animate-fade-in z-10" style={{ animationDelay: "100ms" }}>
-            <img src="/aroma-logo.png?v=3" alt="Aroma Logo" className="w-full h-full object-contain" />
-          </div>
-          <p className="text-[10px] sm:text-xs uppercase tracking-[0.3em] text-gold-400/90 font-medium mb-0.5">
+
+          <p className="text-[10px] sm:text-xs uppercase tracking-[0.3em] text-primary/90 font-medium mb-0.5">
             Welcome to
           </p>
-          <h1 className="font-playfair text-2xl sm:text-4xl md:text-5xl font-bold text-white tracking-wide text-center">
+          <h1 className="font-playfair text-2xl sm:text-4xl md:text-5xl font-bold text-foreground tracking-wide text-center">
             {restaurant.name}
           </h1>
         </motion.div>
 
-        {/* Description */}
-        <motion.p
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.15 }}
-          className="text-center text-zinc-300 text-xs sm:text-sm max-w-xl leading-relaxed mb-2.5 sm:mb-3.5 font-light line-clamp-2 px-2"
-        >
-          {restaurant.description}
-        </motion.p>
-
-        {/* Restaurant Details Info Bar */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5, delay: 0.3 }}
-          className="flex flex-wrap items-center justify-center gap-2.5 sm:gap-6 mb-3 sm:mb-4 text-[11px] sm:text-xs text-zinc-300 bg-black/40 backdrop-blur-md px-3.5 sm:px-5 py-1.5 sm:py-2 rounded-xl border border-white/5"
-        >
-          <div className="flex items-center gap-1.5">
-            <Clock className="w-3.5 h-3.5 text-gold-400" />
-            <span>{restaurant.openingTime} - {restaurant.closingTime}</span>
-          </div>
-          <div className="hidden sm:block w-px h-3 bg-white/10" />
-          <div className="hidden xs:flex items-center gap-1.5">
-            <MapPin className="w-3.5 h-3.5 text-gold-400" />
-            <span>{restaurant.address}</span>
-          </div>
-          <div className="hidden md:block w-px h-3 bg-white/10" />
-          <div className="hidden md:flex items-center gap-1.5">
-            <Phone className="w-3.5 h-3.5 text-gold-400" />
-            <span>{restaurant.phone}</span>
-          </div>
-        </motion.div>
 
         {/* Social Links & CTA */}
         <motion.div
@@ -120,28 +111,16 @@ export default function HeroSection({ mode = "compact" }: HeroSectionProps) {
         >
           <button 
             onClick={scrollToMenu}
-            className="group relative overflow-hidden rounded-full bg-gold-500 text-black px-5 sm:px-7 py-2 sm:py-2.5 text-xs sm:text-sm font-bold tracking-wide transition-transform hover:scale-105 active:scale-95 shadow-[0_2px_15px_rgba(182,141,64,0.3)]"
+            className="group relative overflow-hidden rounded-full bg-primary text-primary-foreground px-5 sm:px-7 py-2 sm:py-2.5 text-xs sm:text-sm font-bold tracking-wide transition-transform hover:scale-105 active:scale-95 shadow-[0_2px_15px_rgba(182,141,64,0.3)]"
           >
             <span className="relative z-10">View Menu</span>
             <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
           </button>
-
-          <div className="flex items-center gap-3 text-xs">
-            <a href={restaurant.socialLinks.instagram} className="text-zinc-400 font-bold hover:text-gold-400 transition-colors text-[11px]">
-              IG
-            </a>
-            <a href={restaurant.socialLinks.facebook} className="text-zinc-400 font-bold hover:text-gold-400 transition-colors text-[11px]">
-              FB
-            </a>
-            <a href={restaurant.socialLinks.twitter} className="text-zinc-400 font-bold hover:text-gold-400 transition-colors text-[11px]">
-              X
-            </a>
-          </div>
         </motion.div>
       </div>
 
       {/* Bottom fade blend */}
-      <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-[#080808] to-transparent pointer-events-none" />
+      <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-[#171918] to-transparent pointer-events-none" />
     </section>
   );
 }

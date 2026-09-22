@@ -59,7 +59,7 @@ export default function ReviewForm({ menuItemId, onSubmitSuccess }: ReviewFormPr
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 rounded-2xl border border-zinc-800/50 bg-zinc-900/20 p-6">
+    <form onSubmit={handleSubmit} className="space-y-4 rounded-2xl border border-border/50 bg-card/20 p-6">
       <h3 className="text-lg font-bold">✍️ Write a Review</h3>
 
       {message && (
@@ -76,7 +76,7 @@ export default function ReviewForm({ menuItemId, onSubmitSuccess }: ReviewFormPr
           value={name}
           onChange={(e) => setName(e.target.value)}
           maxLength={50}
-          className="rounded-xl border border-zinc-800 bg-zinc-950 px-4 py-2 text-sm outline-none focus:border-gold-500 transition-all"
+          className="rounded-xl border border-border bg-card px-4 py-2 text-sm outline-none focus:border-primary transition-all"
         />
         <input
           type="email"
@@ -84,7 +84,7 @@ export default function ReviewForm({ menuItemId, onSubmitSuccess }: ReviewFormPr
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
-          className="rounded-xl border border-zinc-800 bg-zinc-950 px-4 py-2 text-sm outline-none focus:border-gold-500 transition-all"
+          className="rounded-xl border border-border bg-card px-4 py-2 text-sm outline-none focus:border-primary transition-all"
         />
       </div>
 
@@ -116,17 +116,17 @@ export default function ReviewForm({ menuItemId, onSubmitSuccess }: ReviewFormPr
         maxLength={500}
         required
         rows={4}
-        className="w-full rounded-xl border border-zinc-800 bg-zinc-950 px-4 py-3 text-sm outline-none focus:border-gold-500 transition-all resize-none"
+        className="w-full rounded-xl border border-border bg-card px-4 py-3 text-sm outline-none focus:border-primary transition-all resize-none"
       />
 
-      <p className="text-xs text-zinc-500">
+      <p className="text-xs text-muted-foreground">
         ✨ Reviews are moderated and will appear after admin approval
       </p>
 
       <button
         type="submit"
         disabled={isSubmitting}
-        className="w-full rounded-xl bg-gold-600 px-4 py-2 font-bold text-black transition-all hover:bg-gold-700 disabled:bg-zinc-700 disabled:text-zinc-400"
+        className="w-full rounded-xl bg-brand-600 px-4 py-2 font-bold text-primary-foreground transition-all hover:bg-brand-700 disabled:bg-zinc-700 disabled:text-muted-foreground"
       >
         {isSubmitting ? "Submitting..." : "Submit Review"}
       </button>

@@ -38,7 +38,7 @@ export default function BottomNavigation() {
         initial={{ y: 100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-        className="flex items-center gap-1 px-3 py-2 rounded-[2rem] pointer-events-auto bg-[#0e0e0e]/95 backdrop-blur-2xl border border-white/10 shadow-[0_-4px_40px_rgba(0,0,0,0.8),0_0_0_1px_rgba(255,255,255,0.05)]"
+        className="flex items-center gap-1 px-3 py-2 rounded-[2rem] pointer-events-auto bg-background/95 backdrop-blur-2xl border border-border shadow-[0_-4px_40px_rgba(0,0,0,0.8),0_0_0_1px_rgba(255,255,255,0.05)]"
       >
         {navItems.map((item) => {
           const Icon = item.icon;
@@ -56,7 +56,7 @@ export default function BottomNavigation() {
               {isActive && (
                 <motion.div
                   layoutId="bottom-nav-active"
-                  className="absolute inset-0 rounded-2xl bg-gold-500/15 border border-gold-500/30"
+                  className="absolute inset-0 rounded-2xl bg-primary/15 border border-primary/30"
                   transition={{ type: "spring", stiffness: 400, damping: 30 }}
                 />
               )}
@@ -67,7 +67,7 @@ export default function BottomNavigation() {
                   initial={{ scale: 0, opacity: 0.4 }}
                   animate={{ scale: 2.5, opacity: 0 }}
                   transition={{ duration: 0.6 }}
-                  className="absolute inset-0 rounded-2xl bg-gold-500/20"
+                  className="absolute inset-0 rounded-2xl bg-primary/20"
                 />
               )}
 
@@ -76,14 +76,14 @@ export default function BottomNavigation() {
                 <Icon
                   className={`w-5 h-5 transition-all duration-300 ${
                     isActive
-                      ? "text-gold-400 drop-shadow-[0_0_8px_rgba(182,141,64,0.8)]"
-                      : "text-zinc-400 group-hover:text-zinc-200"
+                      ? "text-primary drop-shadow-[0_0_8px_rgba(182,141,64,0.8)]"
+                      : "text-muted-foreground group-hover:text-foreground"
                   }`}
                   strokeWidth={isActive ? 2 : 1.5}
                 />
                 
                 {item.badge !== undefined && item.badge > 0 && (
-                  <span className="absolute -top-1.5 -right-2 flex items-center justify-center min-w-[16px] h-[16px] px-1 text-[9px] font-bold text-black bg-gold-500 rounded-full shadow-[0_0_8px_rgba(182,141,64,0.6)]">
+                  <span className="absolute -top-1.5 -right-2 flex items-center justify-center min-w-[16px] h-[16px] px-1 text-[9px] font-bold text-primary-foreground bg-primary rounded-full shadow-[0_0_8px_rgba(182,141,64,0.6)]">
                     {item.badge}
                   </span>
                 )}
@@ -93,7 +93,7 @@ export default function BottomNavigation() {
                   <motion.div
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
-                    className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-gold-400"
+                    className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-primary"
                   />
                 )}
               </div>
@@ -101,7 +101,7 @@ export default function BottomNavigation() {
               {/* Label */}
               <span
                 className={`text-[9px] mt-1 font-medium tracking-tight transition-colors duration-300 ${
-                  isActive ? "text-gold-400 font-bold" : "text-zinc-500 group-hover:text-zinc-300"
+                  isActive ? "text-primary font-bold" : "text-muted-foreground group-hover:text-muted-foreground"
                 }`}
               >
                 {item.label}

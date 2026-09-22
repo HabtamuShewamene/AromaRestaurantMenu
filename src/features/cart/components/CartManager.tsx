@@ -97,15 +97,15 @@ export default function CartManager() {
     <section className="space-y-6">
       {/* Table Banner Notice if present */}
       {tableContext && (
-        <div className="flex items-center justify-between p-4 rounded-2xl bg-gold-500/10 border border-gold-500/20 text-gold-300">
+        <div className="flex items-center justify-between p-4 rounded-2xl bg-primary/10 border border-primary/20 text-brand-300">
           <div className="flex items-center gap-2.5">
-            <Utensils className="w-4 h-4 text-gold-400 flex-shrink-0" />
+            <Utensils className="w-4 h-4 text-primary flex-shrink-0" />
             <span className="text-sm font-semibold">
               Ordering for Table {tableContext.tableNumber}{" "}
               {tableContext.tableLabel ? `(${tableContext.tableLabel})` : ""}
             </span>
           </div>
-          <span className="text-xs bg-gold-500/20 px-2.5 py-1 rounded-full font-bold uppercase tracking-wider text-gold-400">
+          <span className="text-xs bg-primary/20 px-2.5 py-1 rounded-full font-bold uppercase tracking-wider text-primary">
             Dine-in
           </span>
         </div>
@@ -119,16 +119,16 @@ export default function CartManager() {
       )}
 
       {items.length === 0 ? (
-        <div className="glass-card rounded-3xl p-12 text-center text-zinc-400 space-y-3">
-          <p className="text-base font-semibold text-white">Your cart is empty</p>
-          <p className="text-sm text-zinc-500">Add items from the menu to create your order.</p>
+        <div className="glass-card rounded-3xl p-12 text-center text-muted-foreground space-y-3">
+          <p className="text-base font-semibold text-foreground">Your cart is empty</p>
+          <p className="text-sm text-muted-foreground">Add items from the menu to create your order.</p>
         </div>
       ) : (
         <div className="space-y-6">
           {/* Guest Table Contact Information (Optional) */}
           {tableContext && !session?.user && (
-            <div className="p-5 rounded-3xl bg-[#121212] border border-white/5 space-y-3">
-              <h4 className="text-xs font-semibold uppercase tracking-wider text-zinc-400">
+            <div className="p-5 rounded-3xl bg-[#121212] border border-border space-y-3">
+              <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                 Guest Details (Optional)
               </h4>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -137,20 +137,20 @@ export default function CartManager() {
                   placeholder="Your Name (Optional)"
                   value={guestName}
                   onChange={(e) => setGuestName(e.target.value)}
-                  className="bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2.5 text-sm text-white placeholder-zinc-600 outline-none focus:border-gold-500"
+                  className="bg-card border border-border rounded-xl px-4 py-2.5 text-sm text-foreground placeholder-zinc-600 outline-none focus:border-primary"
                 />
                 <input
                   type="tel"
                   placeholder="Phone Number (Optional)"
                   value={guestPhone}
                   onChange={(e) => setGuestPhone(e.target.value)}
-                  className="bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2.5 text-sm text-white placeholder-zinc-600 outline-none focus:border-gold-500"
+                  className="bg-card border border-border rounded-xl px-4 py-2.5 text-sm text-foreground placeholder-zinc-600 outline-none focus:border-primary"
                 />
               </div>
             </div>
           )}
 
-          <div className="glass-card rounded-3xl overflow-hidden border border-white/10">
+          <div className="glass-card rounded-3xl overflow-hidden border border-border">
             <Cart
               items={items}
               onIncrease={increase}

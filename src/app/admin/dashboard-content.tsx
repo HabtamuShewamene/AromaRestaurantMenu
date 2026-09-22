@@ -1,168 +1,135 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, BarChart3, ListTree, Utensils, Star, Clock, Users } from "lucide-react";
 import { useEffect, useState } from "react";
-
-type Stats = {
-  totalItems: number;
-  totalReviews: number;
-  pendingReviews: number;
-  averageRating: number;
-  topItems: Array<{ id: string; name: string; avgRating: number; count: number }>;
-};
-
-const adminCapabilities = [
-  {
-    title: "Menu Control",
-    description: "Add items, update price and descriptions, toggle availability, or delete outdated products.",
-    href: "/admin/menu",
-    icon: Utensils,
-  },
-  {
-    title: "Categories",
-    description: "Manage menu categories like Coffee, Tea, Cold Drinks, and Pastries.",
-    href: "/admin/categories",
-    icon: ListTree,
-  },
-  {
-    title: "Review Moderation",
-    description: "Moderate customer reviews and manage approval workflow for menu item feedback.",
-    href: "/admin/reviews",
-    icon: Star,
-  },
-  {
-    title: "System Analytics",
-    description: "Track popular items, revenue, and system-wide performance data.",
-    href: "/admin/analytics",
-    icon: BarChart3,
-  },
-];
+import { OrderRecord, MenuItemRecord } from "@/shared/types/app";
+import { ShoppingBag, ArrowRight } from "lucide-react";
 
 export default function AdminDashboardContent() {
-  const [stats, setStats] = useState<Stats | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [dateStr, setDateStr] = useState("");
+  const [orders, setOrders] = useState<OrderRecord[]>([]);
+  const [menuItems, setMenuItems] = useState<MenuItemRecord[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    fetch("/api/admin/stats")
-      .then(res => res.json())
-      .then(data => {
-        setStats(data);
-        setLoading(false);
-      })
-      .catch(() => setLoading(false));
+    const today = new Date();
+    setDateStr(today.toLocaleDateString("en-US", { weekday: 'long', month: 'long', day: 'numeric' }));
+    
+    // Fetch real data
+    Promise.all([
+      fetch("/api/orders").then(res => res.json()),
+      fetch("/api/menu").then(res => res.json())
+    ]).then(([ordersData, menuData]) => {
+      setOrders(Array.isArray(ordersData) ? ordersData : []);
+      setMenuItems(Array.isArray(menuData) ? menuData : []);
+      setIsLoading(false);
+    }).catch(err => {
+      console.error(err);
+      setIsLoading(false);
+    });
   }, []);
 
+  const todayOrders = orders.filter(o => {
+    const d = new Date(o.createdAt);
+    const today = new Date();
+    return d.getDate() === today.getDate() && d.getMonth() === today.getMonth() && d.getFullYear() === today.getFullYear();
+  });
+
+  const newOrdersCount = todayOrders.filter(o => o.status === "NEW").length;
+  const preparingOrdersCount = todayOrders.filter(o => o.status === "PREPARING").length;
+  const readyOrdersCount = todayOrders.filter(o => o.status === "READY").length;
+  const unavailableItemsCount = menuItems.filter(m => !m.isAvailable).length;
+
   return (
-    <div className="space-y-12">
-      <div>
-        <h1 className="mb-3 text-5xl font-bold">
-          Admin <span className="text-gold-500">Control Center</span>
-        </h1>
-        <p className="max-w-3xl text-lg text-zinc-500">
-          Full control over menu data, review moderation, and system reporting.
-        </p>
+    <div className="space-y-8 max-w-6xl mx-auto">
+      {/* ── Header ── */}
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div>
+          <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-foreground mb-1">
+            Dashboard
+          </h1>
+          <p className="text-sm text-muted-foreground">
+            {dateStr ? `${dateStr} · Operational Overview` : "Loading..."}
+          </p>
+        </div>
       </div>
 
-      {/* ── Stats Overview ── */}
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard 
-          title="Menu Items" 
-          value={loading ? "..." : stats?.totalItems ?? 0} 
-          icon={Utensils} 
-          color="blue"
-        />
-        <StatCard 
-          title="Total Reviews" 
-          value={loading ? "..." : stats?.totalReviews ?? 0} 
-          icon={Users} 
-          color="purple"
-        />
-        <StatCard 
-          title="Pending Approval" 
-          value={loading ? "..." : stats?.pendingReviews ?? 0} 
-          icon={Clock} 
-          color="amber"
-          highlight={stats?.pendingReviews ? stats.pendingReviews > 0 : false}
-        />
-        <StatCard 
-          title="Avg Rating" 
-          value={loading ? "..." : (stats?.averageRating ?? 0).toFixed(1)} 
-          icon={Star} 
-          color="gold"
-        />
+      {/* ── Operational Metrics ── */}
+      <div className="grid gap-4 grid-cols-2 lg:grid-cols-5">
+        <StatCard title="NEW ORDERS" value={newOrdersCount} color="text-amber-500" />
+        <StatCard title="PREPARING" value={preparingOrdersCount} color="text-blue-500" />
+        <StatCard title="READY" value={readyOrdersCount} color="text-green-500" />
+        <StatCard title="TOTAL MENU ITEMS" value={menuItems.length} color="text-foreground" />
+        <StatCard title="UNAVAILABLE ITEMS" value={unavailableItemsCount} color="text-red-500" />
       </div>
 
-      <div className="grid gap-8 lg:grid-cols-3">
-        {/* ── Main Actions ── */}
-        <div className="lg:col-span-2 grid gap-6 md:grid-cols-2">
-          {adminCapabilities.map((capability) => (
-            <Link key={capability.title} href={capability.href} className="glass-card rounded-3xl p-8 transition-all hover:border-gold-500/40 group">
-              <div className="mb-6 flex items-center justify-between">
-                <div className="rounded-2xl bg-gold-500/10 p-3 text-gold-500 group-hover:bg-gold-500/20 transition-colors">
-                  <capability.icon className="h-6 w-6" />
-                </div>
-                <ArrowRight className="h-5 w-5 text-zinc-500 group-hover:text-gold-500 transition-colors" />
-              </div>
-              <h2 className="mb-3 text-2xl font-bold">{capability.title}</h2>
-              <p className="text-zinc-500 text-sm leading-relaxed">{capability.description}</p>
-            </Link>
-          ))}
+      {/* ── Recent Orders ── */}
+      <div className="bg-card rounded-3xl p-6 border border-border flex flex-col">
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h2 className="text-xl font-bold text-foreground">Recent Orders</h2>
+            <p className="text-sm text-muted-foreground mt-1">Live feed of incoming requests</p>
+          </div>
+          <Link href="/admin/orders" className="text-sm font-bold text-primary hover:underline flex items-center gap-1">
+            View all <ArrowRight className="w-4 h-4" />
+          </Link>
         </div>
 
-        {/* ── Top Rated Items ── */}
-        <div className="glass-card rounded-3xl p-8">
-          <div className="flex items-center gap-2 mb-6">
-            <Star className="h-5 w-5 text-gold-500" />
-            <h2 className="text-xl font-bold">Top Rated</h2>
+        {isLoading ? (
+          <div className="animate-pulse space-y-4">
+            {[1,2,3].map(i => <div key={i} className="h-16 bg-white/5 rounded-xl"></div>)}
           </div>
-          
-          <div className="space-y-6">
-            {loading ? (
-              <div className="animate-pulse space-y-4">
-                {[1,2,3].map(i => <div key={i} className="h-12 bg-white/5 rounded-2xl" />)}
-              </div>
-            ) : stats?.topItems && stats.topItems.length > 0 ? (
-              stats.topItems.map((item, idx) => (
-                <div key={item.id} className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <span className="text-xs font-bold text-zinc-600 w-4">{idx + 1}</span>
-                    <div>
-                      <p className="font-semibold text-sm">{item.name}</p>
-                      <p className="text-[10px] text-zinc-500">{item.count} reviews</p>
+        ) : todayOrders.length === 0 ? (
+          <div className="py-12 flex flex-col items-center justify-center text-center">
+            <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-4 text-muted-foreground">
+              <ShoppingBag className="w-8 h-8" />
+            </div>
+            <h3 className="text-lg font-bold text-foreground">No orders yet today</h3>
+            <p className="text-sm text-muted-foreground mt-1">When customers place orders, they will appear here.</p>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {todayOrders.slice(0, 10).map((order) => {
+              const time = new Date(order.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+              const tableText = order.tableNumber ? `Table ${order.tableNumber}` : order.orderType === "TAKEAWAY" ? "Takeaway" : "Unknown Table";
+              const itemCount = order.items?.reduce((acc, item) => acc + item.quantity, 0) || 0;
+              
+              let statusColor = "text-muted-foreground bg-white/5";
+              if (order.status === "NEW") statusColor = "text-amber-500 bg-amber-500/10 border-amber-500/20";
+              else if (order.status === "PREPARING") statusColor = "text-blue-500 bg-blue-500/10 border-blue-500/20";
+              else if (order.status === "READY") statusColor = "text-primary bg-primary/10 border-primary/20";
+              
+              return (
+                <Link key={order.id} href="/admin/orders" className="block group">
+                  <div className="flex items-center justify-between p-4 rounded-xl border border-transparent hover:border-border hover:bg-white/5 transition-colors">
+                    <div className="flex items-center gap-4">
+                      <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center font-bold text-xs text-muted-foreground">
+                        #{order.id.slice(0, 4).toUpperCase()}
+                      </div>
+                      <div>
+                        <p className="font-bold text-foreground">{tableText}</p>
+                        <p className="text-xs text-muted-foreground">{itemCount} item{itemCount !== 1 ? 's' : ''} • {time}</p>
+                      </div>
+                    </div>
+                    <div className={`px-3 py-1 text-xs font-bold uppercase tracking-wider rounded-full border ${statusColor}`}>
+                      {order.status}
                     </div>
                   </div>
-                  <div className="flex items-center gap-1 bg-gold-500/10 px-2 py-1 rounded-lg">
-                    <Star className="h-3 w-3 fill-gold-500 text-gold-500" />
-                    <span className="text-xs font-bold text-gold-500">{item.avgRating.toFixed(1)}</span>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <p className="text-sm text-zinc-600 italic">No ratings yet</p>
-            )}
+                </Link>
+              );
+            })}
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
 }
 
-function StatCard({ title, value, icon: Icon, highlight = false }: { title: string; value: string | number; icon: any; highlight?: boolean; color?: string }) {
+function StatCard({ title, value, color }: { title: string; value: string | number; color: string }) {
   return (
-    <div className={`glass-card rounded-3xl p-6 relative overflow-hidden ${highlight ? 'border-amber-500/30 ring-1 ring-amber-500/20' : ''}`}>
-      <div className="flex items-center gap-4">
-        <div className={`p-3 rounded-2xl bg-zinc-900 border border-white/5`}>
-          <Icon className="h-5 w-5 text-zinc-400" />
-        </div>
-        <div>
-          <p className="text-xs text-zinc-500 uppercase tracking-widest font-medium mb-1">{title}</p>
-          <p className="text-2xl font-bold">{value}</p>
-        </div>
-      </div>
-      {highlight && (
-        <div className="absolute top-2 right-2 w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
-      )}
+    <div className="bg-card p-5 rounded-2xl border border-border flex flex-col justify-between h-32">
+      <h3 className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">{title}</h3>
+      <div className={`text-4xl font-black ${color}`}>{value}</div>
     </div>
   );
 }
