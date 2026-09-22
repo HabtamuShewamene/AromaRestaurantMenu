@@ -68,7 +68,7 @@ export default function MenuItemCard({ item, onEdit, onDelete, onToggleAvailabil
         <div>
           <div className="flex items-start justify-between gap-3 mb-1">
             <h3 className="text-lg font-bold text-[#F7F7F2] line-clamp-1">{item.name}</h3>
-            <span className="font-mono text-lg font-black text-[#8BD43F] shrink-0">${item.price.toFixed(2)}</span>
+            <span className="font-mono text-lg font-black text-[#8BD43F] shrink-0">{item.price.toFixed(2)} ETB</span>
           </div>
           <p className="text-xs font-semibold text-[#A7ABB0] uppercase tracking-wider mb-3">
             {categoryName}

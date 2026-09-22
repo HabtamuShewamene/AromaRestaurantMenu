@@ -201,7 +201,7 @@ export default function MenuForm({
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-[#A7ABB0]">Price ($) *</label>
+              <label className="text-xs font-semibold text-[#A7ABB0]">Price (ETB) *</label>
               <input
                 type="number"
                 step="0.01"

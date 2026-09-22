@@ -1,17 +1,15 @@
 "use client";
 
 import {
-  BarChart3,
-  ChefHat,
   LayoutDashboard,
-  ListTree,
-  ShoppingBag,
   Utensils,
-  Package,
-  Star,
+  ListTree,
+  PlusCircle,
+  ShoppingBag,
+  ChefHat,
   QrCode,
-  BellRing,
-  Store,
+  Settings,
+  LogOut,
   Menu as MenuIcon,
   X,
   Home
@@ -31,34 +29,42 @@ export default function AdminLayout({
 
   const navGroups = [
     {
-      label: "Operations",
-      items: [
-        { label: "Kitchen Display", href: "/kitchen", icon: ChefHat },
-        { label: "Live Orders", href: "/admin/orders", icon: ShoppingBag },
-        { label: "Tables & QR", href: "/admin/tables", icon: QrCode },
-        { label: "Waiter Requests", href: "/admin/waiter-requests", icon: BellRing },
-      ],
-    },
-    {
-      label: "Menu & Stock",
-      items: [
-        { label: "Manage Menu", href: "/admin/menu", icon: Utensils },
-        { label: "Categories", href: "/admin/categories", icon: ListTree },
-        { label: "Inventory", href: "/admin/inventory", icon: Package },
-        { label: "Reviews", href: "/admin/reviews", icon: Star },
-      ],
-    },
-    {
-      label: "Overview",
+      label: "MAIN",
       items: [
         { label: "Dashboard", href: "/admin/dashboard", icon: LayoutDashboard },
-        { label: "Analytics", href: "/admin/analytics", icon: BarChart3 },
+      ],
+    },
+    {
+      label: "MENU",
+      items: [
+        { label: "Menu Items", href: "/admin/menu", icon: Utensils },
+        { label: "Categories", href: "/admin/categories", icon: ListTree },
+        { label: "Add-ons", href: "/admin/add-ons", icon: PlusCircle },
+      ],
+    },
+    {
+      label: "ORDERS",
+      items: [
+        { label: "Orders", href: "/admin/orders", icon: ShoppingBag },
+        { label: "Kitchen", href: "/kitchen", icon: ChefHat },
+      ],
+    },
+    {
+      label: "RESTAURANT",
+      items: [
+        { label: "Tables & QR", href: "/admin/tables", icon: QrCode },
+      ],
+    },
+    {
+      label: "SYSTEM",
+      items: [
+        { label: "Settings", href: "/admin/settings", icon: Settings },
       ],
     },
   ];
 
   const bottomNavItems = [
-    { label: "Home", href: "/admin/dashboard", icon: Home },
+    { label: "Dashboard", href: "/admin/dashboard", icon: Home },
     { label: "Orders", href: "/admin/orders", icon: ShoppingBag },
     { label: "Kitchen", href: "/kitchen", icon: ChefHat },
     { label: "Menu", href: "/admin/menu", icon: Utensils },
@@ -67,7 +73,7 @@ export default function AdminLayout({
   return (
     <div className="flex min-h-screen bg-background">
       {/* --- DESKTOP SIDEBAR --- */}
-      <aside className="hidden md:flex fixed z-40 h-full w-64 border-r border-border bg-card/80 backdrop-blur-xl flex-col justify-between overflow-y-auto no-scrollbar">
+      <aside className="hidden md:flex fixed z-40 h-full w-64 border-r border-border bg-card flex-col justify-between overflow-y-auto no-scrollbar shadow-sm">
         <div className="p-6">
           <Link href="/admin/dashboard" className="mb-8 flex items-center gap-2.5">
             <div className="flex items-center justify-center w-10 h-10 relative">
@@ -97,7 +103,7 @@ export default function AdminLayout({
                       href={item.href}
                       className={`flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-xs font-semibold transition-all ${
                         isActive
-                          ? "bg-primary/15 text-primary border border-primary/30 shadow-[0_0_12px_rgba(139,212,63,0.15)]"
+                          ? "bg-primary/10 text-primary border border-primary/20"
                           : "text-muted-foreground hover:bg-foreground/5 hover:text-foreground"
                       }`}
                     >
@@ -111,19 +117,16 @@ export default function AdminLayout({
           </nav>
         </div>
 
-        <div className="p-6 border-t border-border">
-          <Link
-            href="/"
-            className="flex items-center gap-2.5 rounded-xl px-3.5 py-2 text-xs font-semibold text-muted-foreground hover:bg-foreground/5 hover:text-foreground transition-all"
-          >
-            <Store className="h-4 w-4 text-muted-foreground" />
-            <span>Customer Storefront</span>
-          </Link>
+        <div className="p-6 border-t border-border space-y-2">
+          <button className="w-full flex items-center gap-2.5 rounded-xl px-3.5 py-2 text-xs font-semibold text-red-500 hover:bg-red-500/10 transition-all">
+            <LogOut className="h-4 w-4" />
+            <span>Logout</span>
+          </button>
         </div>
       </aside>
 
       {/* --- MOBILE HEADER --- */}
-      <header className="md:hidden fixed top-0 left-0 right-0 z-40 h-16 bg-card/90 backdrop-blur-xl border-b border-border flex items-center justify-between px-4">
+      <header className="md:hidden fixed top-0 left-0 right-0 z-40 h-16 bg-card border-b border-border flex items-center justify-between px-4">
         <Link href="/admin/dashboard" className="flex items-center gap-2">
           <img src="/aroma-logo.png?v=3" alt="Aroma Logo" className="w-8 h-8 object-contain" />
           <div className="flex flex-col">
@@ -140,89 +143,80 @@ export default function AdminLayout({
         {children}
       </main>
 
-      {/* --- MOBILE BOTTOM NAVIGATION --- */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-card border-t border-border px-2 py-2 flex items-center justify-around pb-safe">
-        {bottomNavItems.map((item) => {
-          const Icon = item.icon;
-          const isActive = pathname === item.href || (item.href !== "/admin" && pathname.startsWith(item.href));
-          return (
-            <Link
-              key={item.label}
-              href={item.href}
-              className="flex flex-col items-center justify-center gap-1 p-2 min-w-[64px]"
-            >
-              <div className={`p-1.5 rounded-full transition-colors ${isActive ? 'bg-primary/20 text-primary' : 'text-muted-foreground'}`}>
-                <Icon className="w-5 h-5" />
-              </div>
-              <span className={`text-[9px] font-medium ${isActive ? 'text-primary' : 'text-muted-foreground'}`}>
-                {item.label}
-              </span>
-            </Link>
-          );
-        })}
-        
-        {/* Mobile More Button */}
-        <button
-          onClick={() => setIsMoreMenuOpen(true)}
-          className="flex flex-col items-center justify-center gap-1 p-2 min-w-[64px]"
-        >
-          <div className="p-1.5 rounded-full text-muted-foreground transition-colors hover:bg-foreground/5">
-            <MenuIcon className="w-5 h-5" />
-          </div>
-          <span className="text-[9px] font-medium text-muted-foreground">More</span>
-        </button>
-      </nav>
+      {/* --- MOBILE BOTTOM NAV --- */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-card border-t border-border pb-safe">
+        <div className="flex items-center justify-around h-16 px-2">
+          {bottomNavItems.map((item) => {
+            const Icon = item.icon;
+            const isActive = pathname === item.href || (item.href !== "/admin" && pathname.startsWith(item.href));
+            
+            return (
+              <Link
+                key={item.label}
+                href={item.href}
+                className={`flex flex-col items-center justify-center w-full h-full gap-1 transition-colors ${
+                  isActive ? "text-primary" : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                <Icon className={`h-5 w-5 ${isActive ? "fill-primary/20" : ""}`} />
+                <span className="text-[10px] font-semibold">{item.label}</span>
+              </Link>
+            );
+          })}
+          
+          <button 
+            onClick={() => setIsMoreMenuOpen(!isMoreMenuOpen)}
+            className={`flex flex-col items-center justify-center w-full h-full gap-1 transition-colors ${
+              isMoreMenuOpen ? "text-primary" : "text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            {isMoreMenuOpen ? <X className="h-5 w-5" /> : <MenuIcon className="h-5 w-5" />}
+            <span className="text-[10px] font-semibold">{isMoreMenuOpen ? "Close" : "More"}</span>
+          </button>
+        </div>
+      </div>
 
-      {/* --- MOBILE MORE DRAWER --- */}
+      {/* --- MOBILE MORE MENU --- */}
       {isMoreMenuOpen && (
-        <div className="md:hidden fixed inset-0 z-[100] flex flex-col justify-end">
-          <div className="absolute inset-0 bg-background/80 backdrop-blur-sm" onClick={() => setIsMoreMenuOpen(false)} />
-          <div className="relative w-full bg-card rounded-t-3xl border-t border-border overflow-hidden animate-in slide-in-from-bottom-full duration-200">
-            <div className="flex items-center justify-between p-4 border-b border-border">
-              <span className="font-bold text-foreground">More Options</span>
-              <button onClick={() => setIsMoreMenuOpen(false)} className="p-2 rounded-full bg-foreground/5 text-muted-foreground">
-                <X className="w-5 h-5" />
-              </button>
+        <div className="md:hidden fixed inset-0 z-40 bg-background/95 backdrop-blur-sm pt-20 pb-24 px-4 overflow-y-auto animate-in fade-in duration-200">
+          <div className="max-w-md mx-auto space-y-8">
+            <div className="flex justify-end">
+              <ThemeToggle />
             </div>
-            <div className="max-h-[70vh] overflow-y-auto p-4 space-y-6 pb-8">
-              {navGroups.map((group) => (
-                <div key={group.label} className="space-y-2">
-                  <p className="px-2 text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">
-                    {group.label}
-                  </p>
-                  <div className="grid grid-cols-2 gap-2">
-                    {group.items.map((item) => {
-                      const Icon = item.icon;
-                      const isActive = pathname === item.href || (item.href !== "/admin" && pathname.startsWith(item.href));
-                      return (
-                        <Link
-                          key={item.label}
-                          href={item.href}
-                          onClick={() => setIsMoreMenuOpen(false)}
-                          className={`flex items-center gap-3 p-3 rounded-xl border ${
-                            isActive 
-                            ? 'bg-primary/10 border-primary/30 text-primary' 
-                            : 'bg-background border-border text-foreground'
-                          }`}
-                        >
-                          <Icon className="w-4 h-4 opacity-70" />
-                          <span className="text-xs font-medium">{item.label}</span>
-                        </Link>
-                      );
-                    })}
-                  </div>
+            {navGroups.map((group) => (
+              <div key={group.label} className="space-y-3">
+                <h3 className="text-[11px] font-bold tracking-widest text-muted-foreground uppercase px-2">
+                  {group.label}
+                </h3>
+                <div className="grid grid-cols-2 gap-3">
+                  {group.items.map((item) => {
+                    const Icon = item.icon;
+                    const isActive = pathname === item.href || (item.href !== "/admin" && pathname.startsWith(item.href));
+                    
+                    return (
+                      <Link
+                        key={item.label}
+                        href={item.href}
+                        onClick={() => setIsMoreMenuOpen(false)}
+                        className={`flex items-center gap-3 p-4 rounded-2xl transition-all ${
+                          isActive 
+                            ? "bg-primary/10 border border-primary/20 text-primary" 
+                            : "bg-card border border-border text-foreground"
+                        }`}
+                      >
+                        <Icon className={`h-5 w-5 ${isActive ? "text-primary" : "text-muted-foreground"}`} />
+                        <span className="text-sm font-semibold">{item.label}</span>
+                      </Link>
+                    );
+                  })}
                 </div>
-              ))}
-              <div className="pt-4 border-t border-border">
-                <Link
-                  href="/"
-                  className="flex items-center justify-center gap-2 p-3 w-full rounded-xl bg-background border border-border text-muted-foreground"
-                >
-                  <Store className="w-4 h-4" />
-                  <span className="text-xs font-medium">Exit to Storefront</span>
-                </Link>
               </div>
-            </div>
+            ))}
+
+            <button className="w-full flex items-center justify-center gap-2.5 p-4 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-500 font-semibold mt-8">
+              <LogOut className="h-5 w-5" />
+              <span>Logout</span>
+            </button>
           </div>
         </div>
       )}
