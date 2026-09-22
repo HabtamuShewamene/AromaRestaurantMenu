@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { MapPin, Phone, Mail, Clock, Facebook, Instagram } from "lucide-react";
+import { MapPin, Phone, Mail, Clock } from "lucide-react";
 
 export default function Footer() {
   return (
@@ -74,10 +74,16 @@ export default function Footer() {
             <li className="flex items-center gap-3 pt-2 border-t border-white/5">
               <div className="flex items-center gap-1.5">
                 <a href="https://facebook.com/aroma_restaurant" target="_blank" rel="noopener noreferrer" className="w-6 h-6 rounded-full bg-gold-500 text-black flex items-center justify-center hover:bg-gold-400 transition-colors">
-                  <Facebook className="w-3.5 h-3.5" />
+                  <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
+                    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+                  </svg>
                 </a>
                 <a href="https://instagram.com/aroma_restaurant" target="_blank" rel="noopener noreferrer" className="w-6 h-6 rounded-full bg-gold-500 text-black flex items-center justify-center hover:bg-gold-400 transition-colors">
-                  <Instagram className="w-3.5 h-3.5" />
+                  <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect>
+                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                    <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line>
+                  </svg>
                 </a>
                 <a href="https://www.tiktok.com/@aromarestaurantdb" target="_blank" rel="noopener noreferrer" className="w-6 h-6 rounded-full bg-gold-500 text-black flex items-center justify-center hover:bg-gold-400 transition-colors">
                   <span className="font-extrabold text-[15px] leading-none mb-0.5">♪</span>
