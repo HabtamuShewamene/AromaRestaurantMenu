@@ -65,7 +65,7 @@ export default function TableManager() {
       </div>
 
       {isLoading ? (
-        <div className="grid gap-5 grid-cols-1 md:grid-cols-2">
+        <div className="grid gap-3 sm:gap-5 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {[1,2,3,4].map(i => <div key={i} className="h-48 rounded-3xl bg-[#242424] animate-pulse" />)}
         </div>
       ) : tables.length === 0 ? (
@@ -75,7 +75,7 @@ export default function TableManager() {
           <p className="text-[#A7ABB0] text-sm mt-2">Tables have not been set up in the database.</p>
         </div>
       ) : (
-        <div className="grid gap-5 grid-cols-1 md:grid-cols-2 pb-10">
+        <div className="grid gap-3 sm:gap-5 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 pb-10">
           {tables.map((table) => {
             const activeSession = table.tableSessions?.[0];
             const isOccupied = table.status === "OCCUPIED" || Boolean(activeSession);
@@ -93,40 +93,41 @@ export default function TableManager() {
             }
 
             return (
-              <article key={table.id} className="bg-[#242424] rounded-3xl p-6 flex flex-col justify-between border border-[#3A3D40] transition-colors hover:border-primary/30">
+              <article key={table.id} className="bg-[#242424] rounded-3xl p-3 sm:p-6 flex flex-col justify-between border border-[#3A3D40] transition-colors hover:border-primary/30">
                 <div>
-                  <div className="flex items-start justify-between mb-4">
+                  <div className="flex flex-col sm:flex-row sm:items-start justify-between mb-2 sm:mb-4 gap-2">
                     <div>
-                      <span className="text-[10px] font-black uppercase tracking-widest text-[#A7ABB0] block mb-1">
+                      <span className="text-[8px] sm:text-[10px] font-black uppercase tracking-widest text-[#A7ABB0] block mb-0.5 sm:mb-1">
                         Table #{table.number}
                       </span>
-                      <h3 className="text-xl font-bold text-[#F7F7F2]">{table.label || `Table ${table.number}`}</h3>
+                      <h3 className="text-sm sm:text-xl font-bold text-[#F7F7F2] line-clamp-1">{table.label || `Table ${table.number}`}</h3>
                     </div>
-                    <span className={`px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest rounded-full border ${statusColor}`}>
+                    <span className={`self-start sm:self-auto px-1.5 py-0.5 sm:px-2.5 sm:py-1 text-[8px] sm:text-[10px] font-bold uppercase tracking-widest rounded-full border ${statusColor}`}>
                       {statusText}
                     </span>
                   </div>
 
-                  <div className="flex items-center gap-4 text-sm text-[#A7ABB0] mb-6">
-                    <span className="flex items-center gap-1.5">
-                      <Users className="w-4 h-4 text-primary" /> Capacity: {table.capacity}
+                  <div className="flex items-center gap-4 text-xs sm:text-sm text-[#A7ABB0] mb-4 sm:mb-6">
+                    <span className="flex items-center gap-1 sm:gap-1.5">
+                      <Users className="w-3 h-3 sm:w-4 sm:h-4 text-primary" /> Capacity: {table.capacity}
                     </span>
                   </div>
                 </div>
 
-                <div className="flex gap-2 pt-4 border-t border-[#3A3D40]">
+                <div className="flex flex-col sm:flex-row gap-1.5 sm:gap-2 pt-3 sm:pt-4 border-t border-[#3A3D40]">
                   <button 
                     onClick={() => setSelectedQrTable(table)} 
-                    className="flex-1 py-2.5 rounded-xl bg-primary/10 text-primary border border-primary/20 font-bold text-sm hover:bg-primary hover:text-primary-foreground transition-colors flex justify-center items-center gap-2"
+                    className="flex-1 py-1.5 sm:py-2.5 rounded-xl bg-primary/10 text-primary border border-primary/20 font-bold text-xs sm:text-sm hover:bg-primary hover:text-primary-foreground transition-colors flex justify-center items-center gap-1.5 sm:gap-2"
                   >
-                    <QrCode className="w-4 h-4" /> Generate QR
+                    <QrCode className="w-3 h-3 sm:w-4 sm:h-4" /> <span className="hidden sm:inline">Generate QR</span><span className="sm:hidden">QR</span>
                   </button>
                   <button 
                     onClick={() => handleToggleStatus(table.id, table.status)} 
-                    className="flex-1 py-2.5 rounded-xl bg-[#111111] text-[#F7F7F2] border border-[#3A3D40] font-bold text-sm hover:bg-white/5 transition-colors flex justify-center items-center gap-2"
+                    className="flex-1 py-1.5 sm:py-2.5 rounded-xl bg-[#111111] text-[#F7F7F2] border border-[#3A3D40] font-bold text-xs sm:text-sm hover:bg-white/5 transition-colors flex justify-center items-center gap-1.5 sm:gap-2"
                   >
-                    <Ban className={`w-4 h-4 ${isOutOfService ? 'text-[#8BD43F]' : 'text-[#D95C5C]'}`} /> 
-                    {isOutOfService ? "Enable Table" : "Disable Table"}
+                    <Ban className={`w-3 h-3 sm:w-4 sm:h-4 ${isOutOfService ? 'text-[#8BD43F]' : 'text-[#D95C5C]'}`} /> 
+                    <span className="hidden sm:inline">{isOutOfService ? "Enable Table" : "Disable Table"}</span>
+                    <span className="sm:hidden">{isOutOfService ? "Enable" : "Disable"}</span>
                   </button>
                 </div>
               </article>

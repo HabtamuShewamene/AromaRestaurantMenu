@@ -155,7 +155,7 @@ export default function KitchenDisplay() {
             <p className="text-[#A7ABB0] mt-2 max-w-sm">There are no active orders right now. Good time to prep!</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 min-w-[900px] h-full items-start pb-10">
+          <div className="flex flex-col md:grid md:grid-cols-3 gap-6 min-w-full md:min-w-[900px] h-full items-start pb-10">
             {/* NEW COLUMN */}
             <KDSColumn title="NEW" count={newOrders.length} color="border-amber-500/30">
               {newOrders.map(order => (
@@ -207,13 +207,13 @@ export default function KitchenDisplay() {
 function KDSColumn({ title, count, color, children }: { title: string, count: number, color: string, children: React.ReactNode }) {
   return (
     <div className={`flex flex-col h-full bg-[#111111] rounded-3xl border-2 ${color} overflow-hidden`}>
-      <div className="bg-[#242424] px-4 py-3 border-b border-[#3A3D40] flex items-center justify-between">
+      <div className="bg-[#242424] px-4 py-3 border-b border-[#3A3D40] flex items-center justify-between sticky top-0 z-10">
         <h2 className="font-black text-[#F7F7F2] tracking-wider">{title}</h2>
         <span className="w-7 h-7 rounded-full bg-[#111111] text-[#F7F7F2] font-bold text-xs flex items-center justify-center border border-[#3A3D40]">
           {count}
         </span>
       </div>
-      <div className="p-4 flex-1 space-y-4 overflow-y-auto">
+      <div className="p-3 sm:p-4 flex-1 grid grid-cols-2 md:grid-cols-1 gap-3 sm:gap-4 overflow-y-auto content-start">
         {children}
       </div>
     </div>
@@ -225,38 +225,43 @@ function KDSOrderCard({ order, elapsed, actionLabel, actionClass, onAction }: { 
   const tableText = order.tableNumber ? `Table ${order.tableNumber}` : "Takeaway";
 
   return (
-    <div className={`rounded-2xl p-4 border ${isUrgent ? 'bg-red-500/10 border-red-500/30' : 'bg-[#242424] border-[#3A3D40]'} flex flex-col`}>
-      <div className="flex items-start justify-between mb-3 border-b border-[#3A3D40]/50 pb-3">
-        <div>
-          <div className="flex items-center gap-2 mb-1">
-            <span className={`px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-widest ${order.tableNumber ? 'bg-primary/20 text-primary' : 'bg-white/10 text-[#A7ABB0]'}`}>
-              {tableText}
-            </span>
-            <span className="font-mono text-xs font-bold text-[#A7ABB0]">#{order.id.slice(0,4).toUpperCase()}</span>
+    <div className={`rounded-2xl p-2.5 sm:p-4 border ${isUrgent ? 'bg-red-500/10 border-red-500/30' : 'bg-[#242424] border-[#3A3D40]'} flex flex-col justify-between h-full`}>
+      <div>
+        <div className="flex flex-col sm:flex-row sm:items-start justify-between mb-2 sm:mb-3 border-b border-[#3A3D40]/50 pb-2 sm:pb-3 gap-2">
+          <div>
+            <div className="flex items-center gap-1.5 sm:gap-2 mb-1">
+              <span className={`px-1.5 py-0.5 sm:px-2 sm:py-0.5 rounded text-[8px] sm:text-[10px] font-black uppercase tracking-widest ${order.tableNumber ? 'bg-primary/20 text-primary' : 'bg-white/10 text-[#A7ABB0]'}`}>
+                {tableText}
+              </span>
+              <span className="font-mono text-[10px] sm:text-xs font-bold text-[#A7ABB0]">#{order.id.slice(0,4).toUpperCase()}</span>
+            </div>
+            {order.customerName && <div className="text-[10px] sm:text-sm font-bold text-[#F7F7F2] line-clamp-1">{order.customerName}</div>}
           </div>
-          {order.customerName && <div className="text-sm font-bold text-[#F7F7F2]">{order.customerName}</div>}
+          
+          <div className={`self-start sm:self-auto flex items-center gap-1 sm:gap-1.5 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-bold ${isUrgent ? 'bg-red-500 text-white animate-pulse' : 'bg-white/5 text-[#A7ABB0]'}`}>
+            <Clock className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+            {elapsed}m
+          </div>
         </div>
-        
-        <div className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold ${isUrgent ? 'bg-red-500 text-white animate-pulse' : 'bg-white/5 text-[#A7ABB0]'}`}>
-          <Clock className="w-3.5 h-3.5" />
-          {elapsed}m
-        </div>
-      </div>
 
-      <div className="space-y-3 mb-4">
+      <div className="space-y-2 sm:space-y-3 mb-3 sm:mb-4">
         {order.items.map((item, idx) => (
           <div key={idx}>
-            <div className="flex gap-2 text-sm text-[#F7F7F2]">
+            <div className="flex gap-1.5 sm:gap-2 text-[10px] sm:text-sm text-[#F7F7F2]">
               <strong className="text-primary">{item.quantity}x</strong>
               <span className="font-semibold">{item.name}</span>
             </div>
             {item.addons && item.addons.length > 0 && (
-              <div className="ml-6 mt-0.5 text-xs text-[#A7ABB0] space-y-0.5">
-                {item.addons.map((a, i) => <div key={i}>+ {a.name}</div>)}
+              <div className="ml-4 sm:ml-5 mt-0.5 space-y-0.5">
+                {item.addons.map((a, i) => (
+                  <div key={i} className="text-[9px] sm:text-xs text-[#A7ABB0] leading-tight">
+                    + {a.name}
+                  </div>
+                ))}
               </div>
             )}
             {item.notes && (
-              <div className="ml-6 mt-1.5 text-xs text-amber-400 bg-amber-500/10 px-2 py-1.5 rounded-md border border-amber-500/20">
+              <div className="ml-4 sm:ml-5 mt-1 text-[9px] sm:text-xs text-amber-400 bg-amber-500/10 px-2 py-1.5 rounded-md border border-amber-500/20">
                 "{item.notes}"
               </div>
             )}
@@ -264,7 +269,7 @@ function KDSOrderCard({ order, elapsed, actionLabel, actionClass, onAction }: { 
         ))}
       </div>
 
-      <button onClick={onAction} className={`w-full py-3 rounded-xl font-black text-sm tracking-widest uppercase transition-transform active:scale-95 ${actionClass}`}>
+      <button onClick={onAction} className={`w-full py-1.5 sm:py-3 rounded-lg sm:rounded-xl font-black text-[9px] sm:text-sm tracking-widest uppercase transition-transform active:scale-95 ${actionClass}`}>
         {actionLabel}
       </button>
     </div>

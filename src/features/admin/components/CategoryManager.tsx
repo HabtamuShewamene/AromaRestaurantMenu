@@ -180,7 +180,7 @@ export default function CategoryManager() {
           </button>
         </div>
       ) : (
-        <div className="grid gap-5 grid-cols-1 md:grid-cols-2 pb-10">
+        <div className="grid gap-3 sm:gap-5 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 pb-10">
           {sortedCategories.map((category) => {
             const usageCount = menuItems.filter((item) => {
               const categoryName = typeof item.category === "string" ? item.category : item.category?.name;
@@ -188,47 +188,44 @@ export default function CategoryManager() {
             }).length;
 
             return (
-              <article key={category.id} className="bg-[#242424] rounded-3xl border border-[#3A3D40] p-6 flex flex-col justify-between transition-all hover:border-primary/40">
-                <div className="flex items-start gap-4 mb-6">
+              <article key={category.id} className="bg-[#242424] rounded-3xl border border-[#3A3D40] overflow-hidden flex flex-col justify-between transition-all hover:border-primary/40 relative">
+                {/* ── Image & Badges ── */}
+                <div className="relative h-28 sm:h-40 w-full bg-black/40 border-b border-[#3A3D40]">
                   {category.image ? (
-                    <div className="w-16 h-16 rounded-2xl overflow-hidden shrink-0 relative bg-black/40 border border-[#3A3D40]">
-                      <Image src={category.image} alt={category.name} fill className="object-cover" />
-                    </div>
+                    <Image src={category.image} alt={category.name} fill className="object-cover transition-transform duration-500 group-hover:scale-105" />
                   ) : (
-                    <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center shrink-0 border border-[#3A3D40] text-2xl">
+                    <div className="w-full h-full flex flex-col items-center justify-center bg-white/5 text-3xl">
                       📂
                     </div>
                   )}
-                  <div className="flex-1">
-                    <div className="flex items-start justify-between gap-2">
-                      <h3 className="text-lg font-bold text-[#F7F7F2] leading-tight">{category.name}</h3>
-                      <div className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider border ${
-                        category.status !== false 
-                          ? "bg-[#8BD43F]/10 text-[#8BD43F] border-[#8BD43F]/30" 
-                          : "bg-[#D95C5C]/10 text-[#D95C5C] border-[#D95C5C]/30"
-                      }`}>
-                        {category.status !== false ? "Active" : "Hidden"}
-                      </div>
-                    </div>
-                    <p className="text-xs font-semibold text-primary mt-1">{usageCount} menu item{usageCount !== 1 ? 's' : ''}</p>
+                  {/* Status Badge */}
+                  <div className="absolute top-2 left-2 sm:top-3 sm:left-3 flex items-center gap-1 sm:gap-1.5 px-2 py-1 sm:px-2.5 sm:py-1 rounded-full bg-black/70 backdrop-blur-md border border-white/10">
+                    <div className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full ${category.status !== false ? "bg-[#8BD43F]" : "bg-[#D95C5C]"}`} />
+                    <span className="text-[8px] sm:text-[10px] font-bold text-white uppercase tracking-wider">
+                      {category.status !== false ? "Active" : "Hidden"}
+                    </span>
+                  </div>
+                  <div className="absolute top-2 right-2 sm:top-3 sm:right-3 px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-full bg-primary/90 text-primary-foreground text-[8px] sm:text-[10px] font-bold uppercase tracking-widest shadow-lg">
+                    {usageCount} item{usageCount !== 1 ? 's' : ''}
+                  </div>
+                </div>
+
+                <div className="p-3 sm:p-5 flex-1 flex flex-col justify-between">
+                  <div>
+                    <h3 className="text-sm sm:text-lg font-bold text-[#F7F7F2] leading-tight mb-1">{category.name}</h3>
                     {category.description && (
-                      <p className="text-sm text-[#A7ABB0] mt-2 line-clamp-2">{category.description}</p>
+                      <p className="text-[10px] sm:text-sm text-[#A7ABB0] mt-1 sm:mt-2 line-clamp-2">{category.description}</p>
                     )}
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between pt-4 border-t border-[#3A3D40]">
-                  <div className="text-xs font-bold text-[#A7ABB0] bg-white/5 px-3 py-1.5 rounded-lg border border-[#3A3D40]">
-                    Order: {category.orderIndex || 0}
-                  </div>
-                  <div className="flex gap-2">
-                    <button onClick={() => openEditForm(category)} className="px-4 py-2 rounded-xl bg-primary/10 text-primary border border-primary/20 font-bold text-sm hover:bg-primary hover:text-primary-foreground transition-colors flex items-center gap-1.5">
-                      <Pencil className="w-4 h-4" /> Edit
-                    </button>
-                    <button onClick={() => handleDelete(category, usageCount)} className="p-2 rounded-xl border border-[#3A3D40] text-[#D95C5C] hover:bg-[#D95C5C]/10 transition-colors">
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                  </div>
+                <div className="flex items-center justify-between px-3 pb-3 sm:px-5 sm:pb-5 gap-2">
+                  <button onClick={() => openEditForm(category)} className="flex-1 py-1.5 sm:py-2.5 rounded-xl bg-primary/10 text-primary border border-primary/20 font-bold text-xs sm:text-sm hover:bg-primary hover:text-primary-foreground transition-colors flex items-center justify-center gap-1.5 sm:gap-2">
+                    <Pencil className="w-3 h-3 sm:w-4 sm:h-4" /> <span className="hidden sm:inline">Edit Category</span><span className="sm:hidden">Edit</span>
+                  </button>
+                  <button onClick={() => handleDelete(category, usageCount)} className="p-1.5 sm:p-2.5 rounded-xl border border-[#3A3D40] text-[#D95C5C] hover:bg-[#D95C5C]/10 transition-colors">
+                    <Trash2 className="w-4 h-4 sm:w-5 sm:h-5" />
+                  </button>
                 </div>
               </article>
             );

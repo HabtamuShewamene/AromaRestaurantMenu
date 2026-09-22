@@ -36,7 +36,7 @@ export default function MenuItemCard({ item, onEdit, onDelete, onToggleAvailabil
   return (
     <article className="bg-[#242424] rounded-3xl border border-[#3A3D40] overflow-hidden flex flex-col group transition-all hover:border-primary/40 relative">
       {/* ── Image & Badges ── */}
-      <div className="relative h-48 w-full bg-black/40">
+      <div className="relative h-32 sm:h-48 w-full bg-black/40">
         <Image
           src={item.image || "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800&q=80"}
           alt={item.name}
@@ -48,56 +48,57 @@ export default function MenuItemCard({ item, onEdit, onDelete, onToggleAvailabil
         />
         
         {/* Availability Badge */}
-        <div className="absolute top-3 left-3 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/70 backdrop-blur-md border border-white/10">
-          <div className={`w-2 h-2 rounded-full ${item.isAvailable ? "bg-[#8BD43F]" : "bg-[#D95C5C]"}`} />
-          <span className="text-[10px] font-bold text-white uppercase tracking-wider">
+        <div className="absolute top-2 left-2 sm:top-3 sm:left-3 flex items-center gap-1 sm:gap-1.5 px-2 py-1 sm:px-2.5 sm:py-1 rounded-full bg-black/70 backdrop-blur-md border border-white/10">
+          <div className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full ${item.isAvailable ? "bg-[#8BD43F]" : "bg-[#D95C5C]"}`} />
+          <span className="text-[8px] sm:text-[10px] font-bold text-white uppercase tracking-wider">
             {item.isAvailable ? "Available" : "Hidden"}
           </span>
         </div>
 
         {/* Addon Indicator */}
         {item.addonGroups && item.addonGroups.length > 0 && (
-          <div className="absolute top-3 right-3 px-2 py-1 rounded-full bg-primary/90 text-primary-foreground text-[10px] font-bold uppercase tracking-widest shadow-lg">
+          <div className="absolute top-2 right-2 sm:top-3 sm:right-3 px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-full bg-primary/90 text-primary-foreground text-[8px] sm:text-[10px] font-bold uppercase tracking-widest shadow-lg">
             +{item.addonGroups.length} Add-ons
           </div>
         )}
       </div>
 
       {/* ── Content ── */}
-      <div className="p-5 flex-1 flex flex-col justify-between">
+      <div className="p-3 sm:p-5 flex-1 flex flex-col justify-between">
         <div>
-          <div className="flex items-start justify-between gap-3 mb-1">
-            <h3 className="text-lg font-bold text-[#F7F7F2] line-clamp-1">{item.name}</h3>
-            <span className="font-mono text-lg font-black text-[#8BD43F] shrink-0">{item.price.toFixed(2)} ETB</span>
+          <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-1 sm:gap-3 mb-1">
+            <h3 className="text-sm sm:text-lg font-bold text-[#F7F7F2] line-clamp-1">{item.name}</h3>
+            <span className="font-mono text-xs sm:text-lg font-black text-[#8BD43F] shrink-0">{item.price.toFixed(2)} ETB</span>
           </div>
-          <p className="text-xs font-semibold text-[#A7ABB0] uppercase tracking-wider mb-3">
+          <p className="text-[9px] sm:text-xs font-semibold text-[#A7ABB0] uppercase tracking-wider mb-2 sm:mb-3 line-clamp-1">
             {categoryName}
           </p>
-          <p className="text-sm text-[#A7ABB0] line-clamp-2 leading-relaxed mb-4">
+          <p className="text-[10px] sm:text-sm text-[#A7ABB0] line-clamp-2 leading-relaxed mb-3 sm:mb-4">
             {item.description || "No description provided."}
           </p>
         </div>
 
         {/* ── Actions ── */}
-        <div className="flex items-center justify-between pt-4 border-t border-[#3A3D40]">
+        <div className="flex items-center justify-between pt-3 sm:pt-4 border-t border-[#3A3D40]">
           <button
             onClick={() => onEdit(item)}
-            className="flex-1 py-2.5 rounded-xl bg-primary/10 text-primary border border-primary/20 font-bold text-sm hover:bg-primary hover:text-primary-foreground transition-colors flex items-center justify-center gap-2"
+            className="flex-1 py-1.5 sm:py-2.5 rounded-xl bg-primary/10 text-primary border border-primary/20 font-bold text-xs sm:text-sm hover:bg-primary hover:text-primary-foreground transition-colors flex items-center justify-center gap-1.5 sm:gap-2"
           >
-            <Pencil className="w-4 h-4" />
-            Edit Item
+            <Pencil className="w-3 h-3 sm:w-4 sm:h-4" />
+            <span className="hidden sm:inline">Edit Item</span>
+            <span className="sm:hidden">Edit</span>
           </button>
 
-          <div className="relative ml-3" ref={menuRef}>
+          <div className="relative ml-2 sm:ml-3" ref={menuRef}>
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className={`p-2.5 rounded-xl border transition-colors ${
+              className={`p-1.5 sm:p-2.5 rounded-xl border transition-colors ${
                 isMenuOpen 
                 ? "bg-[#3A3D40] border-[#A7ABB0] text-[#F7F7F2]" 
                 : "bg-transparent border-[#3A3D40] text-[#A7ABB0] hover:text-[#F7F7F2] hover:bg-white/5"
               }`}
             >
-              <MoreVertical className="w-5 h-5" />
+              <MoreVertical className="w-4 h-4 sm:w-5 sm:h-5" />
             </button>
 
             {/* Dropdown Menu */}

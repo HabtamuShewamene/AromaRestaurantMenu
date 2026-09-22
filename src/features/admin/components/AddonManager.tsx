@@ -169,8 +169,8 @@ export default function AddonManager() {
       </div>
 
       {isLoading ? (
-        <div className="grid gap-6 grid-cols-1 md:grid-cols-2">
-          {[1,2,3].map(i => <div key={i} className="h-40 rounded-3xl bg-[#242424] animate-pulse" />)}
+        <div className="grid gap-3 sm:gap-5 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+          {[1,2,3,4].map(i => <div key={i} className="h-40 rounded-3xl bg-[#242424] animate-pulse" />)}
         </div>
       ) : addons.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-20 px-4 text-center rounded-3xl border border-dashed border-[#3A3D40] bg-[#242424]/50">
@@ -186,42 +186,42 @@ export default function AddonManager() {
           </button>
         </div>
       ) : (
-        <div className="grid gap-5 grid-cols-1 md:grid-cols-2 pb-10">
+        <div className="grid gap-3 sm:gap-5 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 pb-10">
           {addons.map(addon => (
-            <article key={addon.id} className="bg-[#242424] rounded-3xl border border-[#3A3D40] p-6 flex flex-col justify-between transition-all hover:border-primary/40">
+            <article key={addon.id} className="bg-[#242424] rounded-3xl border border-[#3A3D40] p-3 sm:p-6 flex flex-col justify-between transition-all hover:border-primary/40">
               <div>
-                <div className="flex items-start justify-between gap-4 mb-2">
-                  <h3 className="text-lg font-bold text-[#F7F7F2]">{addon.name}</h3>
-                  <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider border ${
+                <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2 sm:gap-4 mb-2">
+                  <h3 className="text-sm sm:text-lg font-bold text-[#F7F7F2] leading-tight">{addon.name}</h3>
+                  <span className={`self-start sm:self-auto px-1.5 py-0.5 sm:px-2 sm:py-0.5 rounded-full text-[8px] sm:text-[10px] font-bold uppercase tracking-wider border ${
                     addon.required ? "bg-amber-500/10 text-amber-500 border-amber-500/30" : "bg-white/5 text-muted-foreground border-border"
                   }`}>
                     {addon.required ? "Required" : "Optional"}
                   </span>
                 </div>
-                <p className="text-xs font-semibold text-primary mb-4">
+                <p className="text-[10px] sm:text-xs font-semibold text-primary mb-3 sm:mb-4 line-clamp-1">
                   Attached to: {addon.menuItem?.name || "Unknown Item"}
                 </p>
                 
-                <div className="space-y-1 mb-6">
+                <div className="space-y-1 mb-4 sm:mb-6">
                   {addon.options.slice(0, 3).map(opt => (
-                    <div key={opt.id} className="flex items-center justify-between text-sm">
-                      <span className="text-[#F7F7F2]">{opt.name}</span>
-                      <span className="text-[#A7ABB0]">{opt.price > 0 ? `+${opt.price} ETB` : "Free"}</span>
+                    <div key={opt.id} className="flex items-center justify-between text-[10px] sm:text-sm">
+                      <span className="text-[#F7F7F2] truncate mr-2">{opt.name}</span>
+                      <span className="text-[#A7ABB0] shrink-0">{opt.price > 0 ? `+${opt.price} ETB` : "Free"}</span>
                     </div>
                   ))}
                   {addon.options.length > 3 && (
-                    <div className="text-xs text-muted-foreground pt-1 italic">
+                    <div className="text-[9px] sm:text-xs text-muted-foreground pt-1 italic">
                       + {addon.options.length - 3} more options
                     </div>
                   )}
                 </div>
               </div>
 
-              <div className="flex gap-2 border-t border-[#3A3D40] pt-4 mt-auto">
-                <button onClick={() => openEditForm(addon)} className="flex-1 py-2 rounded-xl bg-primary/10 text-primary border border-primary/20 font-bold text-sm hover:bg-primary hover:text-primary-foreground transition-colors flex justify-center items-center gap-1.5">
-                  <Pencil className="w-4 h-4" /> Edit
+              <div className="flex gap-1.5 sm:gap-2 border-t border-[#3A3D40] pt-3 sm:pt-4 mt-auto">
+                <button onClick={() => openEditForm(addon)} className="flex-1 py-1.5 sm:py-2 rounded-xl bg-primary/10 text-primary border border-primary/20 font-bold text-xs sm:text-sm hover:bg-primary hover:text-primary-foreground transition-colors flex justify-center items-center gap-1.5">
+                  <Pencil className="w-3 h-3 sm:w-4 sm:h-4" /> <span className="hidden sm:inline">Edit</span>
                 </button>
-                <button onClick={() => handleDelete(addon.id)} className="p-2 rounded-xl border border-[#3A3D40] text-[#D95C5C] hover:bg-[#D95C5C]/10 transition-colors">
+                <button onClick={() => handleDelete(addon.id)} className="p-1.5 sm:p-2 rounded-xl border border-[#3A3D40] text-[#D95C5C] hover:bg-[#D95C5C]/10 transition-colors">
                   <Trash2 className="w-4 h-4" />
                 </button>
               </div>
