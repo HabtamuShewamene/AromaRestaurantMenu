@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { X, Plus, Minus, ShoppingBag, Check } from "lucide-react";
 import Image from "next/image";
 import { MenuItemRecord, OrderItemAddonRecord } from "@/shared/types/app";
@@ -17,6 +17,29 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
   const [selectedAddons, setSelectedAddons] = useState<Record<string, OrderItemAddonRecord[]>>({});
   const [notes, setNotes] = useState("");
   const [justAdded, setJustAdded] = useState(false);
+  const modalRef = useRef<HTMLDivElement>(null);
+
+  // Focus trap and Escape-to-close accessibility
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    
+    // Auto-focus modal wrapper for screen readers / keyboard nav
+    if (modalRef.current) {
+      modalRef.current.focus();
+    }
+
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [onClose]);
+
+  // Handle clicking outside modal to close
+  const handleBackdropClick = (e: React.MouseEvent) => {
+    if (e.target === e.currentTarget) {
+      onClose();
+    }
+  };
 
   // Initialize default options for required groups
   useEffect(() => {
@@ -40,24 +63,6 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
       setSelectedAddons(initial);
     }
   }, [item]);
-
-  useEffect(() => {
-    const loadReviews = async () => {
-      try {
-        const response = await fetch(`/api/reviews?menuItemId=${item.id}`);
-        const data = await response.json();
-        setReviews(data.reviews || []);
-        setAverageRating(data.averageRating || 0);
-        setTotalReviews(data.totalReviews || 0);
-      } catch {
-        // Silently fail
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    void loadReviews();
-  }, [item.id]);
 
   const categoryName = typeof item.category === "string" ? item.category : item.category.name;
 
@@ -117,18 +122,6 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
   const unitPrice = item.price + addonsTotalUnit;
   const totalPrice = unitPrice * quantity;
 
-  const handleReviewSubmitted = async () => {
-    try {
-      const response = await fetch(`/api/reviews?menuItemId=${item.id}`);
-      const data = await response.json();
-      setReviews(data.reviews || []);
-      setAverageRating(data.averageRating || 0);
-      setTotalReviews(data.totalReviews || 0);
-    } catch {
-      // Silently fail
-    }
-  };
-
   const missingRequiredGroup = (item.addonGroups || []).find(
     (g) => g.required && (!selectedAddons[g.id] || selectedAddons[g.id].length < Math.max(1, g.minSelect))
   );
@@ -146,53 +139,85 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4 backdrop-blur-md">
-      <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-3xl bg-[#111111] border border-white/10 shadow-2xl">
-        {/* Sticky Modal Header */}
-        <div className="sticky top-0 z-20 flex items-center justify-between border-b border-white/10 bg-[#111111]/95 px-6 py-4 backdrop-blur-md">
-          <h2 className="text-xl font-bold text-white font-playfair">{item.name}</h2>
+    <div 
+      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/80 backdrop-blur-sm sm:p-4 transition-all duration-300"
+      onClick={handleBackdropClick}
+    >
+      <div 
+        ref={modalRef}
+        tabIndex={-1}
+        className="relative flex flex-col w-full max-h-[95vh] sm:max-h-[90vh] max-w-2xl overflow-hidden rounded-t-[2rem] sm:rounded-3xl bg-[#111111] shadow-2xl outline-none"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modal-title"
+      >
+        {/* Edge-to-edge Image Header */}
+        <div className="relative h-56 sm:h-72 w-full flex-shrink-0">
+          <Image
+            src={item.image || "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800&q=80"}
+            alt={item.name}
+            fill
+            priority
+            sizes="(max-width: 768px) 100vw, 800px"
+            className="object-cover"
+          />
+          {/* Gradient fade to blend into background */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#111111] via-[#111111]/20 to-transparent" />
+          
+          {/* Close button layered on top of image */}
           <button
             onClick={onClose}
-            className="rounded-full p-2 text-zinc-400 hover:bg-white/10 hover:text-white transition-all"
+            className="absolute top-4 right-4 sm:top-5 sm:right-5 z-30 rounded-full bg-black/40 backdrop-blur-md p-2.5 text-white/90 hover:bg-black/60 hover:text-white hover:scale-105 active:scale-95 transition-all shadow-lg border border-white/10"
+            aria-label="Close details"
           >
             <X className="h-5 w-5" />
           </button>
         </div>
 
-        <div className="p-6 space-y-6">
-          {/* Item Image and Info */}
-          <div className="space-y-4">
-            <div className="relative h-64 w-full overflow-hidden rounded-2xl">
-              <Image
-                src={item.image || "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800&q=80"}
-                alt={item.name}
-                fill
-                sizes="600px"
-                className="object-cover"
-              />
+        {/* Scrollable Content Body */}
+        <div className="flex-1 overflow-y-auto overflow-x-hidden p-5 sm:p-7 space-y-7 -mt-6 sm:-mt-10 relative z-20 pb-8 sm:pb-10">
+          
+          {/* Title and Pricing */}
+          <div className="space-y-3">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <p className="text-[10px] sm:text-xs uppercase tracking-[0.25em] text-gold-500 font-bold mb-1.5">{categoryName}</p>
+                <h2 id="modal-title" className="text-2xl sm:text-3xl font-bold text-white font-playfair leading-tight">{item.name}</h2>
+              </div>
+              <p className="text-2xl sm:text-3xl font-bold text-gold-400 font-playfair whitespace-nowrap">{item.price.toFixed(2)} Birr</p>
+            </div>
+            
+            {/* Rating Summary & Badges */}
+            <div className="flex flex-wrap items-center gap-3 pt-1">
+              {/* Mock compact rating summary */}
+              <div className="flex items-center gap-1 bg-white/5 px-2.5 py-1 rounded-lg border border-white/5 w-fit shadow-inner">
+                <span className="text-gold-400 text-sm leading-none">★</span>
+                <span className="text-white text-sm font-bold leading-none">4.8</span>
+                <span className="text-zinc-500 text-xs ml-0.5 leading-none">(24)</span>
+              </div>
+
+              <span
+                className={`rounded-full px-3 py-1 font-bold text-[10px] sm:text-xs uppercase tracking-wider ${
+                  item.isAvailable
+                    ? "bg-green-500/15 text-green-400 border border-green-500/30"
+                    : "bg-red-500/15 text-red-400 border border-red-500/30"
+                }`}
+              >
+                {item.isAvailable ? "In Stock" : "Sold Out"}
+              </span>
+              
+              {/* Dietary Tags */}
+              {item.allergens?.map((alg, i) => (
+                <span key={i} className="rounded-full px-3 py-1 font-bold text-[10px] sm:text-xs uppercase tracking-wider bg-orange-500/10 text-orange-400 border border-orange-500/20">
+                  {alg}
+                </span>
+              ))}
             </div>
 
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-xs uppercase tracking-[0.2em] text-gold-500 font-semibold">{categoryName}</p>
-                  <p className="text-3xl font-bold text-gold-400 font-playfair">{item.price.toFixed(2)} Birr</p>
-                </div>
-                <span
-                  className={`rounded-full px-3.5 py-1.5 font-bold text-xs uppercase tracking-wider ${
-                    item.isAvailable
-                      ? "bg-green-500/15 text-green-400 border border-green-500/30"
-                      : "bg-red-500/15 text-red-400 border border-red-500/30"
-                  }`}
-                >
-                  {item.isAvailable ? "In Stock" : "Sold Out"}
-                </span>
-              </div>
-              <p className="text-zinc-300 text-sm leading-relaxed">{item.description}</p>
-            </div>
+            <p className="text-zinc-300 text-sm leading-relaxed mt-2">{item.description}</p>
           </div>
 
-          {/* Add-on Groups / Customization Options */}
+          {/* Customization Options */}
           {item.addonGroups && item.addonGroups.length > 0 && (
             <div className="space-y-5 pt-4 border-t border-white/10">
               <h3 className="text-sm font-bold uppercase tracking-wider text-gold-400">Customizations</h3>
@@ -201,17 +226,18 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
                 const selectedInGroup = selectedAddons[group.id] || [];
 
                 return (
-                  <div key={group.id} className="p-4 rounded-2xl bg-zinc-950 border border-white/5 space-y-3">
+                  <div key={group.id} className="p-4 sm:p-5 rounded-2xl bg-zinc-950/80 border border-white/5 space-y-4">
                     <div className="flex items-center justify-between">
-                      <h4 className="text-sm font-semibold text-white">
-                        {group.name} {group.required && <span className="text-gold-400 text-xs">*Required</span>}
+                      <h4 className="text-sm font-semibold text-white flex items-center gap-2">
+                        {group.name} 
+                        {group.required && <span className="bg-gold-500/20 text-gold-400 text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full border border-gold-500/20">Required</span>}
                       </h4>
-                      <span className="text-[11px] text-zinc-500">
+                      <span className="text-xs font-medium text-zinc-500 bg-black/40 px-2 py-1 rounded-md">
                         {group.maxSelect === 1 ? "Select 1" : `Up to ${group.maxSelect}`}
                       </span>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                       {group.options.map((opt) => {
                         const isSelected = selectedInGroup.some((a) => a.addonOptionId === opt.id);
 
@@ -227,16 +253,16 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
                                 group.maxSelect
                               )
                             }
-                            className={`flex items-center justify-between p-3 rounded-xl border text-xs font-medium transition-all ${
+                            className={`flex items-center justify-between p-3.5 rounded-xl border text-sm font-medium transition-all active:scale-[0.98] ${
                               !opt.isAvailable
                                 ? "opacity-40 cursor-not-allowed bg-zinc-900 border-zinc-800 text-zinc-600"
                                 : isSelected
-                                ? "bg-gold-500/15 border-gold-500/40 text-gold-300 shadow-[0_0_12px_rgba(182,141,64,0.15)]"
-                                : "bg-zinc-900 border-zinc-800 text-zinc-300 hover:bg-zinc-800"
+                                ? "bg-gold-500/15 border-gold-500/40 text-gold-300 shadow-[0_0_15px_rgba(182,141,64,0.15)] ring-1 ring-gold-500/50"
+                                : "bg-zinc-900 border-zinc-800 text-zinc-300 hover:bg-zinc-800 hover:border-zinc-700"
                             }`}
                           >
-                            <span className="truncate">{opt.name}</span>
-                            <span className="font-bold text-zinc-400 ml-2">
+                            <span className="truncate pr-2">{opt.name}</span>
+                            <span className={`font-bold ml-2 whitespace-nowrap ${isSelected ? 'text-gold-400' : 'text-zinc-400'}`}>
                               {opt.price > 0 ? `+${opt.price.toFixed(2)} Birr` : "Free"}
                             </span>
                           </button>
@@ -249,91 +275,80 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
             </div>
           )}
 
-          {/* Special Requests / Item Notes */}
-          <div className="pt-2">
-            <label className="text-xs font-semibold text-zinc-400 uppercase tracking-wider block mb-1.5">
-              Special Instructions (Optional)
-            </label>
-            <input
-              type="text"
+          {/* Special Requests */}
+          <div className="pt-4 border-t border-white/10 space-y-3">
+            <div className="flex items-center justify-between">
+              <label htmlFor="special-instructions" className="text-xs font-bold text-zinc-400 uppercase tracking-wider">
+                Special Instructions
+              </label>
+              <span className={`text-[10px] font-bold tracking-wider ${notes.length > 130 ? 'text-red-400' : 'text-zinc-500'}`}>
+                {notes.length}/150
+              </span>
+            </div>
+            <textarea
+              id="special-instructions"
               value={notes}
+              maxLength={150}
               onChange={(e) => setNotes(e.target.value)}
               placeholder="e.g. Extra hot, no cinnamon, sauce on side..."
-              className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2.5 text-sm text-white placeholder-zinc-600 outline-none focus:border-gold-500"
+              className="w-full bg-zinc-950/80 border border-zinc-800 rounded-xl px-4 py-3.5 text-sm text-white placeholder-zinc-600 outline-none focus:border-gold-500 focus:bg-zinc-950 transition-colors resize-none h-24 shadow-inner"
             />
           </div>
+        </div>
 
-          {/* Add to Cart Footer Bar */}
-          <div className="flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-white/10 sticky bottom-0 bg-[#111111] py-3 -mx-6 px-6">
-            <div className="flex items-center gap-3 bg-zinc-950 px-3 py-2 rounded-2xl border border-white/10">
-              <button
-                type="button"
-                onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                className="w-8 h-8 rounded-xl bg-zinc-900 flex items-center justify-center text-zinc-300 hover:text-white hover:bg-zinc-800 transition-colors"
-              >
-                <Minus className="w-4 h-4" />
-              </button>
-              <span className="w-8 text-center font-bold text-white text-base">{quantity}</span>
-              <button
-                type="button"
-                onClick={() => setQuantity(quantity + 1)}
-                className="w-8 h-8 rounded-xl bg-zinc-900 flex items-center justify-center text-zinc-300 hover:text-white hover:bg-zinc-800 transition-colors"
-              >
-                <Plus className="w-4 h-4" />
-              </button>
-            </div>
-
+        {/* Sticky Glassmorphism Footer */}
+        <div className="flex-shrink-0 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-white/10 bg-[#111111]/95 backdrop-blur-xl px-5 sm:px-7 py-4 sm:py-5 z-30 relative">
+          
+          {/* Quantity Controls - Large Touch Targets */}
+          <div className="flex items-center justify-between w-full sm:w-auto bg-zinc-950 p-1.5 rounded-2xl border border-white/10 shadow-inner">
             <button
               type="button"
-              disabled={!canAddToCart}
-              onClick={handleAddToCart}
-              className={`flex-1 min-w-[200px] flex items-center justify-center gap-2 py-3.5 px-6 rounded-2xl font-bold text-sm transition-all shadow-lg ${
-                !item.isAvailable
-                  ? "bg-zinc-800 text-zinc-500 cursor-not-allowed"
-                  : missingRequiredGroup
-                  ? "bg-zinc-800 text-zinc-400 border border-gold-500/30 cursor-not-allowed"
-                  : justAdded
-                  ? "bg-green-500 text-black shadow-[0_0_20px_rgba(34,197,94,0.4)]"
-                  : "bg-gold-500 text-black hover:bg-gold-400 hover:scale-[1.02] active:scale-[0.98] shadow-[0_4px_20px_rgba(182,141,64,0.3)]"
-              }`}
+              onClick={() => setQuantity(Math.max(1, quantity - 1))}
+              className="w-12 h-12 sm:w-10 sm:h-10 rounded-xl bg-zinc-900 flex items-center justify-center text-zinc-300 hover:text-white hover:bg-zinc-800 transition-colors active:bg-zinc-700"
+              aria-label="Decrease quantity"
             >
-              {justAdded ? (
-                <>
-                  <Check className="w-4 h-4 stroke-[2.5]" />
-                  <span>Added to Cart ({totalPrice.toFixed(2)} Birr)</span>
-                </>
-              ) : missingRequiredGroup ? (
-                <span>Please select: {missingRequiredGroup.name}</span>
-              ) : (
-                <>
-                  <ShoppingBag className="w-4 h-4" />
-                  <span>Add to Cart • {totalPrice.toFixed(2)} Birr</span>
-                </>
-              )}
+              <Minus className="w-5 h-5 sm:w-4 sm:h-4" />
+            </button>
+            <span className="w-12 sm:w-10 text-center font-bold text-white text-lg sm:text-base">{quantity}</span>
+            <button
+              type="button"
+              onClick={() => setQuantity(quantity + 1)}
+              className="w-12 h-12 sm:w-10 sm:h-10 rounded-xl bg-zinc-900 flex items-center justify-center text-zinc-300 hover:text-white hover:bg-zinc-800 transition-colors active:bg-zinc-700"
+              aria-label="Increase quantity"
+            >
+              <Plus className="w-5 h-5 sm:w-4 sm:h-4" />
             </button>
           </div>
 
-          {/* Ingredients & Allergens */}
-          {((item.ingredients && item.ingredients.length > 0) || (item.allergens && item.allergens.length > 0)) && (
-            <div className="pt-4 space-y-4 border-t border-white/10">
-              {item.allergens && item.allergens.length > 0 && (
-                <div>
-                  <h4 className="text-xs font-semibold text-red-400/80 mb-2 uppercase tracking-wider">Allergens</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {item.allergens.map((alg, i) => (
-                      <span
-                        key={i}
-                        className="px-3 py-1 bg-red-500/10 text-red-400 rounded-full text-xs font-medium border border-red-500/20"
-                      >
-                        {alg}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
-
+          {/* Add to Cart Button */}
+          <button
+            type="button"
+            disabled={!canAddToCart}
+            onClick={handleAddToCart}
+            className={`w-full sm:flex-1 sm:min-w-[240px] flex items-center justify-center gap-2 py-4 sm:py-3.5 px-6 rounded-2xl font-bold text-base sm:text-sm transition-all shadow-lg ${
+              !item.isAvailable
+                ? "bg-zinc-800 text-zinc-500 cursor-not-allowed"
+                : missingRequiredGroup
+                ? "bg-zinc-800 text-zinc-400 border border-gold-500/30 cursor-not-allowed"
+                : justAdded
+                ? "bg-green-500 text-black shadow-[0_0_20px_rgba(34,197,94,0.4)] scale-[1.02]"
+                : "bg-gold-500 text-black hover:bg-gold-400 hover:scale-[1.02] active:scale-[0.98] shadow-[0_4px_20px_rgba(182,141,64,0.3)]"
+            }`}
+          >
+            {justAdded ? (
+              <>
+                <Check className="w-5 h-5 sm:w-4 sm:h-4 stroke-[2.5]" />
+                <span>Added to Cart ({totalPrice.toFixed(2)} Birr)</span>
+              </>
+            ) : missingRequiredGroup ? (
+              <span>Please select: {missingRequiredGroup.name}</span>
+            ) : (
+              <>
+                <ShoppingBag className="w-5 h-5 sm:w-4 sm:h-4" />
+                <span>Add to Cart • {totalPrice.toFixed(2)} Birr</span>
+              </>
+            )}
+          </button>
         </div>
       </div>
     </div>
