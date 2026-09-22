@@ -251,15 +251,7 @@ function KDSOrderCard({ order, elapsed, actionLabel, actionClass, onAction }: { 
               <strong className="text-primary">{item.quantity}x</strong>
               <span className="font-semibold">{item.name}</span>
             </div>
-            {item.addons && item.addons.length > 0 && (
-              <div className="ml-4 sm:ml-5 mt-0.5 space-y-0.5">
-                {item.addons.map((a, i) => (
-                  <div key={i} className="text-[9px] sm:text-xs text-[#A7ABB0] leading-tight">
-                    + {a.name}
-                  </div>
-                ))}
-              </div>
-            )}
+
             {item.notes && (
               <div className="ml-4 sm:ml-5 mt-1 text-[9px] sm:text-xs text-amber-400 bg-amber-500/10 px-2 py-1.5 rounded-md border border-amber-500/20">
                 "{item.notes}"
@@ -269,6 +261,7 @@ function KDSOrderCard({ order, elapsed, actionLabel, actionClass, onAction }: { 
         ))}
       </div>
 
+      </div>
       <button onClick={onAction} className={`w-full py-1.5 sm:py-3 rounded-lg sm:rounded-xl font-black text-[9px] sm:text-sm tracking-widest uppercase transition-transform active:scale-95 ${actionClass}`}>
         {actionLabel}
       </button>

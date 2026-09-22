@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import { X, Plus, Minus, ShoppingBag, Check } from "lucide-react";
 import Image from "next/image";
-import { MenuItemRecord, OrderItemAddonRecord } from "@/shared/types/app";
+import { MenuItemRecord } from "@/shared/types/app";
 import { useCart } from "@/components/providers/CartProvider";
 
 type MenuItemDetailProps = {
@@ -14,7 +14,6 @@ type MenuItemDetailProps = {
 export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
   const { addToCart } = useCart();
   const [quantity, setQuantity] = useState(1);
-  const [selectedAddons, setSelectedAddons] = useState<Record<string, OrderItemAddonRecord[]>>({});
   const [notes, setNotes] = useState("");
   const [justAdded, setJustAdded] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
@@ -41,96 +40,14 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
     }
   };
 
-  // Initialize default options for required groups
-  useEffect(() => {
-    if (item.addonGroups && item.addonGroups.length > 0) {
-      const initial: Record<string, OrderItemAddonRecord[]> = {};
-      item.addonGroups.forEach((group) => {
-        if (group.required && group.options.length > 0) {
-          const firstAvailable = group.options.find((o) => o.isAvailable) || group.options[0];
-          initial[group.id] = [
-            {
-              addonOptionId: firstAvailable.id,
-              name: firstAvailable.name,
-              price: firstAvailable.price,
-              quantity: 1,
-            },
-          ];
-        } else {
-          initial[group.id] = [];
-        }
-      });
-      setSelectedAddons(initial);
-    }
-  }, [item]);
-
   const categoryName = typeof item.category === "string" ? item.category : item.category.name;
+  const totalPrice = item.price * quantity;
 
-  const handleOptionToggle = (
-    groupId: string,
-    option: { id: string; name: string; price: number },
-    maxSelect: number
-  ) => {
-    setSelectedAddons((prev) => {
-      const currentList = prev[groupId] || [];
-      const exists = currentList.find((a) => a.addonOptionId === option.id);
-
-      if (maxSelect === 1) {
-        // Single-select radio behavior
-        return {
-          ...prev,
-          [groupId]: [
-            {
-              addonOptionId: option.id,
-              name: option.name,
-              price: option.price,
-              quantity: 1,
-            },
-          ],
-        };
-      }
-
-      // Multi-select toggle
-      if (exists) {
-        return {
-          ...prev,
-          [groupId]: currentList.filter((a) => a.addonOptionId !== option.id),
-        };
-      }
-
-      if (currentList.length >= maxSelect) {
-        return prev; // Reached max selections limit
-      }
-
-      return {
-        ...prev,
-        [groupId]: [
-          ...currentList,
-          {
-            addonOptionId: option.id,
-            name: option.name,
-            price: option.price,
-            quantity: 1,
-          },
-        ],
-      };
-    });
-  };
-
-  const flattenedAddons: OrderItemAddonRecord[] = Object.values(selectedAddons).flat();
-  const addonsTotalUnit = flattenedAddons.reduce((sum, a) => sum + a.price * (a.quantity || 1), 0);
-  const unitPrice = item.price + addonsTotalUnit;
-  const totalPrice = unitPrice * quantity;
-
-  const missingRequiredGroup = (item.addonGroups || []).find(
-    (g) => g.required && (!selectedAddons[g.id] || selectedAddons[g.id].length < Math.max(1, g.minSelect))
-  );
-
-  const canAddToCart = item.isAvailable && !missingRequiredGroup;
+  const canAddToCart = item.isAvailable;
 
   const handleAddToCart = () => {
     if (!canAddToCart) return;
-    addToCart(item, quantity, flattenedAddons, notes.trim());
+    addToCart(item, quantity, notes.trim());
     setJustAdded(true);
     setTimeout(() => {
       setJustAdded(false);
@@ -184,7 +101,7 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
                 <p className="text-[10px] sm:text-xs uppercase tracking-[0.25em] text-primary font-bold mb-1.5">{categoryName}</p>
                 <h2 id="modal-title" className="text-lg sm:text-2xl font-bold text-foreground font-playfair leading-tight line-clamp-3">{item.name}</h2>
               </div>
-              <p className="text-xl sm:text-3xl font-bold text-primary font-playfair whitespace-nowrap">{item.price.toFixed(2)} Birr</p>
+              <p className="text-xl sm:text-3xl font-bold text-primary font-playfair whitespace-nowrap">{item.price.toFixed(2)} ETB</p>
             </div>
             
             {/* Rating Summary & Badges */}
@@ -216,64 +133,6 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
 
             <p className="text-muted-foreground text-sm leading-relaxed mt-2">{item.description}</p>
           </div>
-
-          {/* Customization Options */}
-          {item.addonGroups && item.addonGroups.length > 0 && (
-            <div className="space-y-5 pt-4 border-t border-border">
-              <h3 className="text-sm font-bold uppercase tracking-wider text-primary">Customizations</h3>
-
-              {item.addonGroups.map((group) => {
-                const selectedInGroup = selectedAddons[group.id] || [];
-
-                return (
-                  <div key={group.id} className="p-4 sm:p-5 rounded-2xl bg-card/80 border border-primary/10 space-y-4">
-                    <div className="flex items-center justify-between">
-                      <h4 className="text-sm font-semibold text-foreground flex items-center gap-2">
-                        {group.name} 
-                        {group.required && <span className="bg-primary/20 text-primary text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full border border-primary/20">Required</span>}
-                      </h4>
-                      <span className="text-xs font-medium text-muted-foreground bg-background/40 px-2 py-1 rounded-md">
-                        {group.maxSelect === 1 ? "Select 1" : `Up to ${group.maxSelect}`}
-                      </span>
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                      {group.options.map((opt) => {
-                        const isSelected = selectedInGroup.some((a) => a.addonOptionId === opt.id);
-
-                        return (
-                          <button
-                            key={opt.id}
-                            type="button"
-                            disabled={!opt.isAvailable}
-                            onClick={() =>
-                              handleOptionToggle(
-                                group.id,
-                                { id: opt.id, name: opt.name, price: opt.price },
-                                group.maxSelect
-                              )
-                            }
-                            className={`flex items-center justify-between p-3.5 rounded-xl border text-sm font-medium transition-all active:scale-[0.98] ${
-                              !opt.isAvailable
-                                ? "opacity-40 cursor-not-allowed bg-card border-border text-zinc-600"
-                                : isSelected
-                                ? "bg-primary/15 border-primary/40 text-brand-300 shadow-[0_0_15px_rgba(182,141,64,0.15)] ring-1 ring-primary/50"
-                                : "bg-card border-border text-muted-foreground hover:bg-zinc-800 hover:border-zinc-700"
-                            }`}
-                          >
-                            <span className="truncate pr-2">{opt.name}</span>
-                            <span className={`font-bold ml-2 whitespace-nowrap ${isSelected ? 'text-primary' : 'text-muted-foreground'}`}>
-                              {opt.price > 0 ? `+${opt.price.toFixed(2)} Birr` : "Free"}
-                            </span>
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          )}
 
           {/* Special Requests */}
           <div className="pt-4 border-t border-border space-y-3">
@@ -328,8 +187,6 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
             className={`w-full sm:flex-1 sm:min-w-[240px] flex items-center justify-center gap-2 py-4 sm:py-3.5 px-6 rounded-2xl font-bold text-base sm:text-sm transition-all shadow-lg ${
               !item.isAvailable
                 ? "bg-zinc-800 text-muted-foreground cursor-not-allowed"
-                : missingRequiredGroup
-                ? "bg-zinc-800 text-muted-foreground border border-primary/30 cursor-not-allowed"
                 : justAdded
                 ? "bg-green-500 text-primary-foreground shadow-[0_0_20px_rgba(34,197,94,0.4)] scale-[1.02]"
                 : "bg-primary text-primary-foreground hover:bg-primary hover:scale-[1.02] active:scale-[0.98] shadow-[0_4px_20px_rgba(182,141,64,0.3)]"
@@ -338,14 +195,12 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
             {justAdded ? (
               <>
                 <Check className="w-5 h-5 sm:w-4 sm:h-4 stroke-[2.5]" />
-                <span>Added to Cart ({totalPrice.toFixed(2)} Birr)</span>
+                <span>Added to Cart ({totalPrice.toFixed(2)} ETB)</span>
               </>
-            ) : missingRequiredGroup ? (
-              <span>Please select: {missingRequiredGroup.name}</span>
             ) : (
               <>
                 <ShoppingBag className="w-5 h-5 sm:w-4 sm:h-4" />
-                <span>Add to Cart • {totalPrice.toFixed(2)} Birr</span>
+                <span>Add to Cart • {totalPrice.toFixed(2)} ETB</span>
               </>
             )}
           </button>

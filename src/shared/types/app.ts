@@ -8,22 +8,6 @@ export type CategoryRecord = {
   status: boolean;
 };
 
-export type AddonOptionRecord = {
-  id: string;
-  name: string;
-  price: number;
-  isAvailable: boolean;
-  orderIndex?: number;
-};
-
-export type AddonGroupRecord = {
-  id: string;
-  name: string;
-  required: boolean;
-  minSelect: number;
-  maxSelect: number;
-  options: AddonOptionRecord[];
-};
 
 export type IngredientRecord = {
   id: string;
@@ -62,20 +46,12 @@ export type MenuItemRecord = {
   spicy?: boolean;
   sugarFree?: boolean;
   allergens?: string[];
-  addonGroups?: AddonGroupRecord[];
   ingredients?: MenuItemIngredientRecord[];
   recipe?: FoodIngredientRecord[];
   createdAt?: string;
   updatedAt?: string;
 };
 
-export type OrderItemAddonRecord = {
-  id?: string;
-  addonOptionId?: string | null;
-  name: string;
-  price: number;
-  quantity?: number;
-};
 
 export type CartItemRecord = {
   id: string;
@@ -86,7 +62,6 @@ export type CartItemRecord = {
   image?: string | null;
   category: string;
   isAvailable: boolean;
-  addons?: OrderItemAddonRecord[];
   notes?: string;
 };
 
@@ -182,7 +157,6 @@ export type OrderItemRecord = {
   price: number;
   quantity: number;
   notes?: string | null;
-  addons?: OrderItemAddonRecord[];
 };
 
 export type OrderRecord = {

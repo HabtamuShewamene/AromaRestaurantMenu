@@ -71,16 +71,6 @@ export default function OrderCard({ order, onUpdateStatus }: OrderCardProps) {
                 </span>
               </div>
               
-              {item.addons && item.addons.length > 0 && (
-                <div className="ml-8 space-y-0.5">
-                  {item.addons.map((a, i) => (
-                    <div key={i} className="flex justify-between text-xs text-[#A7ABB0]">
-                      <span>+ {a.name}</span>
-                      {a.price > 0 && <span>{a.price.toFixed(2)} ETB</span>}
-                    </div>
-                  ))}
-                </div>
-              )}
               
               {item.notes && (
                 <div className="ml-8 mt-1 flex items-start gap-1.5 text-xs text-amber-500/80 bg-amber-500/5 p-2 rounded-lg border border-amber-500/10">

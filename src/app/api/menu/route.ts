@@ -9,13 +9,6 @@ export async function GET() {
       prisma.menuItem.findMany({
         include: {
           category: true,
-          addonGroups: {
-            include: {
-              options: {
-                orderBy: { orderIndex: "asc" },
-              },
-            },
-          },
         },
         orderBy: { createdAt: "desc" },
       }),
@@ -98,9 +91,6 @@ export async function POST(request: NextRequest) {
       },
       include: {
         category: true,
-        addonGroups: {
-          include: { options: true },
-        },
       },
     });
 

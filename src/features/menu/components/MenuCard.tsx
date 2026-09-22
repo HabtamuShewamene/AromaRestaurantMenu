@@ -33,7 +33,6 @@ export default function MenuCard({ item, onViewDetails, index = 0 }: MenuCardPro
   const rating = item.averageRating || 0;
   const reviewCount = item.totalReviews || 0;
   const categoryName = typeof item.category === "string" ? item.category : item.category.name;
-  const hasAddons = Boolean(item.addonGroups && item.addonGroups.length > 0);
 
   const tiktokId = getTikTokVideoId(item.videoUrl);
   const isPhoto = isPhotoPost(item.videoUrl);
@@ -54,7 +53,6 @@ export default function MenuCard({ item, onViewDetails, index = 0 }: MenuCardPro
   const handleAddToCart = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (!item.isAvailable) return;
-    if (hasAddons) { onViewDetails?.(item); return; }
     addToCart(item, 1);
     setJustAdded(true);
     setTimeout(() => setJustAdded(false), 1500);
@@ -212,8 +210,6 @@ export default function MenuCard({ item, onViewDetails, index = 0 }: MenuCardPro
           >
             {justAdded ? (
               <><Check className="w-3 h-3 stroke-[2.5]" /><span>Added</span></>
-            ) : hasAddons ? (
-              <><Plus className="w-3 h-3 stroke-[2.5]" /><span>Customize</span></>
             ) : (
               <><Plus className="w-3 h-3 stroke-[2.5]" /><span>Add</span></>
             )}

@@ -11,13 +11,6 @@ export async function getMenu(categorySlug?: string) {
     where: whereClause,
     include: {
       category: true,
-      addonGroups: {
-        include: {
-          options: {
-            orderBy: { orderIndex: "asc" },
-          },
-        },
-      },
       reviews: {
         where: { isApproved: true },
         select: { rating: true },
@@ -32,13 +25,6 @@ export async function getMenuItemById(id: string) {
     where: { id },
     include: {
       category: true,
-      addonGroups: {
-        include: {
-          options: {
-            orderBy: { orderIndex: "asc" },
-          },
-        },
-      },
       ingredients: {
         include: { ingredient: true },
       },
@@ -57,9 +43,3 @@ export async function setItemAvailability(id: string, isAvailable: boolean) {
   });
 }
 
-export async function setAddonAvailability(optionId: string, isAvailable: boolean) {
-  return prisma.addonOption.update({
-    where: { id: optionId },
-    data: { isAvailable },
-  });
-}

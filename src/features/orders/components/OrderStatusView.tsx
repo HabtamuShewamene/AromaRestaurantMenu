@@ -187,15 +187,7 @@ export default function OrderStatusView({ initialOrder }: { initialOrder: OrderR
                   <span className="text-primary mr-2">{item.quantity}x</span>
                   {item.name}
                 </p>
-                {item.addons && item.addons.length > 0 && (
-                  <div className="text-xs text-muted-foreground space-y-0.5 ml-6">
-                    {item.addons.map((a, i) => (
-                      <p key={i}>
-                        + {a.name} {a.price > 0 ? `(${a.price.toFixed(2)} ETB)` : ""}
-                      </p>
-                    ))}
-                  </div>
-                )}
+
                 {item.notes && (
                   <p className="text-xs text-muted-foreground italic ml-6">"{item.notes}"</p>
                 )}

@@ -1,15 +1,12 @@
-﻿import prisma from "../../src/server/db/prisma";
+import prisma from "../../src/server/db/prisma";
 
 async function main() {
   console.log("Seeding 44 Aroma Restaurant items from TikTok...");
 
   await prisma.review.deleteMany();
-  await prisma.orderItemAddon.deleteMany();
   await prisma.orderItem.deleteMany();
   await prisma.order.deleteMany();
   await prisma.foodIngredient.deleteMany();
-  await prisma.addonOption.deleteMany();
-  await prisma.addonGroup.deleteMany();
   await prisma.menuItem.deleteMany();
   await prisma.category.deleteMany();
   console.log("Cleared old data");

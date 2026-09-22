@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { CartItemRecord, MenuItemRecord, OrderItemAddonRecord } from "@/shared/types/app";
+import { CartItemRecord, MenuItemRecord } from "@/shared/types/app";
 
 const CART_STORAGE_KEY = "aroma-restaurant-cart";
 const TABLE_STORAGE_KEY = "aroma-restaurant-table";
@@ -18,7 +18,6 @@ interface CartContextType {
   addToCart: (
     item: MenuItemRecord,
     quantity: number,
-    addons?: OrderItemAddonRecord[],
     notes?: string
   ) => void;
   removeFromCart: (id: string) => void;
@@ -78,22 +77,14 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const addToCart = (
     item: MenuItemRecord,
     quantity: number,
-    addons: OrderItemAddonRecord[] = [],
     notes: string = ""
   ) => {
     if (!item.isAvailable) return;
 
     setCartItems((prev) => {
-      // Check if an item with identical item ID, add-ons, and notes exists
-      const addonsSignature = JSON.stringify(
-        [...addons].sort((a, b) => a.name.localeCompare(b.name))
-      );
-
+      // Check if an item with identical item ID and notes exists
       const existingIndex = prev.findIndex((i) => {
-        const itemAddonsSig = JSON.stringify(
-          [...(i.addons || [])].sort((a, b) => a.name.localeCompare(b.name))
-        );
-        return i.itemId === item.id && itemAddonsSig === addonsSignature && (i.notes || "") === (notes || "");
+        return i.itemId === item.id && (i.notes || "") === (notes || "");
       });
 
       if (existingIndex > -1) {
@@ -116,7 +107,6 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
           image: item.image,
           category: categoryName,
           isAvailable: item.isAvailable,
-          addons,
           notes: notes || undefined,
         },
       ];
@@ -143,13 +133,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   const cartCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
 
-  // Calculate cart total including all selected addon prices
   const cartTotal = cartItems.reduce((acc, item) => {
-    const addonsCost = (item.addons || []).reduce(
-      (sum, addon) => sum + addon.price * (addon.quantity || 1),
-      0
-    );
-    return acc + (item.price + addonsCost) * item.quantity;
+    return acc + item.price * item.quantity;
   }, 0);
 
   return (

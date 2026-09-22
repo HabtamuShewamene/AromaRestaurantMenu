@@ -55,12 +55,6 @@ export default function MenuItemCard({ item, onEdit, onDelete, onToggleAvailabil
           </span>
         </div>
 
-        {/* Addon Indicator */}
-        {item.addonGroups && item.addonGroups.length > 0 && (
-          <div className="absolute top-2 right-2 sm:top-3 sm:right-3 px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-full bg-primary/90 text-primary-foreground text-[8px] sm:text-[10px] font-bold uppercase tracking-widest shadow-lg">
-            +{item.addonGroups.length} Add-ons
-          </div>
-        )}
       </div>
 
       {/* ── Content ── */}

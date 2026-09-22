@@ -25,12 +25,6 @@ type OrderWithRelations = {
     item?: {
       name: string;
     } | null;
-    addons?: Array<{
-      id: string;
-      name: string;
-      price: number;
-      quantity: number;
-    }>;
   }>;
 };
 
@@ -57,12 +51,6 @@ export function serializeOrder(order: OrderWithRelations) {
       price: item.price,
       quantity: item.quantity,
       notes: item.notes ?? null,
-      addons: (item.addons || []).map((addon) => ({
-        id: addon.id,
-        name: addon.name,
-        price: addon.price,
-        quantity: addon.quantity,
-      })),
     })),
   };
 }

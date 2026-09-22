@@ -68,12 +68,6 @@ export default function CartManager() {
             itemId: item.itemId,
             quantity: item.quantity,
             notes: item.notes || null,
-            addons: (item.addons || []).map((a) => ({
-              addonOptionId: a.addonOptionId,
-              name: a.name,
-              price: a.price,
-              quantity: a.quantity || 1,
-            })),
           })),
         }),
       });

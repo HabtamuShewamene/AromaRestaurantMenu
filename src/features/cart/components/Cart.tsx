@@ -28,13 +28,8 @@ export default function Cart({
   tableNumber,
   onClose,
 }: CartProps) {
-  // Calculate total including addons
   const total = items.reduce((sum, item) => {
-    const addonsCost = (item.addons || []).reduce(
-      (addonSum, addon) => addonSum + addon.price * (addon.quantity || 1),
-      0
-    );
-    return sum + (item.price + addonsCost) * item.quantity;
+    return sum + item.price * item.quantity;
   }, 0);
 
   const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
@@ -99,11 +94,7 @@ export default function Cart({
             </motion.div>
           ) : (
             items.map((item) => {
-              const addonsCost = (item.addons || []).reduce(
-                (sum, a) => sum + a.price * (a.quantity || 1),
-                0
-              );
-              const lineUnitPrice = item.price + addonsCost;
+              const lineUnitPrice = item.price;
               const lineTotal = lineUnitPrice * item.quantity;
 
               return (
@@ -132,19 +123,6 @@ export default function Cart({
                     <p className="text-sm font-semibold text-foreground truncate">{item.name}</p>
                     <p className="text-[11px] text-primary/80 mb-1">{item.category}</p>
 
-                    {/* Addons List */}
-                    {item.addons && item.addons.length > 0 && (
-                      <div className="space-y-0.5 mb-2">
-                        {item.addons.map((addon, i) => (
-                          <p key={i} className="text-[11px] text-muted-foreground flex items-center gap-1">
-                            <span className="text-primary">+</span> {addon.name}{" "}
-                            {addon.price > 0 && (
-                              <span className="text-muted-foreground">({addon.price.toFixed(2)} ETB)</span>
-                            )}
-                          </p>
-                        ))}
-                      </div>
-                    )}
 
                     {/* Notes */}
                     {item.notes && (

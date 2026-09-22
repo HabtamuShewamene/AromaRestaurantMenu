@@ -185,10 +185,10 @@ export default function MenuExplorer({ showHero = false }: { showHero?: boolean 
 
                 {/* Price */}
                 <div>
-                  <h4 className="text-xs font-semibold text-muted-foreground mb-3 uppercase tracking-wider">Price Range ($)</h4>
+                  <h4 className="text-xs font-semibold text-muted-foreground mb-3 uppercase tracking-wider">Price Range (ETB)</h4>
                   <div className="flex items-center gap-4">
                     <div className="relative flex-1">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-[10px]">ETB</span>
                       <input 
                         type="number" 
                         placeholder="Min"
@@ -199,7 +199,7 @@ export default function MenuExplorer({ showHero = false }: { showHero?: boolean 
                     </div>
                     <span className="text-zinc-600">-</span>
                     <div className="relative flex-1">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-[10px]">ETB</span>
                       <input 
                         type="number" 
                         placeholder="Max"

@@ -11,7 +11,7 @@ export async function getAllTables() {
               items: {
                 include: {
                   item: true,
-                  addons: true,
+
                 },
               },
             },
@@ -38,7 +38,7 @@ export async function getTableByNumber(tableNumber: number) {
               items: {
                 include: {
                   item: true,
-                  addons: true,
+
                 },
               },
             },
@@ -63,7 +63,7 @@ export async function getTableByQrIdentifier(identifier: string) {
               items: {
                 include: {
                   item: true,
-                  addons: true,
+
                 },
               },
             },
@@ -117,7 +117,7 @@ export async function getOrCreateActiveSession(tableId: string, guestCount: numb
           items: {
             include: {
               item: true,
-              addons: true,
+
             },
           },
         },

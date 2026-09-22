@@ -5,12 +5,6 @@ export type CreateOrderItemInput = {
   itemId: string;
   quantity: number;
   notes?: string;
-  addons?: Array<{
-    addonOptionId?: string;
-    name: string;
-    price: number;
-    quantity?: number;
-  }>;
 };
 
 export type CreateOrderInput = {
@@ -55,9 +49,6 @@ export async function createOrder(input: CreateOrderInput) {
     where: { id: { in: itemIds } },
     include: {
       ingredients: true,
-      addonGroups: {
-        include: { options: true },
-      },
     },
   });
 
@@ -74,12 +65,8 @@ export async function createOrder(input: CreateOrderInput) {
       throw new Error(`"${dish.name}" is currently sold out`);
     }
 
-    const addonsCost = (inputItem.addons || []).reduce(
-      (sum, addon) => sum + addon.price * (addon.quantity || 1),
-      0
-    );
     const itemUnitPrice = dish.price;
-    const itemTotal = (itemUnitPrice + addonsCost) * inputItem.quantity;
+    const itemTotal = itemUnitPrice * inputItem.quantity;
     orderTotal += itemTotal;
 
     return {
@@ -88,12 +75,6 @@ export async function createOrder(input: CreateOrderInput) {
       price: itemUnitPrice,
       quantity: inputItem.quantity,
       notes: inputItem.notes || null,
-      addons: (inputItem.addons || []).map((addon) => ({
-        addonOptionId: addon.addonOptionId || null,
-        name: addon.name,
-        price: addon.price,
-        quantity: addon.quantity || 1,
-      })),
       ingredients: dish.ingredients,
     };
   });
@@ -117,16 +98,6 @@ export async function createOrder(input: CreateOrderInput) {
           quantity: item.quantity,
           price: item.price,
           notes: item.notes,
-          addons: item.addons.length > 0
-            ? {
-                create: item.addons.map((a) => ({
-                  addonOptionId: a.addonOptionId,
-                  name: a.name,
-                  price: a.price,
-                  quantity: a.quantity,
-                })),
-              }
-            : undefined,
         })),
       },
     },
@@ -134,7 +105,6 @@ export async function createOrder(input: CreateOrderInput) {
       items: {
         include: {
           item: true,
-          addons: true,
         },
       },
       table: true,
@@ -193,7 +163,6 @@ export async function updateOrderStatus(orderId: string, nextStatus: string) {
       items: {
         include: {
           item: true,
-          addons: true,
         },
       },
       table: true,
@@ -222,7 +191,6 @@ export async function getOrders(filters: {
       items: {
         include: {
           item: true,
-          addons: true,
         },
       },
       table: true,
@@ -241,7 +209,6 @@ export async function getOrderById(orderId: string) {
       items: {
         include: {
           item: true,
-          addons: true,
         },
       },
       table: true,
@@ -260,7 +227,7 @@ export async function getKitchenOrders() {
       items: {
         include: {
           item: true,
-          addons: true,
+
         },
       },
       table: true,

@@ -39,7 +39,6 @@ export default function AdminLayout({
       items: [
         { label: "Menu Items", href: "/admin/menu", icon: Utensils },
         { label: "Categories", href: "/admin/categories", icon: ListTree },
-        { label: "Add-ons", href: "/admin/add-ons", icon: PlusCircle },
       ],
     },
     {

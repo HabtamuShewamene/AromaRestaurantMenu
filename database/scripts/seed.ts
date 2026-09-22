@@ -32,13 +32,12 @@ async function main() {
 
   // 1. Clean existing records in correct order
   await prisma.waiterRequest.deleteMany({});
-  await prisma.orderItemAddon.deleteMany({});
+
   await prisma.orderItem.deleteMany({});
   await prisma.order.deleteMany({});
   await prisma.tableSession.deleteMany({});
   await prisma.diningTable.deleteMany({});
-  await prisma.addonOption.deleteMany({});
-  await prisma.addonGroup.deleteMany({});
+
   await prisma.review.deleteMany({});
   await prisma.foodIngredient.deleteMany({});
   await prisma.menuItem.deleteMany({});
@@ -194,22 +193,6 @@ async function main() {
       ingredients: {
         create: [{ ingredientId: coffeeBeans.id, quantity: 0.02 }],
       },
-      addonGroups: {
-        create: [
-          {
-            name: "Espresso Shots",
-            required: false,
-            minSelect: 0,
-            maxSelect: 2,
-            options: {
-              create: [
-                { name: "Extra Espresso Shot", price: 1.5, orderIndex: 1 },
-                { name: "Decaf Roast", price: 0.5, orderIndex: 2 },
-              ],
-            },
-          },
-        ],
-      },
     },
   });
 
@@ -235,36 +218,6 @@ async function main() {
           { ingredientId: milk.id, quantity: 0.2 },
         ],
       },
-      addonGroups: {
-        create: [
-          {
-            name: "Milk Selection",
-            required: true,
-            minSelect: 1,
-            maxSelect: 1,
-            options: {
-              create: [
-                { name: "Whole Milk (Standard)", price: 0.0, orderIndex: 1 },
-                { name: "Oat Milk (Barista)", price: 0.75, orderIndex: 2 },
-                { name: "Almond Milk", price: 0.75, orderIndex: 3 },
-              ],
-            },
-          },
-          {
-            name: "Syrups & Flavors",
-            required: false,
-            minSelect: 0,
-            maxSelect: 2,
-            options: {
-              create: [
-                { name: "Madagascar Vanilla", price: 0.6, orderIndex: 1 },
-                { name: "Salted Caramel", price: 0.6, orderIndex: 2 },
-                { name: "Hazelnut", price: 0.6, orderIndex: 3 },
-              ],
-            },
-          },
-        ],
-      },
     },
   });
 
@@ -288,23 +241,6 @@ async function main() {
         create: [
           { ingredientId: matchaPowder.id, quantity: 0.005 },
           { ingredientId: oatMilk.id, quantity: 0.25 },
-        ],
-      },
-      addonGroups: {
-        create: [
-          {
-            name: "Sweetness Level",
-            required: false,
-            minSelect: 0,
-            maxSelect: 1,
-            options: {
-              create: [
-                { name: "Unsweetened (Zero Sugar)", price: 0.0, orderIndex: 1 },
-                { name: "Honey Sweetened", price: 0.5, orderIndex: 2 },
-                { name: "Vanilla Sweetened", price: 0.5, orderIndex: 3 },
-              ],
-            },
-          },
         ],
       },
     },
