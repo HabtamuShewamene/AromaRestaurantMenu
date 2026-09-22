@@ -146,11 +146,13 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
       <div 
         ref={modalRef}
         tabIndex={-1}
-        className="relative flex flex-col w-full max-h-[95vh] sm:max-h-[90vh] max-w-2xl overflow-hidden rounded-t-[2rem] sm:rounded-3xl bg-[#111111] shadow-2xl outline-none"
+        className="relative flex flex-col w-full max-h-[92vh] sm:max-h-[90vh] max-w-2xl overflow-hidden rounded-t-[2rem] sm:rounded-3xl bg-[#111111] shadow-[0_-10px_40px_rgba(182,141,64,0.15)] border-t sm:border border-gold-500/20 outline-none"
         role="dialog"
         aria-modal="true"
         aria-labelledby="modal-title"
       >
+        {/* Mobile Drag Handle Indicator */}
+        <div className="absolute top-3 left-1/2 -translate-x-1/2 w-12 h-1.5 bg-white/20 rounded-full z-40 sm:hidden" />
         {/* Edge-to-edge Image Header */}
         <div className="relative h-56 sm:h-72 w-full flex-shrink-0">
           <Image
@@ -179,12 +181,12 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
           
           {/* Title and Pricing */}
           <div className="space-y-3">
-            <div className="flex items-start justify-between gap-4">
+            <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2 sm:gap-4">
               <div>
                 <p className="text-[10px] sm:text-xs uppercase tracking-[0.25em] text-gold-500 font-bold mb-1.5">{categoryName}</p>
                 <h2 id="modal-title" className="text-2xl sm:text-3xl font-bold text-white font-playfair leading-tight">{item.name}</h2>
               </div>
-              <p className="text-2xl sm:text-3xl font-bold text-gold-400 font-playfair whitespace-nowrap">{item.price.toFixed(2)} Birr</p>
+              <p className="text-xl sm:text-3xl font-bold text-gold-400 font-playfair whitespace-nowrap">{item.price.toFixed(2)} Birr</p>
             </div>
             
             {/* Rating Summary & Badges */}
@@ -226,7 +228,7 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
                 const selectedInGroup = selectedAddons[group.id] || [];
 
                 return (
-                  <div key={group.id} className="p-4 sm:p-5 rounded-2xl bg-zinc-950/80 border border-white/5 space-y-4">
+                  <div key={group.id} className="p-4 sm:p-5 rounded-2xl bg-zinc-950/80 border border-gold-500/10 space-y-4">
                     <div className="flex items-center justify-between">
                       <h4 className="text-sm font-semibold text-white flex items-center gap-2">
                         {group.name} 
@@ -297,7 +299,7 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
         </div>
 
         {/* Sticky Glassmorphism Footer */}
-        <div className="flex-shrink-0 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-white/10 bg-[#111111]/95 backdrop-blur-xl px-5 sm:px-7 py-4 sm:py-5 z-30 relative">
+        <div className="flex-shrink-0 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-gold-500/20 bg-[#111111]/95 backdrop-blur-xl px-5 sm:px-7 py-4 pb-8 sm:pb-5 sm:py-5 z-30 relative">
           
           {/* Quantity Controls - Large Touch Targets */}
           <div className="flex items-center justify-between w-full sm:w-auto bg-zinc-950 p-1.5 rounded-2xl border border-white/10 shadow-inner">
