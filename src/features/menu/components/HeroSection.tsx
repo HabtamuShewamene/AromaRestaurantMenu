@@ -101,38 +101,6 @@ export default function HeroSection({ mode = "compact" }: HeroSectionProps) {
           </h1>
         </motion.div>
 
-        {/* Description */}
-        <motion.p
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.15 }}
-          className="text-center text-zinc-300 text-xs sm:text-sm max-w-xl leading-relaxed mb-2.5 sm:mb-3.5 font-light line-clamp-2 px-2"
-        >
-          {restaurant.description}
-        </motion.p>
-
-        {/* Restaurant Details Info Bar */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5, delay: 0.3 }}
-          className="flex flex-wrap items-center justify-center gap-2.5 sm:gap-6 mb-3 sm:mb-4 text-[11px] sm:text-xs text-zinc-300 bg-black/40 backdrop-blur-md px-3.5 sm:px-5 py-1.5 sm:py-2 rounded-xl border border-white/5"
-        >
-          <div className="flex items-center gap-1.5">
-            <Clock className="w-3.5 h-3.5 text-gold-400" />
-            <span>{restaurant.openingTime} - {restaurant.closingTime}</span>
-          </div>
-          <div className="hidden sm:block w-px h-3 bg-white/10" />
-          <div className="hidden xs:flex items-center gap-1.5">
-            <MapPin className="w-3.5 h-3.5 text-gold-400" />
-            <span>{restaurant.address}</span>
-          </div>
-          <div className="hidden md:block w-px h-3 bg-white/10" />
-          <div className="hidden md:flex items-center gap-1.5">
-            <Phone className="w-3.5 h-3.5 text-gold-400" />
-            <span>{restaurant.phone}</span>
-          </div>
-        </motion.div>
 
         {/* Social Links & CTA */}
         <motion.div
@@ -148,18 +116,6 @@ export default function HeroSection({ mode = "compact" }: HeroSectionProps) {
             <span className="relative z-10">View Menu</span>
             <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
           </button>
-
-          <div className="flex items-center gap-3 text-xs">
-            <a href={restaurant.socialLinks.instagram} className="text-zinc-400 font-bold hover:text-gold-400 transition-colors text-[11px]">
-              IG
-            </a>
-            <a href={restaurant.socialLinks.facebook} className="text-zinc-400 font-bold hover:text-gold-400 transition-colors text-[11px]">
-              FB
-            </a>
-            <a href={restaurant.socialLinks.twitter} className="text-zinc-400 font-bold hover:text-gold-400 transition-colors text-[11px]">
-              X
-            </a>
-          </div>
         </motion.div>
       </div>
 
