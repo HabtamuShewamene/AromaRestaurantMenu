@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { CategoryRecord, MenuItemRecord, IngredientRecord, FoodIngredientRecord } from "@/shared/types/app";
+import { X, Upload, Plus, Trash2, CheckCircle2 } from "lucide-react";
+import Image from "next/image";
 
 type MenuFormProps = {
   categories: CategoryRecord[];
@@ -47,6 +49,7 @@ export default function MenuForm({
   const [isSaving, setIsSaving] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false);
 
   const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -84,7 +87,6 @@ export default function MenuForm({
     const qty = Number(ingQty);
     if (qty <= 0) return;
 
-    // prevent duplicates
     if (recipe.some(r => r.ingredientId === selectedIng)) {
       alert("Ingredient already added. Remove it first to update quantity.");
       return;
@@ -95,24 +97,35 @@ export default function MenuForm({
     setIngQty("");
   };
 
+  const handleRemoveIngredient = (id: string) => {
+    setRecipe(recipe.filter(r => r.ingredientId !== id));
+  };
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setIsSaving(true);
     setError("");
+    setSuccess(false);
 
     try {
+      if (!name.trim()) throw new Error("Item name is required.");
+      if (Number(price) < 0) throw new Error("Price cannot be negative.");
+      if (!category && !categoryName) throw new Error("Category is required.");
+
       await onSubmit({
-        name,
+        name: name.trim(),
         price: Number(price),
-        description,
+        description: description.trim(),
         image,
         category: category || undefined,
-        categoryName: category ? undefined : categoryName || undefined,
+        categoryName: category ? undefined : categoryName.trim() || undefined,
         isAvailable,
         recipe,
       });
 
+      setSuccess(true);
       if (!initialValues?.id) {
+        // Only clear if creating a new item
         setName("");
         setPrice("");
         setDescription("");
@@ -121,6 +134,7 @@ export default function MenuForm({
         setCategoryName("");
         setIsAvailable(true);
         setRecipe([]);
+        setTimeout(() => setSuccess(false), 3000);
       }
     } catch (submitError) {
       setError(submitError instanceof Error ? submitError.message : "Unable to save menu item");
@@ -130,161 +144,268 @@ export default function MenuForm({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="glass-card space-y-6 rounded-3xl p-8">
-      <div>
-        <h2 className="text-2xl font-bold">{initialValues?.id ? "Edit Menu Item" : "Create Menu Item"}</h2>
-        <p className="mt-2 text-sm text-muted-foreground">Add products, change pricing, and build recipes.</p>
-      </div>
-      
-      {error ? <p className="rounded-2xl border border-red-500/20 bg-red-500/10 p-4 text-sm text-red-500">{error}</p> : null}
-      
-      <div className="grid gap-6 md:grid-cols-2">
-        <div className="space-y-6">
-          <input
-            value={name}
-            onChange={(event) => setName(event.target.value)}
-            placeholder="Item name"
-            className="w-full rounded-2xl border border-border bg-card px-5 py-4 outline-none transition-all focus:border-primary"
-            required
-          />
-          <textarea
-            value={description}
-            onChange={(event) => setDescription(event.target.value)}
-            placeholder="Description"
-            className="min-h-32 w-full rounded-2xl border border-border bg-card px-5 py-4 outline-none transition-all focus:border-primary"
-            required
-          />
-          <div className="grid gap-4 md:grid-cols-2">
-            <input
-              type="number"
-              value={price}
-              onChange={(event) => setPrice(event.target.value)}
-              placeholder="Price"
-              className="w-full rounded-2xl border border-border bg-card px-5 py-4 outline-none transition-all focus:border-primary"
-              min="0"
-              step="0.01"
-              required
-            />
-            <select
-              value={category}
-              onChange={(event) => setCategory(event.target.value)}
-              className="w-full rounded-2xl border border-border bg-card px-5 py-4 outline-none transition-all focus:border-primary"
-            >
-              <option value="">Create from new category</option>
-              {categories.map((category) => (
-                <option key={category.id} value={category.id}>
-                  {category.name}
-                </option>
-              ))}
-            </select>
-          </div>
-          {!category ? (
-            <input
-              value={categoryName}
-              onChange={(event) => setCategoryName(event.target.value)}
-              placeholder="New category name"
-              className="w-full rounded-2xl border border-border bg-card px-5 py-4 outline-none transition-all focus:border-primary"
-              required
-            />
-          ) : null}
+    <form onSubmit={handleSubmit} className="flex flex-col h-full bg-[#111111] md:bg-[#242424] md:rounded-3xl md:border md:border-[#3A3D40] overflow-hidden">
+      {/* ── Form Header ── */}
+      <div className="flex items-center justify-between p-4 md:p-6 border-b border-[#3A3D40] bg-[#111111] md:bg-[#242424] sticky top-0 z-10">
+        <div>
+          <h2 className="text-xl md:text-2xl font-bold text-[#F7F7F2]">
+            {initialValues?.id ? "Edit Menu Item" : "Create Menu Item"}
+          </h2>
+          <p className="text-xs md:text-sm text-[#A7ABB0] mt-1">
+            {initialValues?.id ? "Update the details of this item." : "Add a new dish to your menu."}
+          </p>
         </div>
+        {onCancel && (
+          <button
+            type="button"
+            onClick={onCancel}
+            className="p-2 rounded-full bg-white/5 text-[#A7ABB0] hover:text-[#F7F7F2] hover:bg-white/10 transition-colors"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        )}
+      </div>
 
-        <div className="space-y-6">
-          {/* Image Upload */}
-          <div className="rounded-2xl border border-border bg-card/50 p-5">
-            <label className="block text-sm text-muted-foreground mb-3">Item Image URL or Upload</label>
-            <input
-              value={image}
-              onChange={(event) => setImage(event.target.value)}
-              placeholder="https://..."
-              className="w-full rounded-xl border border-border bg-card px-4 py-3 outline-none transition-all focus:border-primary mb-3"
-              required
-            />
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleImageUpload}
-              disabled={isUploading}
-              className="w-full text-sm file:mr-4 file:rounded-xl file:border-0 file:bg-brand-600 file:px-4 file:py-2 file:font-bold file:text-primary-foreground hover:file:bg-primary transition-all"
-            />
-            {isUploading ? <p className="text-sm text-primary mt-2">Uploading image...</p> : null}
+      {/* ── Form Body ── */}
+      <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-8">
+        
+        {/* Messages */}
+        {error && (
+          <div className="p-4 rounded-xl bg-[#D95C5C]/10 border border-[#D95C5C]/30 text-[#D95C5C] text-sm font-medium">
+            {error}
           </div>
+        )}
+        {success && (
+          <div className="p-4 rounded-xl bg-[#8BD43F]/10 border border-[#8BD43F]/30 text-[#8BD43F] text-sm font-medium flex items-center gap-2">
+            <CheckCircle2 className="w-5 h-5" />
+            Item successfully saved!
+          </div>
+        )}
 
-          {/* Recipe Builder */}
-          <div className="rounded-2xl border border-border bg-card/50 p-5">
-            <h3 className="text-sm font-semibold text-muted-foreground mb-3 uppercase tracking-wider">Recipe Builder</h3>
-            <p className="text-xs text-muted-foreground mb-4">Connect raw inventory to automatically deduct stock on sale.</p>
-            
-            {recipe.length > 0 && (
-              <ul className="space-y-2 mb-4">
-                {recipe.map((r, i) => {
-                   const ing = ingredients?.find(x => x.id === r.ingredientId);
-                   return (
-                     <li key={i} className="flex items-center justify-between bg-card p-3 rounded-xl border border-border text-sm">
-                       <span className="font-medium text-foreground">{ing?.name || "Unknown"}</span>
-                       <div className="flex items-center gap-4">
-                         <span className="text-primary font-mono">{r.quantity} {ing?.unit}</span>
-                         <button type="button" onClick={() => setRecipe(recipe.filter((_, idx) => idx !== i))} className="text-red-500/80 hover:text-red-400 transition-colors">
-                           Remove
-                         </button>
-                       </div>
-                     </li>
-                   )
-                })}
-              </ul>
+        {/* ── Core Details ── */}
+        <div className="space-y-5">
+          <h3 className="text-sm font-bold text-[#F7F7F2] uppercase tracking-wider border-b border-[#3A3D40] pb-2">
+            Core Details
+          </h3>
+          
+          <div className="grid gap-5 md:grid-cols-2">
+            <div className="space-y-1.5 md:col-span-2">
+              <label className="text-xs font-semibold text-[#A7ABB0]">Item Name *</label>
+              <input
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="e.g. Avocado Toast"
+                className="w-full rounded-xl border border-[#3A3D40] bg-[#111111] px-4 py-3 text-sm text-[#F7F7F2] outline-none transition-all focus:border-primary focus:ring-1 focus:ring-primary/50"
+                required
+              />
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold text-[#A7ABB0]">Price ($) *</label>
+              <input
+                type="number"
+                step="0.01"
+                min="0"
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+                placeholder="0.00"
+                className="w-full rounded-xl border border-[#3A3D40] bg-[#111111] px-4 py-3 text-sm text-[#F7F7F2] outline-none transition-all focus:border-primary focus:ring-1 focus:ring-primary/50"
+                required
+              />
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold text-[#A7ABB0]">Category *</label>
+              <div className="flex gap-2">
+                <select
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
+                  className="flex-1 rounded-xl border border-[#3A3D40] bg-[#111111] px-4 py-3 text-sm text-[#F7F7F2] outline-none transition-all focus:border-primary focus:ring-1 focus:ring-primary/50 appearance-none"
+                >
+                  <option value="">Select or create new...</option>
+                  {categories.map((c) => (
+                    <option key={c.id} value={c.id}>{c.name}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            {category === "" && (
+              <div className="space-y-1.5 md:col-span-2">
+                <label className="text-xs font-semibold text-[#A7ABB0]">New Category Name</label>
+                <input
+                  value={categoryName}
+                  onChange={(e) => setCategoryName(e.target.value)}
+                  placeholder="e.g. Breakfast"
+                  className="w-full rounded-xl border border-[#3A3D40] bg-[#111111] px-4 py-3 text-sm text-[#F7F7F2] outline-none transition-all focus:border-primary focus:ring-1 focus:ring-primary/50"
+                />
+              </div>
             )}
-            
-            <div className="flex gap-2">
-               <select 
-                  value={selectedIng} 
-                  onChange={e => setSelectedIng(e.target.value)}
-                  className="flex-1 rounded-xl border border-border bg-card px-4 py-2 text-sm outline-none focus:border-primary"
-               >
-                 <option value="">Select Ingredient</option>
-                 {ingredients?.map(ing => <option key={ing.id} value={ing.id}>{ing.name} ({ing.unit})</option>)}
-               </select>
-               <input 
-                  type="number" 
-                  step="0.01" 
-                  placeholder="Qty" 
-                  value={ingQty} 
-                  onChange={e => setIngQty(e.target.value)}
-                  className="w-24 rounded-xl border border-border bg-card px-4 py-2 text-sm outline-none focus:border-primary"
-               />
-               <button type="button" onClick={handleAddIngredient} className="bg-zinc-800 text-muted-foreground px-4 rounded-xl font-bold text-sm hover:bg-zinc-700 hover:text-foreground transition-colors">Add</button>
+
+            <div className="space-y-1.5 md:col-span-2">
+              <label className="text-xs font-semibold text-[#A7ABB0]">Description</label>
+              <textarea
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                placeholder="Describe the dish..."
+                rows={3}
+                className="w-full rounded-xl border border-[#3A3D40] bg-[#111111] px-4 py-3 text-sm text-[#F7F7F2] outline-none transition-all focus:border-primary focus:ring-1 focus:ring-primary/50 resize-none"
+              />
             </div>
           </div>
         </div>
+
+        {/* ── Image & Status ── */}
+        <div className="space-y-5">
+          <h3 className="text-sm font-bold text-[#F7F7F2] uppercase tracking-wider border-b border-[#3A3D40] pb-2">
+            Presentation & Status
+          </h3>
+          
+          <div className="grid gap-6 md:grid-cols-2">
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold text-[#A7ABB0]">Item Image</label>
+              <div className="flex flex-col gap-3">
+                {image ? (
+                  <div className="relative h-32 w-full rounded-xl overflow-hidden border border-[#3A3D40]">
+                    <Image src={image} alt="Preview" fill className="object-cover" />
+                    <button
+                      type="button"
+                      onClick={() => setImage("")}
+                      className="absolute top-2 right-2 p-1.5 rounded-full bg-black/60 text-white hover:bg-red-500/80 transition-colors"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+                ) : (
+                  <label className="flex flex-col items-center justify-center h-32 w-full rounded-xl border-2 border-dashed border-[#3A3D40] bg-white/5 hover:bg-white/10 transition-colors cursor-pointer text-[#A7ABB0] hover:text-[#F7F7F2] hover:border-primary/50 group">
+                    {isUploading ? (
+                      <span className="text-sm font-medium animate-pulse">Uploading...</span>
+                    ) : (
+                      <>
+                        <Upload className="w-6 h-6 mb-2 text-muted-foreground group-hover:text-primary transition-colors" />
+                        <span className="text-xs font-medium">Click to upload image</span>
+                      </>
+                    )}
+                    <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" disabled={isUploading} />
+                  </label>
+                )}
+                <input
+                  value={image}
+                  onChange={(e) => setImage(e.target.value)}
+                  placeholder="Or paste an image URL"
+                  className="w-full rounded-xl border border-[#3A3D40] bg-[#111111] px-4 py-2.5 text-xs text-[#F7F7F2] outline-none focus:border-primary"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <div className="space-y-1.5">
+                <label className="text-xs font-semibold text-[#A7ABB0]">Visibility</label>
+                <button
+                  type="button"
+                  onClick={() => setIsAvailable(!isAvailable)}
+                  className={`w-full flex items-center justify-between px-4 py-3.5 rounded-xl border transition-all ${
+                    isAvailable
+                      ? "bg-[#8BD43F]/10 border-[#8BD43F]/30 text-[#8BD43F]"
+                      : "bg-[#D95C5C]/10 border-[#D95C5C]/30 text-[#D95C5C]"
+                  }`}
+                >
+                  <span className="font-bold text-sm">
+                    {isAvailable ? "Available on Menu" : "Hidden from Menu"}
+                  </span>
+                  <div className={`w-3 h-3 rounded-full ${isAvailable ? "bg-[#8BD43F]" : "bg-[#D95C5C]"}`} />
+                </button>
+                <p className="text-[10px] text-[#A7ABB0] mt-1">
+                  Hidden items will not appear on the customer storefront.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* ── Recipe (Optional) ── */}
+        {ingredients.length > 0 && (
+          <div className="space-y-4">
+            <h3 className="text-sm font-bold text-[#F7F7F2] uppercase tracking-wider border-b border-[#3A3D40] pb-2">
+              Inventory Recipe (Optional)
+            </h3>
+            
+            <div className="flex flex-col sm:flex-row gap-2">
+              <select
+                value={selectedIng}
+                onChange={(e) => setSelectedIng(e.target.value)}
+                className="flex-1 rounded-xl border border-[#3A3D40] bg-[#111111] px-4 py-2.5 text-sm text-[#F7F7F2] outline-none focus:border-primary appearance-none"
+              >
+                <option value="">Select ingredient...</option>
+                {ingredients.map((i) => (
+                  <option key={i.id} value={i.id}>{i.name} ({i.unit})</option>
+                ))}
+              </select>
+              <input
+                type="number"
+                min="0"
+                step="0.01"
+                value={ingQty}
+                onChange={(e) => setIngQty(e.target.value)}
+                placeholder="Quantity"
+                className="w-full sm:w-28 rounded-xl border border-[#3A3D40] bg-[#111111] px-4 py-2.5 text-sm text-[#F7F7F2] outline-none focus:border-primary"
+              />
+              <button
+                type="button"
+                onClick={handleAddIngredient}
+                className="rounded-xl bg-white/10 px-4 py-2.5 text-sm font-bold text-white hover:bg-white/20 transition-colors flex items-center justify-center gap-1 shrink-0"
+              >
+                <Plus className="w-4 h-4" /> Add
+              </button>
+            </div>
+
+            {recipe.length > 0 && (
+              <div className="space-y-2 mt-3">
+                {recipe.map((r, idx) => {
+                  const ingDef = ingredients.find((i) => i.id === r.ingredientId);
+                  return (
+                    <div key={idx} className="flex items-center justify-between rounded-xl border border-[#3A3D40] bg-white/5 p-3">
+                      <div className="text-sm">
+                        <span className="font-bold text-[#F7F7F2]">{ingDef?.name || "Unknown"}</span>
+                        <span className="text-[#A7ABB0] ml-2">
+                          {r.quantity} {ingDef?.unit}
+                        </span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveIngredient(r.ingredientId)}
+                        className="p-1.5 rounded-lg text-[#D95C5C] hover:bg-[#D95C5C]/10 transition-colors"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
-      <div className="flex items-center justify-between border-t border-border pt-6 mt-4">
-        <label className="flex items-center gap-3 text-sm text-muted-foreground cursor-pointer group">
-          <div className={`w-5 h-5 rounded border flex items-center justify-center transition-colors ${isAvailable ? 'bg-primary border-primary' : 'bg-card border-zinc-700 group-hover:border-zinc-500'}`}>
-            {isAvailable && <span className="text-primary-foreground text-xs font-bold">✓</span>}
-          </div>
-          <input
-            type="checkbox"
-            checked={isAvailable}
-            onChange={(event) => setIsAvailable(event.target.checked)}
-            className="hidden"
-          />
-          Item is available for clients
-        </label>
-        
-        <div className="flex gap-3">
-          {onCancel ? (
-            <button type="button" onClick={onCancel} className="rounded-xl border border-border px-6 py-2.5 font-bold text-muted-foreground transition-colors hover:border-white/20 hover:text-foreground hover:bg-foreground/5">
-              Cancel
-            </button>
-          ) : null}
+      {/* ── Form Footer Actions ── */}
+      <div className="p-4 md:p-6 border-t border-[#3A3D40] bg-[#111111] md:bg-[#242424] flex gap-3 sticky bottom-0">
+        {onCancel && (
           <button
-            type="submit"
+            type="button"
+            onClick={onCancel}
             disabled={isSaving}
-            className="rounded-xl bg-brand-600 px-6 py-2.5 font-bold text-primary-foreground transition-all hover:bg-primary hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none"
+            className="flex-1 py-3.5 rounded-xl border border-[#3A3D40] text-[#A7ABB0] font-bold hover:text-[#F7F7F2] hover:bg-white/5 transition-colors"
           >
-            {isSaving ? "Saving..." : submitLabel}
+            Cancel
           </button>
-        </div>
+        )}
+        <button
+          type="submit"
+          disabled={isSaving}
+          className="flex-[2] py-3.5 rounded-xl bg-primary text-primary-foreground font-black tracking-wide uppercase hover:bg-[#7bc235] transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_4px_14px_rgba(139,212,63,0.3)]"
+        >
+          {isSaving ? "Saving..." : submitLabel}
+        </button>
       </div>
     </form>
   );
