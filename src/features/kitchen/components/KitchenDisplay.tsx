@@ -253,7 +253,7 @@ export default function KitchenDisplay() {
           {/* Digital Clock */}
           <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-card/90 border border-border text-muted-foreground font-mono">
             <Clock className="w-3.5 h-3.5 text-primary" />
-            <span>
+            <span suppressHydrationWarning>
               {currentTime.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" })}
             </span>
           </div>

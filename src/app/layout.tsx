@@ -34,6 +34,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning data-scroll-behavior="smooth">
       <body
+        suppressHydrationWarning
         className={`${inter.variable} ${playfair.variable} font-inter bg-background text-foreground min-h-screen antialiased`}
       >
         <ThemeProvider
