@@ -140,19 +140,17 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
 
   return (
     <div 
-      className="fixed inset-0 z-[70] flex items-end sm:items-center justify-center bg-black/80 backdrop-blur-sm sm:p-4 transition-all duration-300"
+      className="fixed inset-0 z-[70] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 transition-all duration-300"
       onClick={handleBackdropClick}
     >
       <div 
         ref={modalRef}
         tabIndex={-1}
-        className="relative flex flex-col w-full max-h-[80vh] sm:max-h-[85vh] max-w-xl overflow-hidden rounded-t-[2rem] sm:rounded-3xl bg-[#111111] shadow-[0_-10px_40px_rgba(182,141,64,0.15)] border-t sm:border border-gold-500/20 outline-none"
+        className="relative flex flex-col w-full max-w-xl max-h-[85vh] overflow-hidden rounded-[2rem] sm:rounded-3xl bg-[#111111] shadow-[0_0_40px_rgba(182,141,64,0.15)] border border-gold-500/20 outline-none"
         role="dialog"
         aria-modal="true"
         aria-labelledby="modal-title"
       >
-        {/* Mobile Drag Handle Indicator */}
-        <div className="absolute top-3 left-1/2 -translate-x-1/2 w-12 h-1.5 bg-white/20 rounded-full z-40 sm:hidden" />
         {/* Edge-to-edge Image Header */}
         <div className="relative h-48 sm:h-64 w-full flex-shrink-0">
           <Image
