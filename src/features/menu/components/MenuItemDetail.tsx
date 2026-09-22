@@ -182,7 +182,7 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-xs uppercase tracking-[0.2em] text-gold-500 font-semibold">{categoryName}</p>
-                  <p className="text-3xl font-bold text-gold-400 font-playfair">${item.price.toFixed(2)}</p>
+                  <p className="text-3xl font-bold text-gold-400 font-playfair">{item.price.toFixed(2)} ETB</p>
                 </div>
                 <span
                   className={`rounded-full px-3.5 py-1.5 font-bold text-xs uppercase tracking-wider ${
@@ -243,7 +243,7 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
                           >
                             <span className="truncate">{opt.name}</span>
                             <span className="font-bold text-zinc-400 ml-2">
-                              {opt.price > 0 ? `+$${opt.price.toFixed(2)}` : "Free"}
+                              {opt.price > 0 ? `+${opt.price.toFixed(2)} ETB` : "Free"}
                             </span>
                           </button>
                         );
@@ -306,14 +306,14 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
               {justAdded ? (
                 <>
                   <Check className="w-4 h-4 stroke-[2.5]" />
-                  <span>Added to Cart (${totalPrice.toFixed(2)})</span>
+                  <span>Added to Cart ({totalPrice.toFixed(2)} ETB)</span>
                 </>
               ) : missingRequiredGroup ? (
                 <span>Please select: {missingRequiredGroup.name}</span>
               ) : (
                 <>
                   <ShoppingBag className="w-4 h-4" />
-                  <span>Add to Cart • ${totalPrice.toFixed(2)}</span>
+                  <span>Add to Cart • {totalPrice.toFixed(2)} ETB</span>
                 </>
               )}
             </button>

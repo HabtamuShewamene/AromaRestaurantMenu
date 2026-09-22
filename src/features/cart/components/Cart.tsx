@@ -139,7 +139,7 @@ export default function Cart({
                           <p key={i} className="text-[11px] text-zinc-400 flex items-center gap-1">
                             <span className="text-gold-400">+</span> {addon.name}{" "}
                             {addon.price > 0 && (
-                              <span className="text-zinc-500">(${addon.price.toFixed(2)})</span>
+                              <span className="text-zinc-500">({addon.price.toFixed(2)} ETB)</span>
                             )}
                           </p>
                         ))}
@@ -175,7 +175,7 @@ export default function Cart({
 
                   {/* Price + remove */}
                   <div className="flex flex-col items-end justify-between h-full gap-3 flex-shrink-0">
-                    <span className="text-sm font-bold text-gold-400 font-mono">${lineTotal.toFixed(2)}</span>
+                    <span className="text-sm font-bold text-gold-400 font-mono">{lineTotal.toFixed(2)} ETB</span>
                     <button
                       onClick={() => onRemove(item.id)}
                       className="w-8 h-8 flex items-center justify-center rounded-full text-zinc-500 hover:bg-red-500/15 hover:text-red-400 transition-all"
@@ -197,7 +197,7 @@ export default function Cart({
           {/* Subtotal row */}
           <div className="flex items-center justify-between mb-2">
             <span className="text-xs text-zinc-400">Subtotal</span>
-            <span className="text-sm text-zinc-300 font-mono">${total.toFixed(2)}</span>
+            <span className="text-sm text-zinc-300 font-mono">{total.toFixed(2)} ETB</span>
           </div>
           <div className="flex items-center justify-between mb-1">
             <span className="text-xs text-zinc-400">Service charge & Tax</span>
@@ -206,7 +206,7 @@ export default function Cart({
 
           <div className="flex items-center justify-between py-3 my-3 border-t border-white/10">
             <span className="font-semibold text-white">Total Amount</span>
-            <span className="font-bold text-xl text-gold-400 font-mono font-playfair">${total.toFixed(2)}</span>
+            <span className="font-bold text-xl text-gold-400 font-mono font-playfair">{total.toFixed(2)} ETB</span>
           </div>
 
           {/* Checkout button */}

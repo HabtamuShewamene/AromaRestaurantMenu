@@ -50,6 +50,7 @@ export type MenuItemRecord = {
   description?: string | null;
   price: number;
   image?: string | null;
+  videoUrl?: string | null;
   category: CategoryRecord | string;
   categoryId: string;
   isAvailable: boolean;

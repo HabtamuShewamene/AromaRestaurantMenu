@@ -1,8 +1,19 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { ChefHat, MapPin, Phone, Clock } from "lucide-react";
 import Image from "next/image";
+
+const HERO_IMAGES = [
+  "/slider-0.jpeg",
+  "/slider-1.jpeg",
+  "/slider-2.jpeg",
+  "/slider-3.jpeg",
+  "/slider-4.jpeg",
+  "/slider-5.jpeg",
+  "/slider-6.jpeg"
+];
 
 type HeroSectionProps = {
   mode?: "compact" | "full";
@@ -26,6 +37,15 @@ const restaurant = {
 };
 
 export default function HeroSection({ mode = "compact" }: HeroSectionProps) {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % HERO_IMAGES.length);
+    }, 5000); // Change image every 5 seconds
+    return () => clearInterval(interval);
+  }, []);
+
   const scrollToMenu = () => {
     document.getElementById("menu-explorer")?.scrollIntoView({ behavior: "smooth" });
   };
@@ -34,16 +54,21 @@ export default function HeroSection({ mode = "compact" }: HeroSectionProps) {
     <section
       className="relative w-full overflow-hidden rounded-b-[2rem] sm:rounded-b-[2.5rem] h-[46vh] min-h-[300px] sm:min-h-[360px] max-h-[440px]"
     >
-      {/* Background Image */}
-      <div className="absolute inset-0">
-        <Image
-          src={restaurant.coverImage}
-          alt={restaurant.name}
-          fill
-          priority
-          className="object-cover scale-105 transition-transform duration-[20s] ease-out hover:scale-100"
-          sizes="100vw"
-        />
+      {/* Background Image Slider */}
+      <div className="absolute inset-0 bg-black">
+        {HERO_IMAGES.map((src, index) => (
+          <Image
+            key={src}
+            src={src}
+            alt={`${restaurant.name} Atmosphere ${index + 1}`}
+            fill
+            priority={index === 0}
+            className={`object-cover transition-opacity duration-[1500ms] ease-in-out ${
+              index === currentImageIndex ? "opacity-100 scale-105" : "opacity-0 scale-100"
+            }`}
+            sizes="100vw"
+          />
+        ))}
       </div>
 
       {/* Layered gradient overlays for text readability */}
@@ -67,8 +92,8 @@ export default function HeroSection({ mode = "compact" }: HeroSectionProps) {
           transition={{ duration: 0.6, ease: "easeOut" }}
           className="flex flex-col items-center mb-2 sm:mb-3"
         >
-          <div className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full border border-gold-500/40 mb-1.5 sm:mb-2 shadow-[0_0_20px_rgba(216,196,145,0.2)] overflow-hidden">
-            <img src="/aroma-logo.webp" alt="Aroma Logo" className="w-full h-full object-cover" />
+          <div className="flex items-center justify-center w-20 h-20 sm:w-24 sm:h-24 md:w-32 md:h-32 mb-2 sm:mb-4 relative animate-fade-in z-10" style={{ animationDelay: "100ms" }}>
+            <img src="/aroma-logo.png?v=3" alt="Aroma Logo" className="w-full h-full object-contain" />
           </div>
           <p className="text-[10px] sm:text-xs uppercase tracking-[0.3em] text-gold-400/90 font-medium mb-0.5">
             Welcome to

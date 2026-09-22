@@ -57,8 +57,8 @@ export default function AdminLayout({
       <aside className="fixed z-40 h-full w-64 border-r border-white/5 bg-zinc-950/80 backdrop-blur-xl flex flex-col justify-between overflow-y-auto no-scrollbar">
         <div className="p-6">
           <Link href="/admin/dashboard" className="mb-8 flex items-center gap-2.5">
-            <div className="flex items-center justify-center w-9 h-9 rounded-xl bg-gold-500/15 border border-gold-500/30">
-              <ChefHat className="h-5 w-5 text-gold-400" />
+            <div className="flex items-center justify-center w-10 h-10 relative">
+              <img src="/aroma-logo.png?v=3" alt="Aroma Logo" className="w-full h-full object-contain" />
             </div>
             <div className="flex flex-col">
               <span className="text-base font-bold tracking-tight text-white font-playfair">AROMA</span>

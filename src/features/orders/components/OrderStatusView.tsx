@@ -191,7 +191,7 @@ export default function OrderStatusView({ initialOrder }: { initialOrder: OrderR
                   <div className="text-xs text-zinc-400 space-y-0.5 ml-6">
                     {item.addons.map((a, i) => (
                       <p key={i}>
-                        + {a.name} {a.price > 0 ? `($${a.price.toFixed(2)})` : ""}
+                        + {a.name} {a.price > 0 ? `(${a.price.toFixed(2)} ETB)` : ""}
                       </p>
                     ))}
                   </div>
@@ -201,7 +201,7 @@ export default function OrderStatusView({ initialOrder }: { initialOrder: OrderR
                 )}
               </div>
               <span className="font-mono text-zinc-300 font-medium">
-                ${(item.price * item.quantity).toFixed(2)}
+                {item.price * item.quantity > 0 ? `${(item.price * item.quantity).toFixed(2)} ETB` : "Free"}
               </span>
             </div>
           ))}
@@ -210,7 +210,7 @@ export default function OrderStatusView({ initialOrder }: { initialOrder: OrderR
         <div className="pt-4 border-t border-white/10 flex items-center justify-between">
           <span className="font-bold text-white text-base">Total</span>
           <span className="font-mono font-bold text-xl text-gold-400 font-playfair">
-            ${order.totalAmount.toFixed(2)}
+            {order.totalAmount.toFixed(2)} ETB
           </span>
         </div>
       </div>

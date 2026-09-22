@@ -29,6 +29,14 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "source.unsplash.com",
       },
+      {
+        protocol: "https",
+        hostname: "p16-common-sign.tiktokcdn-us.com",
+      },
+      {
+        protocol: "https",
+        hostname: "p19-common-sign.tiktokcdn-us.com",
+      },
     ],
   },
 };

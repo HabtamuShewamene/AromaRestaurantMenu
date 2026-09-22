@@ -230,8 +230,8 @@ export default function KitchenDisplay() {
       <header className="sticky top-0 z-40 bg-[#0c0c0c] border-b border-white/10 px-4 sm:px-6 py-3 shadow-2xl flex flex-wrap items-center justify-between gap-4">
         {/* Brand & KDS Title */}
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gold-500/20 border border-gold-500/40 flex items-center justify-center shadow-[0_0_15px_rgba(182,141,64,0.3)]">
-            <ChefHat className="w-5 h-5 text-gold-400" />
+          <div className="w-12 h-12 flex items-center justify-center">
+            <img src="/aroma-logo.png?v=3" alt="Aroma Logo" className="w-full h-full object-contain" />
           </div>
           <div>
             <div className="flex items-center gap-2">

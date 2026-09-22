@@ -20,8 +20,8 @@ export default function Navbar() {
         <div className="flex h-20 items-center justify-between">
           {/* Brand Logo */}
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="flex items-center justify-center w-10 h-10 rounded-2xl border border-gold-500/30 group-hover:border-gold-400 transition-all shadow-[0_0_20px_rgba(182,141,64,0.2)] overflow-hidden">
-              <img src="/aroma-logo.webp" alt="Aroma Logo" className="w-full h-full object-cover" />
+            <div className="flex items-center justify-center w-12 h-12 relative group-hover:scale-105 transition-transform">
+              <img src="/aroma-logo.png?v=3" alt="Aroma Logo" className="w-full h-full object-contain" />
             </div>
             <div className="flex flex-col">
               <span className="text-xl font-bold tracking-tight text-white font-playfair group-hover:text-gold-300 transition-colors">
