@@ -3,10 +3,8 @@
 import { useEffect, useState } from "react";
 import { X, Plus, Minus, ShoppingBag, Check } from "lucide-react";
 import Image from "next/image";
-import { MenuItemRecord, ReviewRecord, OrderItemAddonRecord } from "@/shared/types/app";
+import { MenuItemRecord, OrderItemAddonRecord } from "@/shared/types/app";
 import { useCart } from "@/components/providers/CartProvider";
-import ReviewDisplay from "@/features/reviews/components/ReviewDisplay";
-import ReviewForm from "@/features/reviews/components/ReviewForm";
 
 type MenuItemDetailProps = {
   item: MenuItemRecord;
@@ -19,10 +17,6 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
   const [selectedAddons, setSelectedAddons] = useState<Record<string, OrderItemAddonRecord[]>>({});
   const [notes, setNotes] = useState("");
   const [justAdded, setJustAdded] = useState(false);
-  const [reviews, setReviews] = useState<ReviewRecord[]>([]);
-  const [averageRating, setAverageRating] = useState(0);
-  const [totalReviews, setTotalReviews] = useState(0);
-  const [isLoading, setIsLoading] = useState(true);
 
   // Initialize default options for required groups
   useEffect(() => {
@@ -182,7 +176,7 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-xs uppercase tracking-[0.2em] text-gold-500 font-semibold">{categoryName}</p>
-                  <p className="text-3xl font-bold text-gold-400 font-playfair">{item.price.toFixed(2)} ETB</p>
+                  <p className="text-3xl font-bold text-gold-400 font-playfair">{item.price.toFixed(2)} Birr</p>
                 </div>
                 <span
                   className={`rounded-full px-3.5 py-1.5 font-bold text-xs uppercase tracking-wider ${
@@ -243,7 +237,7 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
                           >
                             <span className="truncate">{opt.name}</span>
                             <span className="font-bold text-zinc-400 ml-2">
-                              {opt.price > 0 ? `+${opt.price.toFixed(2)} ETB` : "Free"}
+                              {opt.price > 0 ? `+${opt.price.toFixed(2)} Birr` : "Free"}
                             </span>
                           </button>
                         );
@@ -306,14 +300,14 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
               {justAdded ? (
                 <>
                   <Check className="w-4 h-4 stroke-[2.5]" />
-                  <span>Added to Cart ({totalPrice.toFixed(2)} ETB)</span>
+                  <span>Added to Cart ({totalPrice.toFixed(2)} Birr)</span>
                 </>
               ) : missingRequiredGroup ? (
                 <span>Please select: {missingRequiredGroup.name}</span>
               ) : (
                 <>
                   <ShoppingBag className="w-4 h-4" />
-                  <span>Add to Cart • {totalPrice.toFixed(2)} ETB</span>
+                  <span>Add to Cart • {totalPrice.toFixed(2)} Birr</span>
                 </>
               )}
             </button>
@@ -340,20 +334,6 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
             </div>
           )}
 
-          {/* Customer Reviews */}
-          <div className="border-t border-white/10 pt-6">
-            <h3 className="mb-4 text-lg font-bold text-white">⭐ Customer Reviews</h3>
-            {isLoading ? (
-              <p className="text-zinc-500 text-sm">Loading reviews...</p>
-            ) : (
-              <ReviewDisplay reviews={reviews} averageRating={averageRating} totalReviews={totalReviews} />
-            )}
-          </div>
-
-          {/* Review Form */}
-          <div className="border-t border-white/10 pt-6">
-            <ReviewForm menuItemId={item.id} onSubmitSuccess={handleReviewSubmitted} />
-          </div>
         </div>
       </div>
     </div>
