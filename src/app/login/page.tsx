@@ -29,7 +29,7 @@ export default function LoginPage() {
 
   return (
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden p-4">
-      <div className="absolute top-1/2 left-1/2 -z-10 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gold-900/10 blur-[100px]" />
+      <div className="absolute top-1/2 left-1/2 -z-10 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand-900/10 blur-[100px]" />
 
       <div className="w-full max-w-md">
         <div className="mb-12 text-center">
@@ -39,7 +39,7 @@ export default function LoginPage() {
             </div>
             <div className="flex flex-col text-left">
               <span className="text-2xl font-bold tracking-tight text-white font-playfair">AROMA</span>
-              <span className="text-[9px] tracking-[0.25em] text-gold-500 font-semibold uppercase -mt-1">Restaurant</span>
+              <span className="text-[9px] tracking-[0.25em] text-brand-500 font-semibold uppercase -mt-1">Restaurant</span>
             </div>
           </Link>
           <h1 className="mb-2 text-4xl font-bold">Welcome Back</h1>
@@ -61,7 +61,7 @@ export default function LoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="hello@example.com"
-                className="w-full rounded-2xl border border-zinc-800 bg-zinc-950 px-6 py-4 outline-none transition-all focus:border-gold-500"
+                className="w-full rounded-2xl border border-zinc-800 bg-[#292C2B] px-6 py-4 outline-none transition-all focus:border-brand-500"
                 required
               />
             </div>
@@ -73,14 +73,14 @@ export default function LoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="********"
-                className="w-full rounded-2xl border border-zinc-800 bg-zinc-950 px-6 py-4 outline-none transition-all focus:border-gold-500"
+                className="w-full rounded-2xl border border-zinc-800 bg-[#292C2B] px-6 py-4 outline-none transition-all focus:border-brand-500"
                 required
               />
             </div>
 
             <button
               type="submit"
-              className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gold-600 py-4 text-lg font-bold text-black transition-all hover:scale-[1.02] hover:bg-gold-700 active:scale-[0.98]"
+              className="flex w-full items-center justify-center gap-2 rounded-2xl bg-brand-600 py-4 text-lg font-bold text-black transition-all hover:scale-[1.02] hover:bg-brand-700 active:scale-[0.98]"
             >
               Sign In <ArrowRight className="h-5 w-5" />
             </button>
@@ -88,7 +88,7 @@ export default function LoginPage() {
 
           <div className="mt-8 text-center text-sm text-zinc-500">
             Don&apos;t have an account?{" "}
-            <Link href="/signup" className="font-bold text-gold-500 hover:underline">
+            <Link href="/signup" className="font-bold text-brand-500 hover:underline">
               Sign up now
             </Link>
           </div>

@@ -135,7 +135,7 @@ export default function MenuExplorer({ showHero = false }: { showHero?: boolean 
     .map((item) => item.name);
 
   return (
-    <div id="menu-explorer" className="relative min-h-screen bg-[#080808]">
+    <div id="menu-explorer" className="relative min-h-screen bg-[#171918]">
       {/* ── Hero ── (rendered only when requested) */}
       {showHero && <HeroSection mode="full" />}
 
@@ -174,7 +174,7 @@ export default function MenuExplorer({ showHero = false }: { showHero?: boolean 
                         className={`px-4 py-2 rounded-xl text-xs font-bold border transition-all ${
                           filters[prop.key as keyof typeof filters] 
                             ? prop.color 
-                            : 'bg-zinc-900 border-zinc-800 text-zinc-400 hover:bg-zinc-800'
+                            : 'bg-[#292C2B] border-zinc-800 text-zinc-400 hover:bg-zinc-800'
                         }`}
                       >
                         {prop.label}
@@ -194,7 +194,7 @@ export default function MenuExplorer({ showHero = false }: { showHero?: boolean 
                         placeholder="Min"
                         value={filters.minPrice}
                         onChange={(e) => setFilters({ ...filters, minPrice: e.target.value })}
-                        className="w-full bg-zinc-900 border border-zinc-800 rounded-xl py-2 pl-7 pr-3 text-white placeholder-zinc-600 outline-none focus:border-gold-500/50 text-sm"
+                        className="w-full bg-[#292C2B] border border-zinc-800 rounded-xl py-2 pl-7 pr-3 text-white placeholder-zinc-600 outline-none focus:border-brand-500/50 text-sm"
                       />
                     </div>
                     <span className="text-zinc-600">-</span>
@@ -205,7 +205,7 @@ export default function MenuExplorer({ showHero = false }: { showHero?: boolean 
                         placeholder="Max"
                         value={filters.maxPrice}
                         onChange={(e) => setFilters({ ...filters, maxPrice: e.target.value })}
-                        className="w-full bg-zinc-900 border border-zinc-800 rounded-xl py-2 pl-7 pr-3 text-white placeholder-zinc-600 outline-none focus:border-gold-500/50 text-sm"
+                        className="w-full bg-[#292C2B] border border-zinc-800 rounded-xl py-2 pl-7 pr-3 text-white placeholder-zinc-600 outline-none focus:border-brand-500/50 text-sm"
                       />
                     </div>
                   </div>
@@ -221,7 +221,7 @@ export default function MenuExplorer({ showHero = false }: { showHero?: boolean 
       <div ref={filterRef} />
       <div
         className={`sticky top-20 z-30 transition-all duration-400 ${
-          filterSticky ? "shadow-2xl bg-[#080808]/95 backdrop-blur-2xl border-b border-white/10" : "bg-transparent"
+          filterSticky ? "shadow-2xl bg-[#171918]/95 backdrop-blur-2xl border-b border-white/10" : "bg-transparent"
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
@@ -247,7 +247,7 @@ export default function MenuExplorer({ showHero = false }: { showHero?: boolean 
               border: "1px solid rgba(182,141,64,0.25)",
             }}
           >
-            <Sparkles className="w-4 h-4 text-gold-400 flex-shrink-0" />
+            <Sparkles className="w-4 h-4 text-brand-400 flex-shrink-0" />
             <span className="text-sm text-zinc-200 whitespace-nowrap">
               {message}
             </span>
@@ -302,7 +302,7 @@ export default function MenuExplorer({ showHero = false }: { showHero?: boolean 
                       {categoryItems.length} curated dish{categoryItems.length !== 1 ? "es" : ""}
                     </p>
                   </div>
-                  <div className="flex-1 h-px bg-gradient-to-r from-gold-500/20 to-transparent" />
+                  <div className="flex-1 h-px bg-gradient-to-r from-brand-500/20 to-transparent" />
                 </div>
 
                 {/* Cards Grid */}

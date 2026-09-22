@@ -158,7 +158,7 @@ export default function AdminMenuManager() {
         </div>
       </div>
 
-      {message ? <div className="rounded-2xl border border-gold-500/20 bg-gold-500/10 p-4 text-sm text-gold-400">{message}</div> : null}
+      {message ? <div className="rounded-2xl border border-brand-500/20 bg-brand-500/10 p-4 text-sm text-brand-400">{message}</div> : null}
 
       <MenuForm
         key={editingItem?.id ?? "new-item-form"}

@@ -146,7 +146,7 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
       <div 
         ref={modalRef}
         tabIndex={-1}
-        className="relative flex flex-col w-full max-w-xl max-h-[85vh] overflow-hidden rounded-[2rem] sm:rounded-3xl bg-[#111111] shadow-[0_0_40px_rgba(182,141,64,0.15)] border border-gold-500/20 outline-none"
+        className="relative flex flex-col w-full max-w-xl max-h-[85vh] overflow-hidden rounded-[2rem] sm:rounded-3xl bg-[#292C2B] shadow-[0_0_40px_rgba(182,141,64,0.15)] border border-brand-500/20 outline-none"
         role="dialog"
         aria-modal="true"
         aria-labelledby="modal-title"
@@ -162,7 +162,7 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
             className="object-cover"
           />
           {/* Gradient fade to blend into background */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#111111] via-[#111111]/20 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#292C2B] via-[#292C2B]/20 to-transparent" />
           
           {/* Close button layered on top of image */}
           <button
@@ -181,17 +181,17 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
           <div className="space-y-3">
             <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2 sm:gap-4">
               <div>
-                <p className="text-[10px] sm:text-xs uppercase tracking-[0.25em] text-gold-500 font-bold mb-1.5">{categoryName}</p>
+                <p className="text-[10px] sm:text-xs uppercase tracking-[0.25em] text-brand-500 font-bold mb-1.5">{categoryName}</p>
                 <h2 id="modal-title" className="text-lg sm:text-2xl font-bold text-white font-playfair leading-tight line-clamp-3">{item.name}</h2>
               </div>
-              <p className="text-xl sm:text-3xl font-bold text-gold-400 font-playfair whitespace-nowrap">{item.price.toFixed(2)} Birr</p>
+              <p className="text-xl sm:text-3xl font-bold text-brand-400 font-playfair whitespace-nowrap">{item.price.toFixed(2)} Birr</p>
             </div>
             
             {/* Rating Summary & Badges */}
             <div className="flex flex-wrap items-center gap-3 pt-1">
               {/* Mock compact rating summary */}
               <div className="flex items-center gap-1 bg-white/5 px-2.5 py-1 rounded-lg border border-white/5 w-fit shadow-inner">
-                <span className="text-gold-400 text-sm leading-none">★</span>
+                <span className="text-brand-400 text-sm leading-none">★</span>
                 <span className="text-white text-sm font-bold leading-none">4.8</span>
                 <span className="text-zinc-500 text-xs ml-0.5 leading-none">(24)</span>
               </div>
@@ -220,17 +220,17 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
           {/* Customization Options */}
           {item.addonGroups && item.addonGroups.length > 0 && (
             <div className="space-y-5 pt-4 border-t border-white/10">
-              <h3 className="text-sm font-bold uppercase tracking-wider text-gold-400">Customizations</h3>
+              <h3 className="text-sm font-bold uppercase tracking-wider text-brand-400">Customizations</h3>
 
               {item.addonGroups.map((group) => {
                 const selectedInGroup = selectedAddons[group.id] || [];
 
                 return (
-                  <div key={group.id} className="p-4 sm:p-5 rounded-2xl bg-zinc-950/80 border border-gold-500/10 space-y-4">
+                  <div key={group.id} className="p-4 sm:p-5 rounded-2xl bg-[#292C2B]/80 border border-brand-500/10 space-y-4">
                     <div className="flex items-center justify-between">
                       <h4 className="text-sm font-semibold text-white flex items-center gap-2">
                         {group.name} 
-                        {group.required && <span className="bg-gold-500/20 text-gold-400 text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full border border-gold-500/20">Required</span>}
+                        {group.required && <span className="bg-brand-500/20 text-brand-400 text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full border border-brand-500/20">Required</span>}
                       </h4>
                       <span className="text-xs font-medium text-zinc-500 bg-black/40 px-2 py-1 rounded-md">
                         {group.maxSelect === 1 ? "Select 1" : `Up to ${group.maxSelect}`}
@@ -255,14 +255,14 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
                             }
                             className={`flex items-center justify-between p-3.5 rounded-xl border text-sm font-medium transition-all active:scale-[0.98] ${
                               !opt.isAvailable
-                                ? "opacity-40 cursor-not-allowed bg-zinc-900 border-zinc-800 text-zinc-600"
+                                ? "opacity-40 cursor-not-allowed bg-[#292C2B] border-zinc-800 text-zinc-600"
                                 : isSelected
-                                ? "bg-gold-500/15 border-gold-500/40 text-gold-300 shadow-[0_0_15px_rgba(182,141,64,0.15)] ring-1 ring-gold-500/50"
-                                : "bg-zinc-900 border-zinc-800 text-zinc-300 hover:bg-zinc-800 hover:border-zinc-700"
+                                ? "bg-brand-500/15 border-brand-500/40 text-brand-300 shadow-[0_0_15px_rgba(182,141,64,0.15)] ring-1 ring-brand-500/50"
+                                : "bg-[#292C2B] border-zinc-800 text-zinc-300 hover:bg-zinc-800 hover:border-zinc-700"
                             }`}
                           >
                             <span className="truncate pr-2">{opt.name}</span>
-                            <span className={`font-bold ml-2 whitespace-nowrap ${isSelected ? 'text-gold-400' : 'text-zinc-400'}`}>
+                            <span className={`font-bold ml-2 whitespace-nowrap ${isSelected ? 'text-brand-400' : 'text-zinc-400'}`}>
                               {opt.price > 0 ? `+${opt.price.toFixed(2)} Birr` : "Free"}
                             </span>
                           </button>
@@ -291,20 +291,20 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
               maxLength={150}
               onChange={(e) => setNotes(e.target.value)}
               placeholder="e.g. Extra hot, no cinnamon, sauce on side..."
-              className="w-full bg-zinc-950/80 border border-zinc-800 rounded-xl px-4 py-3.5 text-sm text-white placeholder-zinc-600 outline-none focus:border-gold-500 focus:bg-zinc-950 transition-colors resize-none h-24 shadow-inner"
+              className="w-full bg-[#292C2B]/80 border border-zinc-800 rounded-xl px-4 py-3.5 text-sm text-white placeholder-zinc-600 outline-none focus:border-brand-500 focus:bg-[#292C2B] transition-colors resize-none h-24 shadow-inner"
             />
           </div>
         </div>
 
         {/* Sticky Glassmorphism Footer */}
-        <div className="flex-shrink-0 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-gold-500/20 bg-[#111111]/95 backdrop-blur-xl px-5 sm:px-7 py-4 pb-8 sm:pb-5 sm:py-5 z-30 relative">
+        <div className="flex-shrink-0 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-brand-500/20 bg-[#292C2B]/95 backdrop-blur-xl px-5 sm:px-7 py-4 pb-8 sm:pb-5 sm:py-5 z-30 relative">
           
           {/* Quantity Controls - Large Touch Targets */}
-          <div className="flex items-center justify-between w-full sm:w-auto bg-zinc-950 p-1.5 rounded-2xl border border-white/10 shadow-inner">
+          <div className="flex items-center justify-between w-full sm:w-auto bg-[#292C2B] p-1.5 rounded-2xl border border-white/10 shadow-inner">
             <button
               type="button"
               onClick={() => setQuantity(Math.max(1, quantity - 1))}
-              className="w-12 h-12 sm:w-10 sm:h-10 rounded-xl bg-zinc-900 flex items-center justify-center text-zinc-300 hover:text-white hover:bg-zinc-800 transition-colors active:bg-zinc-700"
+              className="w-12 h-12 sm:w-10 sm:h-10 rounded-xl bg-[#292C2B] flex items-center justify-center text-zinc-300 hover:text-white hover:bg-zinc-800 transition-colors active:bg-zinc-700"
               aria-label="Decrease quantity"
             >
               <Minus className="w-5 h-5 sm:w-4 sm:h-4" />
@@ -313,7 +313,7 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
             <button
               type="button"
               onClick={() => setQuantity(quantity + 1)}
-              className="w-12 h-12 sm:w-10 sm:h-10 rounded-xl bg-zinc-900 flex items-center justify-center text-zinc-300 hover:text-white hover:bg-zinc-800 transition-colors active:bg-zinc-700"
+              className="w-12 h-12 sm:w-10 sm:h-10 rounded-xl bg-[#292C2B] flex items-center justify-center text-zinc-300 hover:text-white hover:bg-zinc-800 transition-colors active:bg-zinc-700"
               aria-label="Increase quantity"
             >
               <Plus className="w-5 h-5 sm:w-4 sm:h-4" />
@@ -329,10 +329,10 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
               !item.isAvailable
                 ? "bg-zinc-800 text-zinc-500 cursor-not-allowed"
                 : missingRequiredGroup
-                ? "bg-zinc-800 text-zinc-400 border border-gold-500/30 cursor-not-allowed"
+                ? "bg-zinc-800 text-zinc-400 border border-brand-500/30 cursor-not-allowed"
                 : justAdded
                 ? "bg-green-500 text-black shadow-[0_0_20px_rgba(34,197,94,0.4)] scale-[1.02]"
-                : "bg-gold-500 text-black hover:bg-gold-400 hover:scale-[1.02] active:scale-[0.98] shadow-[0_4px_20px_rgba(182,141,64,0.3)]"
+                : "bg-brand-500 text-black hover:bg-brand-400 hover:scale-[1.02] active:scale-[0.98] shadow-[0_4px_20px_rgba(182,141,64,0.3)]"
             }`}
           >
             {justAdded ? (

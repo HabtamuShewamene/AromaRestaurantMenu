@@ -20,7 +20,7 @@ export default async function TablePage({ params }: PageProps) {
 
   if (table.status === "OUT_OF_SERVICE") {
     return (
-      <main className="min-h-screen bg-[#080808] flex items-center justify-center p-4">
+      <main className="min-h-screen bg-[#171918] flex items-center justify-center p-4">
         <div className="glass-card max-w-md p-8 rounded-3xl text-center space-y-4">
           <div className="w-16 h-16 rounded-full bg-red-500/10 border border-red-500/20 mx-auto flex items-center justify-center text-2xl">
             🛑
@@ -46,7 +46,7 @@ export default async function TablePage({ params }: PageProps) {
 
   return (
     <TableSessionInitializer context={tableContext}>
-      <main className="relative min-h-screen bg-[#080808]">
+      <main className="relative min-h-screen bg-[#171918]">
         <Navbar />
         <TableActionBar />
         <MenuExplorer showHero={false} />

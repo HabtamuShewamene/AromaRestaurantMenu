@@ -53,7 +53,7 @@ export default function SignupPage() {
 
   return (
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden p-4">
-      <div className="absolute top-1/2 left-1/2 -z-10 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gold-900/10 blur-[100px]" />
+      <div className="absolute top-1/2 left-1/2 -z-10 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand-900/10 blur-[100px]" />
 
       <div className="w-full max-w-md">
         <div className="mb-10 text-center">
@@ -63,7 +63,7 @@ export default function SignupPage() {
             </div>
             <div className="flex flex-col text-left">
               <span className="text-2xl font-bold tracking-tight text-white font-playfair">AROMA</span>
-              <span className="text-[9px] tracking-[0.25em] text-gold-500 font-semibold uppercase -mt-1">Restaurant</span>
+              <span className="text-[9px] tracking-[0.25em] text-brand-500 font-semibold uppercase -mt-1">Restaurant</span>
             </div>
           </Link>
           <h1 className="mb-2 text-4xl font-bold">Create Account</h1>
@@ -85,7 +85,7 @@ export default function SignupPage() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Sophia Martinez"
-                className="w-full rounded-2xl border border-zinc-800 bg-zinc-950 px-6 py-4 outline-none transition-all focus:border-gold-500 text-white"
+                className="w-full rounded-2xl border border-zinc-800 bg-[#292C2B] px-6 py-4 outline-none transition-all focus:border-brand-500 text-white"
                 required
               />
             </div>
@@ -97,7 +97,7 @@ export default function SignupPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="sophia@example.com"
-                className="w-full rounded-2xl border border-zinc-800 bg-zinc-950 px-6 py-4 outline-none transition-all focus:border-gold-500 text-white"
+                className="w-full rounded-2xl border border-zinc-800 bg-[#292C2B] px-6 py-4 outline-none transition-all focus:border-brand-500 text-white"
                 required
               />
             </div>
@@ -110,7 +110,7 @@ export default function SignupPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Minimum 6 characters"
                 minLength={6}
-                className="w-full rounded-2xl border border-zinc-800 bg-zinc-950 px-6 py-4 outline-none transition-all focus:border-gold-500 text-white"
+                className="w-full rounded-2xl border border-zinc-800 bg-[#292C2B] px-6 py-4 outline-none transition-all focus:border-brand-500 text-white"
                 required
               />
             </div>
@@ -118,7 +118,7 @@ export default function SignupPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="flex w-full items-center justify-center gap-2 rounded-2xl bg-gold-600 py-4 text-lg font-bold text-black transition-all hover:scale-[1.02] hover:bg-gold-500 active:scale-[0.98] disabled:opacity-50"
+              className="flex w-full items-center justify-center gap-2 rounded-2xl bg-brand-600 py-4 text-lg font-bold text-black transition-all hover:scale-[1.02] hover:bg-brand-500 active:scale-[0.98] disabled:opacity-50"
             >
               {isLoading ? "Creating Account..." : "Create Account"} <ArrowRight className="h-5 w-5" />
             </button>
@@ -126,7 +126,7 @@ export default function SignupPage() {
 
           <div className="mt-8 text-center text-sm text-zinc-500">
             Already have an account?{" "}
-            <Link href="/login" className="font-bold text-gold-500 hover:underline">
+            <Link href="/login" className="font-bold text-brand-500 hover:underline">
               Sign In
             </Link>
           </div>

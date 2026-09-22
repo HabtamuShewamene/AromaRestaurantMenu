@@ -27,7 +27,7 @@ export default function OrderCard({ order, onStatusChange }: OrderCardProps) {
           <div className="flex items-center gap-2 mb-1">
             <span className="text-xs font-mono text-zinc-500">#{order.id.slice(-6).toUpperCase()}</span>
             {order.tableNumber ? (
-              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-gold-500/20 border border-gold-500/30 text-gold-400 text-xs font-bold">
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-brand-500/20 border border-brand-500/30 text-brand-400 text-xs font-bold">
                 <Utensils className="w-3 h-3" /> Table {order.tableNumber}
               </span>
             ) : (
@@ -68,7 +68,7 @@ export default function OrderCard({ order, onStatusChange }: OrderCardProps) {
           <div key={idx} className="space-y-0.5">
             <div className="flex justify-between">
               <span>
-                <strong className="text-gold-400 mr-1.5">{item.quantity}x</strong> {item.name}
+                <strong className="text-brand-400 mr-1.5">{item.quantity}x</strong> {item.name}
               </span>
               <span className="font-mono text-xs text-zinc-400">
                 ${(item.price * item.quantity).toFixed(2)}
@@ -95,7 +95,7 @@ export default function OrderCard({ order, onStatusChange }: OrderCardProps) {
       <div className="flex flex-wrap items-center justify-between gap-3 pt-1">
         <div>
           <span className="text-xs text-zinc-500 block">Total</span>
-          <span className="font-mono font-bold text-gold-400 text-lg">
+          <span className="font-mono font-bold text-brand-400 text-lg">
             ${order.totalAmount.toFixed(2)}
           </span>
         </div>
@@ -112,7 +112,7 @@ export default function OrderCard({ order, onStatusChange }: OrderCardProps) {
             <select
               value={normStatus}
               onChange={(event) => onStatusChange(order.id, event.target.value as OrderStatus)}
-              className="rounded-xl border border-white/10 bg-zinc-950 px-3 py-2 text-xs font-semibold text-white outline-none transition-colors hover:border-gold-500 focus:border-gold-500"
+              className="rounded-xl border border-white/10 bg-[#292C2B] px-3 py-2 text-xs font-semibold text-white outline-none transition-colors hover:border-brand-500 focus:border-brand-500"
             >
               {STATUS_LIST.map((status) => (
                 <option key={status} value={status}>

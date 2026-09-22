@@ -8,7 +8,7 @@ export const metadata = {
 
 export default function MenuPage() {
   return (
-    <main className="bg-[#080808] min-h-screen">
+    <main className="bg-[#171918] min-h-screen">
       <Navbar />
       <MenuExplorer showHero={true} />
     </main>

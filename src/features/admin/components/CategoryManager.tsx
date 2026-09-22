@@ -102,7 +102,7 @@ export default function CategoryManager() {
         </p>
       </div>
 
-      {message ? <div className="rounded-2xl border border-gold-500/20 bg-gold-500/10 p-4 text-sm text-gold-400">{message}</div> : null}
+      {message ? <div className="rounded-2xl border border-brand-500/20 bg-brand-500/10 p-4 text-sm text-brand-400">{message}</div> : null}
 
       <form onSubmit={handleSubmit} className="glass-card space-y-4 rounded-3xl p-8">
         <div className="grid gap-4 md:grid-cols-2">
@@ -110,22 +110,22 @@ export default function CategoryManager() {
             value={name}
             onChange={(event) => setName(event.target.value)}
             placeholder="Category name"
-            className="rounded-2xl border border-zinc-800 bg-zinc-950 px-5 py-4 outline-none transition-all focus:border-gold-500"
+            className="rounded-2xl border border-zinc-800 bg-[#292C2B] px-5 py-4 outline-none transition-all focus:border-brand-500"
             required
           />
           <input
             value={image}
             onChange={(event) => setImage(event.target.value)}
             placeholder="Optional image URL"
-            className="rounded-2xl border border-zinc-800 bg-zinc-950 px-5 py-4 outline-none transition-all focus:border-gold-500"
+            className="rounded-2xl border border-zinc-800 bg-[#292C2B] px-5 py-4 outline-none transition-all focus:border-brand-500"
           />
         </div>
         <div className="flex gap-3">
-          <button className="rounded-2xl bg-gold-600 px-6 py-3 font-bold text-black transition-colors hover:bg-gold-700">
+          <button className="rounded-2xl bg-brand-600 px-6 py-3 font-bold text-black transition-colors hover:bg-brand-700">
             {editingCategory ? "Update Category" : "Create Category"}
           </button>
           {editingCategory ? (
-            <button type="button" onClick={resetForm} className="rounded-2xl border border-white/10 px-6 py-3 font-bold text-zinc-200 transition-colors hover:border-gold-500 hover:text-gold-500">
+            <button type="button" onClick={resetForm} className="rounded-2xl border border-white/10 px-6 py-3 font-bold text-zinc-200 transition-colors hover:border-brand-500 hover:text-brand-500">
               Cancel
             </button>
           ) : null}
@@ -156,7 +156,7 @@ export default function CategoryManager() {
                 </div>
               ) : null}
               <div className="flex gap-3">
-                <button onClick={() => handleEdit(category)} className="rounded-xl border border-white/10 px-4 py-2 text-sm transition-colors hover:border-gold-500 hover:text-gold-500">
+                <button onClick={() => handleEdit(category)} className="rounded-xl border border-white/10 px-4 py-2 text-sm transition-colors hover:border-brand-500 hover:text-brand-500">
                   Edit
                 </button>
                 <button onClick={() => handleDelete(category.id)} className="rounded-xl border border-red-500/20 px-4 py-2 text-sm text-red-400 transition-colors hover:bg-red-500/10">

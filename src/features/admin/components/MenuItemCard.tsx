@@ -29,7 +29,7 @@ export default function MenuItemCard({ item, onEdit, onDelete, onToggleAvailabil
           <div className="flex items-center gap-2 mt-1">
             <p className="text-sm text-zinc-500">{categoryName}</p>
             {item.addonGroups && item.addonGroups.length > 0 && (
-              <span className="text-[10px] font-bold text-gold-400 bg-gold-500/10 px-2 py-0.5 rounded-full border border-gold-500/20">
+              <span className="text-[10px] font-bold text-brand-400 bg-brand-500/10 px-2 py-0.5 rounded-full border border-brand-500/20">
                 {item.addonGroups.length} Addon Group{item.addonGroups.length !== 1 ? "s" : ""}
               </span>
             )}
@@ -44,7 +44,7 @@ export default function MenuItemCard({ item, onEdit, onDelete, onToggleAvailabil
         </span>
       </div>
       <div className="flex items-center justify-between">
-        <span className="font-mono text-lg text-gold-500">${item.price.toFixed(2)}</span>
+        <span className="font-mono text-lg text-brand-500">${item.price.toFixed(2)}</span>
         <div className="flex gap-2">
           <button onClick={() => onToggleAvailability(item)} className="rounded-xl p-2 text-zinc-400 transition-colors hover:bg-white/5 hover:text-white">
             <EyeOff className="h-4 w-4" />

@@ -111,7 +111,7 @@ export default function AdminReviewManager() {
           {approvedReviews.map((review) => (
             <div
               key={review.id}
-              className="group flex items-center justify-between gap-4 p-4 rounded-2xl bg-zinc-900/40 border border-white/5 hover:bg-zinc-900 transition-colors"
+              className="group flex items-center justify-between gap-4 p-4 rounded-2xl bg-[#292C2B]/40 border border-white/5 hover:bg-[#292C2B] transition-colors"
             >
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-1">
@@ -150,12 +150,12 @@ function ReviewModerationCard({ review, onApprove, onReject }: any) {
         {/* Reviewer Details */}
         <div className="md:w-1/3 space-y-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-gold-500/10 flex items-center justify-center text-gold-500 font-bold text-lg">
+            <div className="w-10 h-10 rounded-full bg-brand-500/10 flex items-center justify-center text-brand-500 font-bold text-lg">
               {review.name[0]}
             </div>
             <div>
               <p className="font-bold text-white">{review.name}</p>
-              <div className="flex items-center gap-1.5 text-gold-500">
+              <div className="flex items-center gap-1.5 text-brand-500">
                 {[...Array(5)].map((_, i) => (
                   <Star 
                     key={i} 
@@ -191,7 +191,7 @@ function ReviewModerationCard({ review, onApprove, onReject }: any) {
             </button>
             <button
               onClick={() => onReject(review.id)}
-              className="flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-zinc-900 text-zinc-400 border border-white/5 font-bold hover:bg-red-500/10 hover:text-red-500 hover:border-red-500/20 transition-all"
+              className="flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-[#292C2B] text-zinc-400 border border-white/5 font-bold hover:bg-red-500/10 hover:text-red-500 hover:border-red-500/20 transition-all"
             >
               <Trash2 className="w-4 h-4" />
             </button>

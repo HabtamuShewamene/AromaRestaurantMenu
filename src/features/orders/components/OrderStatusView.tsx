@@ -79,7 +79,7 @@ export default function OrderStatusView({ initialOrder }: { initialOrder: OrderR
         </Link>
         {isRefreshing && (
           <span className="text-[11px] text-zinc-500 flex items-center gap-1.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-gold-400 animate-ping" />
+            <span className="w-1.5 h-1.5 rounded-full bg-brand-400 animate-ping" />
             Live Sync
           </span>
         )}
@@ -87,7 +87,7 @@ export default function OrderStatusView({ initialOrder }: { initialOrder: OrderR
 
       {/* Hero Header */}
       <div className="glass-card p-6 sm:p-8 rounded-3xl text-center space-y-3 relative overflow-hidden border border-white/10 shadow-2xl">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gold-500/10 border border-gold-500/20 text-gold-400 text-xs font-semibold uppercase tracking-wider">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-400 text-xs font-semibold uppercase tracking-wider">
           Order #{orderRef}
         </div>
         <h1 className="text-3xl sm:text-4xl font-bold text-white font-playfair">
@@ -106,7 +106,7 @@ export default function OrderStatusView({ initialOrder }: { initialOrder: OrderR
 
       {/* Lifecycle Progress Bar */}
       {!isCancelled ? (
-        <div className="p-6 rounded-3xl bg-[#111111] border border-white/5 space-y-6">
+        <div className="p-6 rounded-3xl bg-[#292C2B] border border-white/5 space-y-6">
           <h2 className="text-xs font-semibold uppercase tracking-wider text-zinc-400">
             Live Kitchen & Serving Progress
           </h2>
@@ -123,16 +123,16 @@ export default function OrderStatusView({ initialOrder }: { initialOrder: OrderR
                   key={stage.status}
                   className={`flex items-start gap-4 p-3.5 rounded-2xl transition-all ${
                     isCurrent
-                      ? "bg-gold-500/10 border border-gold-500/30 shadow-[0_0_20px_rgba(182,141,64,0.1)]"
+                      ? "bg-brand-500/10 border border-brand-500/30 shadow-[0_0_20px_rgba(182,141,64,0.1)]"
                       : isPast
-                      ? "opacity-60 bg-zinc-950/40"
-                      : "opacity-30 bg-zinc-950/20"
+                      ? "opacity-60 bg-[#292C2B]/40"
+                      : "opacity-30 bg-[#292C2B]/20"
                   }`}
                 >
                   <div
                     className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-colors ${
                       isCurrent
-                        ? "bg-gold-500 text-black shadow-[0_0_15px_rgba(182,141,64,0.5)]"
+                        ? "bg-brand-500 text-black shadow-[0_0_15px_rgba(182,141,64,0.5)]"
                         : isPast
                         ? "bg-green-500/20 text-green-400 border border-green-500/40"
                         : "bg-zinc-800 text-zinc-500"
@@ -145,13 +145,13 @@ export default function OrderStatusView({ initialOrder }: { initialOrder: OrderR
                     <div className="flex items-center justify-between">
                       <h3
                         className={`text-sm font-bold ${
-                          isCurrent ? "text-gold-300" : isPast ? "text-white" : "text-zinc-500"
+                          isCurrent ? "text-brand-300" : isPast ? "text-white" : "text-zinc-500"
                         }`}
                       >
                         {stage.label}
                       </h3>
                       {isCurrent && (
-                        <span className="text-[10px] uppercase tracking-wider font-bold text-gold-400 animate-pulse">
+                        <span className="text-[10px] uppercase tracking-wider font-bold text-brand-400 animate-pulse">
                           Active Stage
                         </span>
                       )}
@@ -174,7 +174,7 @@ export default function OrderStatusView({ initialOrder }: { initialOrder: OrderR
       )}
 
       {/* Order Summary Breakdown */}
-      <div className="p-6 rounded-3xl bg-[#111111] border border-white/5 space-y-4">
+      <div className="p-6 rounded-3xl bg-[#292C2B] border border-white/5 space-y-4">
         <h2 className="text-xs font-semibold uppercase tracking-wider text-zinc-400">
           Ordered Items
         </h2>
@@ -184,7 +184,7 @@ export default function OrderStatusView({ initialOrder }: { initialOrder: OrderR
             <div key={idx} className="py-3 flex items-start justify-between gap-4 text-sm">
               <div className="space-y-1">
                 <p className="font-semibold text-white">
-                  <span className="text-gold-400 mr-2">{item.quantity}x</span>
+                  <span className="text-brand-400 mr-2">{item.quantity}x</span>
                   {item.name}
                 </p>
                 {item.addons && item.addons.length > 0 && (
@@ -209,7 +209,7 @@ export default function OrderStatusView({ initialOrder }: { initialOrder: OrderR
 
         <div className="pt-4 border-t border-white/10 flex items-center justify-between">
           <span className="font-bold text-white text-base">Total</span>
-          <span className="font-mono font-bold text-xl text-gold-400 font-playfair">
+          <span className="font-mono font-bold text-xl text-brand-400 font-playfair">
             {order.totalAmount.toFixed(2)} ETB
           </span>
         </div>
@@ -219,7 +219,7 @@ export default function OrderStatusView({ initialOrder }: { initialOrder: OrderR
       <div className="flex flex-col sm:flex-row gap-3 pt-2">
         <Link
           href={order.tableNumber ? `/table/${order.tableNumber}` : "/menu"}
-          className="flex-1 py-3.5 px-6 rounded-2xl bg-gold-500 text-black font-bold text-sm text-center hover:bg-gold-400 transition-all flex items-center justify-center gap-2"
+          className="flex-1 py-3.5 px-6 rounded-2xl bg-brand-500 text-black font-bold text-sm text-center hover:bg-brand-400 transition-all flex items-center justify-center gap-2"
         >
           <ShoppingBag className="w-4 h-4" />
           <span>Add More Dishes</span>

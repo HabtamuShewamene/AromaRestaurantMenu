@@ -162,7 +162,7 @@ export default function MenuCard({ item, onViewDetails, index = 0 }: MenuCardPro
         )}
 
         <div
-          className="absolute top-2 right-2 sm:top-3 sm:right-3 px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-xs sm:text-sm font-bold text-gold-300 font-playfair shadow-md z-20"
+          className="absolute top-2 right-2 sm:top-3 sm:right-3 px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-xs sm:text-sm font-bold text-brand-300 font-playfair shadow-md z-20"
           style={{ background: "rgba(8,8,8,0.85)", backdropFilter: "blur(12px)", border: "1px solid rgba(182,141,64,0.35)" }}
         >
           {item.price.toFixed(0)} Birr
@@ -173,7 +173,7 @@ export default function MenuCard({ item, onViewDetails, index = 0 }: MenuCardPro
             {item.isAvailable ? "Available" : "Sold Out"}
           </span>
           {item.isFeatured && (
-            <span className="hidden xs:inline-block px-1.5 py-0.5 rounded-full text-[8px] font-bold uppercase tracking-wider bg-gold-500/20 text-gold-300 border border-gold-500/40">
+            <span className="hidden xs:inline-block px-1.5 py-0.5 rounded-full text-[8px] font-bold uppercase tracking-wider bg-brand-500/20 text-brand-300 border border-brand-500/40">
               Chef Pick
             </span>
           )}
@@ -184,16 +184,16 @@ export default function MenuCard({ item, onViewDetails, index = 0 }: MenuCardPro
             className="absolute bottom-2 left-2 flex items-center gap-1 px-2 py-0.5 rounded-full z-20"
             style={{ background: "rgba(8,8,8,0.8)", backdropFilter: "blur(10px)", border: "1px solid rgba(255,255,255,0.1)" }}
           >
-            <Star className="w-2.5 h-2.5 fill-gold-400 text-gold-400" />
-            <span className="text-[10px] font-bold text-gold-400">{rating.toFixed(1)}</span>
+            <Star className="w-2.5 h-2.5 fill-brand-400 text-brand-400" />
+            <span className="text-[10px] font-bold text-brand-400">{rating.toFixed(1)}</span>
             <span className="text-[9px] text-zinc-500">({reviewCount})</span>
           </div>
         )}
       </div>
 
       <div className="flex flex-col flex-1 p-2.5 sm:p-4 pt-2.5 sm:pt-3.5">
-        <p className="text-[9px] sm:text-[10px] uppercase tracking-[0.15em] text-gold-500 font-semibold mb-0.5 truncate">{categoryName}</p>
-        <h3 className="font-semibold text-white text-xs sm:text-base leading-snug mb-1 line-clamp-1 font-playfair group-hover:text-gold-300 transition-colors">{item.name}</h3>
+        <p className="text-[9px] sm:text-[10px] uppercase tracking-[0.15em] text-brand-500 font-semibold mb-0.5 truncate">{categoryName}</p>
+        <h3 className="font-semibold text-white text-xs sm:text-base leading-snug mb-1 line-clamp-1 font-playfair group-hover:text-brand-300 transition-colors">{item.name}</h3>
         <p className="text-[10px] sm:text-xs text-zinc-400 leading-relaxed line-clamp-2 mb-2.5 sm:mb-4 flex-1">{item.description}</p>
 
         <div className="mt-auto pt-2 sm:pt-3 border-t border-white/5 flex items-center justify-between gap-1.5">
@@ -208,7 +208,7 @@ export default function MenuCard({ item, onViewDetails, index = 0 }: MenuCardPro
             type="button"
             disabled={!item.isAvailable}
             onClick={handleAddToCart}
-            className={`flex items-center justify-center gap-1 px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-lg sm:rounded-xl text-[10px] sm:text-xs font-bold transition-all ${!item.isAvailable ? "bg-zinc-800 text-zinc-500 cursor-not-allowed" : justAdded ? "bg-green-500 text-black shadow-[0_0_12px_rgba(34,197,94,0.4)]" : "bg-gold-500 text-black hover:bg-gold-400 hover:scale-[1.03] active:scale-95 shadow-[0_2px_10px_rgba(182,141,64,0.25)]"}`}
+            className={`flex items-center justify-center gap-1 px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-lg sm:rounded-xl text-[10px] sm:text-xs font-bold transition-all ${!item.isAvailable ? "bg-zinc-800 text-zinc-500 cursor-not-allowed" : justAdded ? "bg-green-500 text-black shadow-[0_0_12px_rgba(34,197,94,0.4)]" : "bg-brand-500 text-black hover:bg-brand-400 hover:scale-[1.03] active:scale-95 shadow-[0_2px_10px_rgba(182,141,64,0.25)]"}`}
           >
             {justAdded ? (
               <><Check className="w-3 h-3 stroke-[2.5]" /><span>Added</span></>

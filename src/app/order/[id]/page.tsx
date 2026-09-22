@@ -20,7 +20,7 @@ export default async function OrderDetailPage({ params }: PageProps) {
   const serialized = serializeOrder(order as any);
 
   return (
-    <main className="min-h-screen bg-[#080808] text-white">
+    <main className="min-h-screen bg-[#171918] text-white">
       <Navbar />
       <div className="pt-24 pb-20">
         <OrderStatusView initialOrder={serialized as any} />

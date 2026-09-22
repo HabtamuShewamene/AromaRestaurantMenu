@@ -43,7 +43,7 @@ export default function AnalyticsPanel() {
       <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
         <div className="glass-card rounded-3xl p-6">
           <p className="text-sm text-zinc-500">Revenue</p>
-          <p className="mt-3 text-3xl font-bold text-gold-500">${analytics.totalRevenue.toFixed(2)}</p>
+          <p className="mt-3 text-3xl font-bold text-brand-500">${analytics.totalRevenue.toFixed(2)}</p>
         </div>
         <div className="glass-card rounded-3xl p-6">
           <p className="text-sm text-zinc-500">Orders</p>
@@ -69,7 +69,7 @@ export default function AnalyticsPanel() {
                   <h3 className="font-semibold">{item.name}</h3>
                   <p className="text-sm text-zinc-500">{item.quantity} sold</p>
                 </div>
-                <span className="font-mono text-gold-500">${item.revenue.toFixed(2)}</span>
+                <span className="font-mono text-brand-500">${item.revenue.toFixed(2)}</span>
               </div>
             ))}
           </div>

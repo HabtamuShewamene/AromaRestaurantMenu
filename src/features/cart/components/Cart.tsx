@@ -51,7 +51,7 @@ export default function Cart({
               border: "1px solid rgba(182,141,64,0.25)",
             }}
           >
-            <ShoppingBag className="w-5 h-5 text-gold-400" />
+            <ShoppingBag className="w-5 h-5 text-brand-400" />
           </div>
           <div>
             <h2
@@ -92,7 +92,7 @@ export default function Cart({
                   border: "1px solid rgba(182,141,64,0.15)",
                 }}
               >
-                <ShoppingBag className="w-7 h-7 text-gold-500/50" />
+                <ShoppingBag className="w-7 h-7 text-brand-500/50" />
               </div>
               <p className="text-zinc-400 text-sm font-medium">Your cart is empty</p>
               <p className="text-zinc-600 text-xs mt-1">Add some delicious dishes from our menu!</p>
@@ -130,14 +130,14 @@ export default function Cart({
                   {/* Details */}
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-semibold text-white truncate">{item.name}</p>
-                    <p className="text-[11px] text-gold-500/80 mb-1">{item.category}</p>
+                    <p className="text-[11px] text-brand-500/80 mb-1">{item.category}</p>
 
                     {/* Addons List */}
                     {item.addons && item.addons.length > 0 && (
                       <div className="space-y-0.5 mb-2">
                         {item.addons.map((addon, i) => (
                           <p key={i} className="text-[11px] text-zinc-400 flex items-center gap-1">
-                            <span className="text-gold-400">+</span> {addon.name}{" "}
+                            <span className="text-brand-400">+</span> {addon.name}{" "}
                             {addon.price > 0 && (
                               <span className="text-zinc-500">({addon.price.toFixed(2)} ETB)</span>
                             )}
@@ -157,7 +157,7 @@ export default function Cart({
                     <div className="flex items-center gap-2">
                       <button
                         onClick={() => onDecrease(item.id)}
-                        className="w-8 h-8 flex items-center justify-center rounded-xl bg-zinc-900 border border-zinc-800 hover:bg-gold-500/20 hover:text-gold-400 text-zinc-300 active:scale-95 transition-all"
+                        className="w-8 h-8 flex items-center justify-center rounded-xl bg-[#292C2B] border border-zinc-800 hover:bg-brand-500/20 hover:text-brand-400 text-zinc-300 active:scale-95 transition-all"
                         aria-label="Decrease quantity"
                       >
                         <Minus className="w-3.5 h-3.5" />
@@ -165,7 +165,7 @@ export default function Cart({
                       <span className="text-xs font-bold text-white w-5 text-center">{item.quantity}</span>
                       <button
                         onClick={() => onIncrease(item.id)}
-                        className="w-8 h-8 flex items-center justify-center rounded-xl bg-zinc-900 border border-zinc-800 hover:bg-gold-500/20 hover:text-gold-400 text-zinc-300 active:scale-95 transition-all"
+                        className="w-8 h-8 flex items-center justify-center rounded-xl bg-[#292C2B] border border-zinc-800 hover:bg-brand-500/20 hover:text-brand-400 text-zinc-300 active:scale-95 transition-all"
                         aria-label="Increase quantity"
                       >
                         <Plus className="w-3.5 h-3.5" />
@@ -175,7 +175,7 @@ export default function Cart({
 
                   {/* Price + remove */}
                   <div className="flex flex-col items-end justify-between h-full gap-3 flex-shrink-0">
-                    <span className="text-sm font-bold text-gold-400 font-mono">{lineTotal.toFixed(2)} ETB</span>
+                    <span className="text-sm font-bold text-brand-400 font-mono">{lineTotal.toFixed(2)} ETB</span>
                     <button
                       onClick={() => onRemove(item.id)}
                       className="w-8 h-8 flex items-center justify-center rounded-full text-zinc-500 hover:bg-red-500/15 hover:text-red-400 transition-all"
@@ -206,7 +206,7 @@ export default function Cart({
 
           <div className="flex items-center justify-between py-3 my-3 border-t border-white/10">
             <span className="font-semibold text-white">Total Amount</span>
-            <span className="font-bold text-xl text-gold-400 font-mono font-playfair">{total.toFixed(2)} ETB</span>
+            <span className="font-bold text-xl text-brand-400 font-mono font-playfair">{total.toFixed(2)} ETB</span>
           </div>
 
           {/* Checkout button */}
@@ -219,7 +219,7 @@ export default function Cart({
               canCheckout
                 ? {
                     background: "linear-gradient(135deg, #b68d40, #d8c491, #a47636)",
-                    color: "#080808",
+                    color: "#171918",
                     boxShadow: "0 8px 24px rgba(182,141,64,0.35)",
                   }
                 : {

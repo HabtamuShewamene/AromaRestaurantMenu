@@ -1,17 +1,17 @@
 @import "tailwindcss";
 
 @theme {
-  --color-gold-50: #fbf8f1;
-  --color-gold-100: #f5eedc;
-  --color-gold-200: #eaddbc;
-  --color-gold-300: #d8c491;
-  --color-gold-400: #c5a469;
-  --color-gold-500: #b68d40;
-  --color-gold-600: #a47636;
-  --color-gold-700: #895d2f;
-  --color-gold-800: #714c2c;
-  --color-gold-900: #5e4028;
-  --color-gold-950: #352114;
+  --color-brand-50: #f4faeb;
+  --color-brand-100: #e6f5d4;
+  --color-brand-200: #ceecad;
+  --color-brand-300: #aedd7b;
+  --color-brand-400: #8BCF3F;
+  --color-brand-500: #7ac12f;
+  --color-brand-600: #5D9F2F;
+  --color-brand-700: #467b25;
+  --color-brand-800: #3b6222;
+  --color-brand-900: #335320;
+  --color-brand-950: #192e0d;
 
   --font-playfair: "Playfair Display", serif;
   --font-inter: "Inter", sans-serif;
@@ -19,25 +19,25 @@
 
 @layer base {
   :root {
-    --background: #080808;
-    --foreground: #fafafa;
-    --card: #111111;
-    --card-foreground: #fafafa;
-    --popover: #080808;
-    --popover-foreground: #fafafa;
-    --primary: #b68d40;
-    --primary-foreground: #080808;
-    --secondary: #1a1a1a;
-    --secondary-foreground: #fafafa;
-    --muted: #1e1e1e;
-    --muted-foreground: #888888;
-    --accent: #1a1a1a;
-    --accent-foreground: #fafafa;
+    --background: #171918;
+    --foreground: #F4F5EF;
+    --card: #292C2B;
+    --card-foreground: #F4F5EF;
+    --popover: #171918;
+    --popover-foreground: #F4F5EF;
+    --primary: #8BCF3F;
+    --primary-foreground: #171918;
+    --secondary: #292C2B;
+    --secondary-foreground: #F4F5EF;
+    --muted: #292C2B;
+    --muted-foreground: #A6ABA5;
+    --accent: #292C2B;
+    --accent-foreground: #F4F5EF;
     --destructive: #7f1d1d;
-    --destructive-foreground: #fafafa;
-    --border: #222222;
-    --input: #1a1a1a;
-    --ring: #b68d40;
+    --destructive-foreground: #F4F5EF;
+    --border: #454947;
+    --input: #292C2B;
+    --ring: #8BCF3F;
   }
 
   * {
@@ -49,8 +49,8 @@
   }
 
   body {
-    background-color: #080808;
-    color: #fafafa;
+    background-color: #171918;
+    color: #F4F5EF;
     font-family: "Inter", sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -66,11 +66,11 @@
     background: #111;
   }
   ::-webkit-scrollbar-thumb {
-    background: #b68d40;
+    background: #8BCF3F;
     border-radius: 100px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: #c5a469;
+    background: #5D9F2F;
   }
 }
 

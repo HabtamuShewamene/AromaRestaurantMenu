@@ -87,7 +87,7 @@ export default function TableManager() {
       </div>
 
       {message && (
-        <div className="rounded-2xl border border-gold-500/20 bg-gold-500/10 p-4 text-sm text-gold-300">
+        <div className="rounded-2xl border border-brand-500/20 bg-brand-500/10 p-4 text-sm text-brand-300">
           {message}
         </div>
       )}
@@ -140,7 +140,7 @@ export default function TableManager() {
                       <Users className="w-3.5 h-3.5 text-zinc-500" /> Capacity: {table.capacity}
                     </span>
                     {activeSession && (
-                      <span className="text-gold-400 font-semibold">
+                      <span className="text-brand-400 font-semibold">
                         {orders.length} active order{orders.length !== 1 ? "s" : ""}
                       </span>
                     )}
@@ -149,10 +149,10 @@ export default function TableManager() {
 
                 {/* Active Session Info */}
                 {activeSession ? (
-                  <div className="p-3.5 rounded-2xl bg-zinc-950 border border-white/5 space-y-1.5 text-xs">
+                  <div className="p-3.5 rounded-2xl bg-[#292C2B] border border-white/5 space-y-1.5 text-xs">
                     <div className="flex justify-between text-zinc-400">
                       <span>Session Total:</span>
-                      <span className="font-mono font-bold text-gold-400 text-sm">
+                      <span className="font-mono font-bold text-brand-400 text-sm">
                         ${sessionTotal.toFixed(2)}
                       </span>
                     </div>
@@ -162,7 +162,7 @@ export default function TableManager() {
                     </div>
                   </div>
                 ) : (
-                  <div className="p-3.5 rounded-2xl bg-zinc-950/40 border border-white/5 text-center text-xs text-zinc-600">
+                  <div className="p-3.5 rounded-2xl bg-[#292C2B]/40 border border-white/5 text-center text-xs text-zinc-600">
                     No active session
                   </div>
                 )}
@@ -172,9 +172,9 @@ export default function TableManager() {
                   <div className="grid grid-cols-2 gap-2">
                     <button
                       onClick={() => setSelectedQrTable(table)}
-                      className="flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-white/5 hover:bg-gold-500/15 hover:text-gold-300 text-zinc-300 text-xs font-semibold transition-all border border-white/5"
+                      className="flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-white/5 hover:bg-brand-500/15 hover:text-brand-300 text-zinc-300 text-xs font-semibold transition-all border border-white/5"
                     >
-                      <QrCode className="w-3.5 h-3.5 text-gold-400" />
+                      <QrCode className="w-3.5 h-3.5 text-brand-400" />
                       <span>View QR</span>
                     </button>
 
@@ -206,7 +206,7 @@ export default function TableManager() {
       {/* QR Code Printable Modal */}
       {selectedQrTable && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4 backdrop-blur-md">
-          <div className="bg-[#111111] border border-white/10 rounded-3xl max-w-sm w-full p-6 text-center space-y-6 shadow-2xl">
+          <div className="bg-[#292C2B] border border-white/10 rounded-3xl max-w-sm w-full p-6 text-center space-y-6 shadow-2xl">
             <div className="flex items-center justify-between border-b border-white/10 pb-3">
               <h3 className="font-bold text-white text-base font-playfair">
                 Table {selectedQrTable.number} QR Code
@@ -253,7 +253,7 @@ export default function TableManager() {
             <div className="flex gap-2">
               <button
                 onClick={() => window.print()}
-                className="flex-1 py-3 rounded-xl bg-gold-500 font-bold text-black text-xs hover:bg-gold-400 transition-all flex items-center justify-center gap-1.5"
+                className="flex-1 py-3 rounded-xl bg-brand-500 font-bold text-black text-xs hover:bg-brand-400 transition-all flex items-center justify-center gap-1.5"
               >
                 <Printer className="w-4 h-4" />
                 <span>Print QR Card</span>

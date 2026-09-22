@@ -238,7 +238,7 @@ export default function KitchenDisplay() {
               <h1 className="text-lg sm:text-xl font-bold tracking-tight text-white font-playfair leading-none">
                 AROMA
               </h1>
-              <span className="px-2 py-0.5 rounded-md bg-gold-500 text-black font-extrabold text-[10px] tracking-widest uppercase">
+              <span className="px-2 py-0.5 rounded-md bg-brand-500 text-black font-extrabold text-[10px] tracking-widest uppercase">
                 KDS
               </span>
             </div>
@@ -251,15 +251,15 @@ export default function KitchenDisplay() {
         {/* Live Clock & Connection Status */}
         <div className="flex items-center gap-4 text-xs">
           {/* Digital Clock */}
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-zinc-900/90 border border-zinc-800 text-zinc-300 font-mono">
-            <Clock className="w-3.5 h-3.5 text-gold-400" />
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#292C2B]/90 border border-zinc-800 text-zinc-300 font-mono">
+            <Clock className="w-3.5 h-3.5 text-brand-400" />
             <span>
               {currentTime.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" })}
             </span>
           </div>
 
           {/* Connection Pulse */}
-          <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-zinc-900/90 border border-zinc-800 text-zinc-400 text-xs">
+          <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#292C2B]/90 border border-zinc-800 text-zinc-400 text-xs">
             <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
             <span className="font-medium text-[11px]">Live Sync (5s)</span>
           </div>
@@ -272,12 +272,12 @@ export default function KitchenDisplay() {
             onClick={toggleSound}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all ${
               soundEnabled
-                ? "bg-gold-500/15 border-gold-500/30 text-gold-300 hover:bg-gold-500/25"
-                : "bg-zinc-900 border-zinc-800 text-zinc-500 hover:text-zinc-300"
+                ? "bg-brand-500/15 border-brand-500/30 text-brand-300 hover:bg-brand-500/25"
+                : "bg-[#292C2B] border-zinc-800 text-zinc-500 hover:text-zinc-300"
             }`}
             title={soundEnabled ? "Audio chime active" : "Audio chime muted"}
           >
-            {soundEnabled ? <Volume2 className="w-4 h-4 text-gold-400" /> : <VolumeX className="w-4 h-4" />}
+            {soundEnabled ? <Volume2 className="w-4 h-4 text-brand-400" /> : <VolumeX className="w-4 h-4" />}
             <span className="hidden md:inline">{soundEnabled ? "Sound ON" : "Muted"}</span>
           </button>
 
@@ -285,10 +285,10 @@ export default function KitchenDisplay() {
           <button
             onClick={() => fetchOrders(true)}
             disabled={isRefreshing}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-300 hover:text-white hover:bg-zinc-800 text-xs font-semibold transition-all disabled:opacity-50"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#292C2B] border border-zinc-800 text-zinc-300 hover:text-white hover:bg-zinc-800 text-xs font-semibold transition-all disabled:opacity-50"
             title="Refresh kitchen orders"
           >
-            <RefreshCw className={`w-3.5 h-3.5 text-gold-400 ${isRefreshing ? "animate-spin" : ""}`} />
+            <RefreshCw className={`w-3.5 h-3.5 text-brand-400 ${isRefreshing ? "animate-spin" : ""}`} />
             <span className="hidden md:inline">Refresh</span>
           </button>
 
@@ -298,7 +298,7 @@ export default function KitchenDisplay() {
               href="/admin/orders"
               className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-white/5 border border-white/10 text-zinc-400 hover:text-white text-xs font-medium transition-all"
             >
-              <Shield className="w-3.5 h-3.5 text-gold-400" />
+              <Shield className="w-3.5 h-3.5 text-brand-400" />
               <span>Admin</span>
             </Link>
             <Link
@@ -314,7 +314,7 @@ export default function KitchenDisplay() {
 
       {/* ── New Order Visual Notification Banner ── */}
       {newOrderAlert && (
-        <div className="bg-gradient-to-r from-gold-500 via-amber-400 to-gold-600 text-black px-4 py-2.5 text-center font-bold text-sm shadow-xl flex items-center justify-center gap-2 animate-bounce">
+        <div className="bg-gradient-to-r from-brand-500 via-amber-400 to-brand-600 text-black px-4 py-2.5 text-center font-bold text-sm shadow-xl flex items-center justify-center gap-2 animate-bounce">
           <Bell className="w-4 h-4 animate-ping" />
           <span>🔔 {newOrderAlert}</span>
         </div>
@@ -338,8 +338,8 @@ export default function KitchenDisplay() {
                 onClick={() => setActiveFilter(tab.id as FilterType)}
                 className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all ${
                   isSelected
-                    ? "bg-gold-500 text-black shadow-[0_2px_12px_rgba(182,141,64,0.4)] scale-105"
-                    : "bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-white hover:bg-zinc-800"
+                    ? "bg-brand-500 text-black shadow-[0_2px_12px_rgba(182,141,64,0.4)] scale-105"
+                    : "bg-[#292C2B] border border-zinc-800 text-zinc-400 hover:text-white hover:bg-zinc-800"
                 }`}
               >
                 <span>{tab.label}</span>
@@ -372,7 +372,7 @@ export default function KitchenDisplay() {
             {Array.from({ length: 4 }).map((_, i) => (
               <div
                 key={i}
-                className="h-80 rounded-3xl bg-zinc-900/60 border border-white/5 animate-pulse p-5 space-y-4"
+                className="h-80 rounded-3xl bg-[#292C2B]/60 border border-white/5 animate-pulse p-5 space-y-4"
               >
                 <div className="h-6 bg-zinc-800 rounded-lg w-1/2" />
                 <div className="h-10 bg-zinc-800 rounded-xl" />
@@ -385,7 +385,7 @@ export default function KitchenDisplay() {
           </div>
         ) : filteredOrders.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-28 text-center space-y-4">
-            <div className="w-20 h-20 rounded-3xl bg-zinc-900/80 border border-zinc-800 flex items-center justify-center text-4xl shadow-2xl">
+            <div className="w-20 h-20 rounded-3xl bg-[#292C2B]/80 border border-zinc-800 flex items-center justify-center text-4xl shadow-2xl">
               🍳
             </div>
             <div>
@@ -398,7 +398,7 @@ export default function KitchenDisplay() {
               onClick={() => fetchOrders(true)}
               className="mt-2 px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-xs font-semibold text-zinc-300 hover:text-white hover:bg-white/10 transition-all flex items-center gap-2"
             >
-              <RefreshCw className="w-3.5 h-3.5 text-gold-400" />
+              <RefreshCw className="w-3.5 h-3.5 text-brand-400" />
               <span>Check for Orders</span>
             </button>
           </div>
@@ -500,9 +500,9 @@ export default function KitchenDisplay() {
                             {item.addons.map((addon, aIdx) => (
                               <p
                                 key={aIdx}
-                                className="text-xs font-semibold text-gold-300 flex items-center gap-1.5"
+                                className="text-xs font-semibold text-brand-300 flex items-center gap-1.5"
                               >
-                                <span className="text-gold-500 font-bold">•</span>
+                                <span className="text-brand-500 font-bold">•</span>
                                 <span>{addon.name}</span>
                               </p>
                             ))}

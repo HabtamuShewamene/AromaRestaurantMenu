@@ -97,21 +97,21 @@ export default function InventoryManager() {
         </div>
         <button
           onClick={handleCreate}
-          className="flex items-center gap-2 rounded-xl bg-gold-500 px-5 py-3 font-bold text-black transition-transform hover:scale-105"
+          className="flex items-center gap-2 rounded-xl bg-brand-500 px-5 py-3 font-bold text-black transition-transform hover:scale-105"
         >
           <Plus className="h-5 w-5" /> Add Ingredient
         </button>
       </div>
 
       {message && (
-        <div className="rounded-2xl border border-gold-500/20 bg-gold-500/10 p-4 text-sm text-gold-400">
+        <div className="rounded-2xl border border-brand-500/20 bg-brand-500/10 p-4 text-sm text-brand-400">
           {message}
         </div>
       )}
 
       {/* Form Inline Editor */}
       {(isCreating || editingId) && (
-        <div className="glass-card rounded-3xl p-6 border border-gold-500/30">
+        <div className="glass-card rounded-3xl p-6 border border-brand-500/30">
           <h2 className="mb-4 text-xl font-bold">{isCreating ? "New Ingredient" : "Edit Ingredient"}</h2>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <div className="space-y-2">
@@ -120,7 +120,7 @@ export default function InventoryManager() {
                 type="text"
                 value={formData.name || ""}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="w-full rounded-xl border border-zinc-800 bg-zinc-900/50 px-4 py-2 outline-none focus:border-gold-500"
+                className="w-full rounded-xl border border-zinc-800 bg-[#292C2B]/50 px-4 py-2 outline-none focus:border-brand-500"
                 placeholder="e.g. Arabica Beans"
               />
             </div>
@@ -130,7 +130,7 @@ export default function InventoryManager() {
                 type="number"
                 value={formData.currentStock || ""}
                 onChange={(e) => setFormData({ ...formData, currentStock: Number(e.target.value) })}
-                className="w-full rounded-xl border border-zinc-800 bg-zinc-900/50 px-4 py-2 outline-none focus:border-gold-500"
+                className="w-full rounded-xl border border-zinc-800 bg-[#292C2B]/50 px-4 py-2 outline-none focus:border-brand-500"
               />
             </div>
             <div className="space-y-2">
@@ -139,7 +139,7 @@ export default function InventoryManager() {
                 type="text"
                 value={formData.unit || ""}
                 onChange={(e) => setFormData({ ...formData, unit: e.target.value })}
-                className="w-full rounded-xl border border-zinc-800 bg-zinc-900/50 px-4 py-2 outline-none focus:border-gold-500"
+                className="w-full rounded-xl border border-zinc-800 bg-[#292C2B]/50 px-4 py-2 outline-none focus:border-brand-500"
                 placeholder="e.g. kg, ml, pcs"
               />
             </div>
@@ -150,7 +150,7 @@ export default function InventoryManager() {
                 step="0.01"
                 value={formData.minimumStock || ""}
                 onChange={(e) => setFormData({ ...formData, minimumStock: Number(e.target.value) })}
-                className="w-full rounded-xl border border-zinc-800 bg-zinc-900/50 px-4 py-2 outline-none focus:border-gold-500"
+                className="w-full rounded-xl border border-zinc-800 bg-[#292C2B]/50 px-4 py-2 outline-none focus:border-brand-500"
               />
             </div>
           </div>
@@ -158,7 +158,7 @@ export default function InventoryManager() {
             <button onClick={handleCancel} className="flex items-center gap-2 rounded-xl border border-zinc-700 px-4 py-2 text-zinc-300 hover:bg-zinc-800">
               <X className="h-4 w-4" /> Cancel
             </button>
-            <button onClick={handleSave} className="flex items-center gap-2 rounded-xl bg-gold-600 px-4 py-2 text-black font-bold hover:bg-gold-500">
+            <button onClick={handleSave} className="flex items-center gap-2 rounded-xl bg-brand-600 px-4 py-2 text-black font-bold hover:bg-brand-500">
               <Save className="h-4 w-4" /> Save
             </button>
           </div>
@@ -190,7 +190,7 @@ export default function InventoryManager() {
                 ingredients.map((item) => (
                   <tr key={item.id} className="transition-colors hover:bg-white/5">
                     <td className="px-6 py-4 font-medium text-white flex items-center gap-3">
-                      <div className="p-2 rounded-lg bg-zinc-900">
+                      <div className="p-2 rounded-lg bg-[#292C2B]">
                         <Package className="h-4 w-4 text-zinc-400" />
                       </div>
                       {item.name}

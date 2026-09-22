@@ -43,7 +43,7 @@ export default function FilterBar({
                   ? {
                       background:
                         "linear-gradient(135deg, #b68d40, #d8c491, #a47636)",
-                      color: "#080808",
+                      color: "#171918",
                       boxShadow: "0 4px 16px rgba(182,141,64,0.35)",
                     }
                   : {

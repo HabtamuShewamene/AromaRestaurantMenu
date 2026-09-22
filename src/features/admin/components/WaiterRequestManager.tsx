@@ -19,7 +19,7 @@ const REQUEST_TYPE_INFO: Record<string, { label: string; icon: any; color: strin
   REQUEST_WATER: { label: "Water Refill", icon: Droplets, color: "text-blue-400 bg-blue-500/10 border-blue-500/30" },
   REQUEST_CUTLERY: { label: "Extra Cutlery", icon: Utensils, color: "text-purple-400 bg-purple-500/10 border-purple-500/30" },
   REQUEST_BILL: { label: "Bill Requested", icon: Receipt, color: "text-green-400 bg-green-500/10 border-green-500/30" },
-  CUSTOM: { label: "Custom Request", icon: BellRing, color: "text-gold-400 bg-gold-500/10 border-gold-500/30" },
+  CUSTOM: { label: "Custom Request", icon: BellRing, color: "text-brand-400 bg-brand-500/10 border-brand-500/30" },
 };
 
 export default function WaiterRequestManager() {
@@ -87,7 +87,7 @@ export default function WaiterRequestManager() {
             <h1 className="text-3xl sm:text-4xl font-bold text-white font-playfair">
               Waiter & Table Assistance
             </h1>
-            {isRefreshing && <RefreshCw className="w-4 h-4 text-gold-400 animate-spin" />}
+            {isRefreshing && <RefreshCw className="w-4 h-4 text-brand-400 animate-spin" />}
           </div>
           <p className="text-zinc-400 text-sm">
             Real-time feed of guest service calls, water refills, cutlery, and bill requests.
@@ -103,7 +103,7 @@ export default function WaiterRequestManager() {
       </div>
 
       {message && (
-        <div className="rounded-2xl border border-gold-500/20 bg-gold-500/10 p-4 text-sm text-gold-300">
+        <div className="rounded-2xl border border-brand-500/20 bg-brand-500/10 p-4 text-sm text-brand-300">
           {message}
         </div>
       )}
@@ -132,11 +132,11 @@ export default function WaiterRequestManager() {
                 <div className="space-y-3">
                   <div className="flex items-start justify-between">
                     <div>
-                      <span className="text-xs font-mono text-gold-400 font-bold uppercase tracking-wider block">
+                      <span className="text-xs font-mono text-brand-400 font-bold uppercase tracking-wider block">
                         Table {tableNum} {req.table?.label ? `• ${req.table.label}` : ""}
                       </span>
                       <h3 className="text-lg font-bold text-white flex items-center gap-2 mt-0.5">
-                        <Icon className="w-4 h-4 text-gold-400" />
+                        <Icon className="w-4 h-4 text-brand-400" />
                         <span>{typeInfo.label}</span>
                       </h3>
                     </div>
@@ -155,7 +155,7 @@ export default function WaiterRequestManager() {
                   </div>
 
                   {req.note && (
-                    <div className="p-3 rounded-xl bg-zinc-950 border border-white/5 text-xs text-zinc-300 italic">
+                    <div className="p-3 rounded-xl bg-[#292C2B] border border-white/5 text-xs text-zinc-300 italic">
                       "{req.note}"
                     </div>
                   )}

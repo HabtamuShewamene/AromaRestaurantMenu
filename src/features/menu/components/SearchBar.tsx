@@ -81,7 +81,7 @@ export default function SearchBar({
       >
         {/* Search icon */}
         <div className="flex-shrink-0">
-          <Search className={`w-5 h-5 transition-colors ${isFocused ? 'text-gold-400' : 'text-gold-500/70'}`} strokeWidth={1.5} />
+          <Search className={`w-5 h-5 transition-colors ${isFocused ? 'text-brand-400' : 'text-brand-500/70'}`} strokeWidth={1.5} />
         </div>
 
         {/* Input */}
@@ -117,9 +117,9 @@ export default function SearchBar({
         {/* Filter button */}
         <button 
           onClick={onFilterToggle}
-          className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-xl bg-gold-500/10 border border-gold-500/20 hover:bg-gold-500/20 transition-all"
+          className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-xl bg-brand-500/10 border border-brand-500/20 hover:bg-brand-500/20 transition-all"
         >
-          <SlidersHorizontal className="w-3.5 h-3.5 text-gold-400" />
+          <SlidersHorizontal className="w-3.5 h-3.5 text-brand-400" />
         </button>
       </div>
 
@@ -153,7 +153,7 @@ export default function SearchBar({
                         e.preventDefault(); // Prevents input onBlur
                         handleSearch(term);
                       }}
-                      className="px-3 py-1.5 rounded-lg bg-zinc-900 border border-zinc-800 text-sm text-zinc-300 hover:bg-zinc-800 hover:text-white transition-colors"
+                      className="px-3 py-1.5 rounded-lg bg-[#292C2B] border border-zinc-800 text-sm text-zinc-300 hover:bg-zinc-800 hover:text-white transition-colors"
                     >
                       {term}
                     </button>
@@ -164,7 +164,7 @@ export default function SearchBar({
 
             {popularSearches.length > 0 && (
               <div>
-                <h4 className="text-xs font-semibold text-gold-500/80 uppercase tracking-wider flex items-center gap-1.5 mb-2">
+                <h4 className="text-xs font-semibold text-brand-500/80 uppercase tracking-wider flex items-center gap-1.5 mb-2">
                   <TrendingUp className="w-3.5 h-3.5" /> Popular
                 </h4>
                 <div className="flex flex-wrap gap-2">
@@ -175,7 +175,7 @@ export default function SearchBar({
                         e.preventDefault(); // Prevents input onBlur
                         handleSearch(term);
                       }}
-                      className="px-3 py-1.5 rounded-lg bg-gold-500/5 border border-gold-500/10 text-sm text-gold-200 hover:bg-gold-500/10 transition-colors"
+                      className="px-3 py-1.5 rounded-lg bg-brand-500/5 border border-brand-500/10 text-sm text-brand-200 hover:bg-brand-500/10 transition-colors"
                     >
                       {term}
                     </button>

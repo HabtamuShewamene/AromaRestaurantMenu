@@ -103,7 +103,7 @@ export default function AdminOrdersManager() {
               Live Order Management
             </h1>
             {isRefreshing && (
-              <RefreshCw className="w-4 h-4 text-gold-400 animate-spin" />
+              <RefreshCw className="w-4 h-4 text-brand-400 animate-spin" />
             )}
           </div>
           <p className="text-zinc-400 text-sm">
@@ -144,7 +144,7 @@ export default function AdminOrdersManager() {
       />
 
       {message && (
-        <div className="rounded-2xl border border-gold-500/20 bg-gold-500/10 p-4 text-sm text-gold-300 animate-fade-in">
+        <div className="rounded-2xl border border-brand-500/20 bg-brand-500/10 p-4 text-sm text-brand-300 animate-fade-in">
           {message}
         </div>
       )}

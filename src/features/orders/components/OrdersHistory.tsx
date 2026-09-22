@@ -44,7 +44,7 @@ export default function OrdersHistory() {
       <div className="glass-card rounded-3xl p-10 text-center">
         <h2 className="mb-3 text-2xl font-bold">Sign in to view your order history</h2>
         <p className="mb-6 text-zinc-500">Clients can place orders and track only their own purchases.</p>
-        <Link href="/login" className="rounded-full bg-gold-600 px-6 py-3 font-bold text-black transition-colors hover:bg-gold-700">
+        <Link href="/login" className="rounded-full bg-brand-600 px-6 py-3 font-bold text-black transition-colors hover:bg-brand-700">
           Go To Login
         </Link>
       </div>

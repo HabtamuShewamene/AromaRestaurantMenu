@@ -17,7 +17,7 @@ export default function ReviewDisplay({
   return (
     <div className="space-y-6">
       {/* Rating Summary */}
-      <div className="flex items-center gap-4 rounded-2xl border border-zinc-800/50 bg-zinc-900/20 p-6">
+      <div className="flex items-center gap-4 rounded-2xl border border-zinc-800/50 bg-[#292C2B]/20 p-6">
         <div>
           <div className="flex items-baseline gap-2">
             <span className="text-4xl font-bold">{averageRating}</span>
@@ -45,7 +45,7 @@ export default function ReviewDisplay({
           {reviews.map((review) => (
             <div
               key={review.id}
-              className="rounded-2xl border border-zinc-800/50 bg-zinc-900/20 p-5 hover:border-gold-500/20 transition-all"
+              className="rounded-2xl border border-zinc-800/50 bg-[#292C2B]/20 p-5 hover:border-brand-500/20 transition-all"
             >
               <div className="mb-3 flex items-start justify-between">
                 <div>

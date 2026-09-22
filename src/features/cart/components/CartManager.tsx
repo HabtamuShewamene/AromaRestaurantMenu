@@ -97,15 +97,15 @@ export default function CartManager() {
     <section className="space-y-6">
       {/* Table Banner Notice if present */}
       {tableContext && (
-        <div className="flex items-center justify-between p-4 rounded-2xl bg-gold-500/10 border border-gold-500/20 text-gold-300">
+        <div className="flex items-center justify-between p-4 rounded-2xl bg-brand-500/10 border border-brand-500/20 text-brand-300">
           <div className="flex items-center gap-2.5">
-            <Utensils className="w-4 h-4 text-gold-400 flex-shrink-0" />
+            <Utensils className="w-4 h-4 text-brand-400 flex-shrink-0" />
             <span className="text-sm font-semibold">
               Ordering for Table {tableContext.tableNumber}{" "}
               {tableContext.tableLabel ? `(${tableContext.tableLabel})` : ""}
             </span>
           </div>
-          <span className="text-xs bg-gold-500/20 px-2.5 py-1 rounded-full font-bold uppercase tracking-wider text-gold-400">
+          <span className="text-xs bg-brand-500/20 px-2.5 py-1 rounded-full font-bold uppercase tracking-wider text-brand-400">
             Dine-in
           </span>
         </div>
@@ -137,14 +137,14 @@ export default function CartManager() {
                   placeholder="Your Name (Optional)"
                   value={guestName}
                   onChange={(e) => setGuestName(e.target.value)}
-                  className="bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2.5 text-sm text-white placeholder-zinc-600 outline-none focus:border-gold-500"
+                  className="bg-[#292C2B] border border-zinc-800 rounded-xl px-4 py-2.5 text-sm text-white placeholder-zinc-600 outline-none focus:border-brand-500"
                 />
                 <input
                   type="tel"
                   placeholder="Phone Number (Optional)"
                   value={guestPhone}
                   onChange={(e) => setGuestPhone(e.target.value)}
-                  className="bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-2.5 text-sm text-white placeholder-zinc-600 outline-none focus:border-gold-500"
+                  className="bg-[#292C2B] border border-zinc-800 rounded-xl px-4 py-2.5 text-sm text-white placeholder-zinc-600 outline-none focus:border-brand-500"
                 />
               </div>
             </div>

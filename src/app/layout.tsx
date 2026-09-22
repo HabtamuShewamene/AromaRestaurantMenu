@@ -32,7 +32,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark" data-scroll-behavior="smooth">
       <body
-        className={`${inter.variable} ${playfair.variable} font-inter bg-[#080808] text-zinc-100 min-h-screen antialiased`}
+        className={`${inter.variable} ${playfair.variable} font-inter bg-[#171918] text-zinc-100 min-h-screen antialiased`}
       >
         <NextAuthProvider>
           <CartProvider>

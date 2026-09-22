@@ -78,7 +78,7 @@ export default function TableActionBar() {
   return (
     <>
       {/* Table Banner Header */}
-      <div className="pt-20 bg-[#0e0e0e]/95 border-b border-gold-500/20 px-4 py-3 shadow-lg">
+      <div className="pt-20 bg-[#0e0e0e]/95 border-b border-brand-500/20 px-4 py-3 shadow-lg">
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-3">
           <div className="flex items-center gap-2.5">
             <span className="flex h-2.5 w-2.5 rounded-full bg-green-500 animate-pulse flex-shrink-0" />
@@ -91,7 +91,7 @@ export default function TableActionBar() {
                   </span>
                 )}
               </p>
-              <p className="text-[10px] text-gold-400 uppercase tracking-wider font-semibold">
+              <p className="text-[10px] text-brand-400 uppercase tracking-wider font-semibold">
                 Dine-in Table Session
               </p>
             </div>
@@ -100,9 +100,9 @@ export default function TableActionBar() {
           <div className="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
             <button
               onClick={() => setShowWaiterModal(true)}
-              className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-gold-500/10 border border-gold-500/30 text-gold-300 hover:bg-gold-500/20 text-[11px] sm:text-xs font-semibold transition-all hover:scale-105 active:scale-95 shadow-[0_0_12px_rgba(182,141,64,0.1)]"
+              className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-brand-500/10 border border-brand-500/30 text-brand-300 hover:bg-brand-500/20 text-[11px] sm:text-xs font-semibold transition-all hover:scale-105 active:scale-95 shadow-[0_0_12px_rgba(182,141,64,0.1)]"
             >
-              <BellRing className="w-3.5 h-3.5 text-gold-400" />
+              <BellRing className="w-3.5 h-3.5 text-brand-400" />
               <span>Call Waiter</span>
             </button>
 
@@ -129,8 +129,8 @@ export default function TableActionBar() {
             >
               <div className="flex items-center justify-between border-b border-white/10 pb-4">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-9 h-9 rounded-xl bg-gold-500/20 border border-gold-500/40 flex items-center justify-center">
-                    <BellRing className="w-5 h-5 text-gold-400" />
+                  <div className="w-9 h-9 rounded-xl bg-brand-500/20 border border-brand-500/40 flex items-center justify-center">
+                    <BellRing className="w-5 h-5 text-brand-400" />
                   </div>
                   <div>
                     <h3 className="font-bold text-white text-lg">Call Waiter</h3>
@@ -168,11 +168,11 @@ export default function TableActionBar() {
                           onClick={() => setSelectedType(item.id as any)}
                           className={`flex items-center gap-2 p-3 rounded-2xl border text-xs font-semibold transition-all ${
                             isSelected
-                              ? "bg-gold-500/20 border-gold-500/50 text-gold-300"
-                              : "bg-zinc-900 border-zinc-800 text-zinc-400 hover:bg-zinc-800"
+                              ? "bg-brand-500/20 border-brand-500/50 text-brand-300"
+                              : "bg-[#292C2B] border-zinc-800 text-zinc-400 hover:bg-zinc-800"
                           }`}
                         >
-                          <Icon className="w-4 h-4 text-gold-400" />
+                          <Icon className="w-4 h-4 text-brand-400" />
                           <span>{item.label}</span>
                         </button>
                       );
@@ -188,14 +188,14 @@ export default function TableActionBar() {
                       value={customNote}
                       onChange={(e) => setCustomNote(e.target.value)}
                       placeholder="e.g., extra napkins, ice with water..."
-                      className="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3 text-sm text-white placeholder-zinc-600 outline-none focus:border-gold-500"
+                      className="w-full bg-[#292C2B] border border-zinc-800 rounded-xl p-3 text-sm text-white placeholder-zinc-600 outline-none focus:border-brand-500"
                     />
                   </div>
 
                   <button
                     disabled={isSubmitting}
                     onClick={handleCallWaiter}
-                    className="w-full py-3.5 rounded-2xl bg-gold-500 font-bold text-black text-sm hover:bg-gold-400 transition-all active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-2"
+                    className="w-full py-3.5 rounded-2xl bg-brand-500 font-bold text-black text-sm hover:bg-brand-400 transition-all active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-2"
                   >
                     {isSubmitting ? (
                       <>
@@ -225,8 +225,8 @@ export default function TableActionBar() {
             >
               <div className="flex items-center justify-between border-b border-white/10 pb-4">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-9 h-9 rounded-xl bg-gold-500/20 border border-gold-500/40 flex items-center justify-center">
-                    <Receipt className="w-5 h-5 text-gold-400" />
+                  <div className="w-9 h-9 rounded-xl bg-brand-500/20 border border-brand-500/40 flex items-center justify-center">
+                    <Receipt className="w-5 h-5 text-brand-400" />
                   </div>
                   <div>
                     <h3 className="font-bold text-white text-lg">Request Bill</h3>
@@ -250,13 +250,13 @@ export default function TableActionBar() {
                 <div className="space-y-4">
                   <p className="text-sm text-zinc-300 leading-relaxed">
                     Ready for the bill? We will notify our restaurant staff to bring your check to{" "}
-                    <strong className="text-gold-400">Table {tableContext.tableNumber}</strong>.
+                    <strong className="text-brand-400">Table {tableContext.tableNumber}</strong>.
                   </p>
 
                   <button
                     disabled={isSubmitting}
                     onClick={handleRequestBill}
-                    className="w-full py-3.5 rounded-2xl bg-gold-500 font-bold text-black text-sm hover:bg-gold-400 transition-all active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-2"
+                    className="w-full py-3.5 rounded-2xl bg-brand-500 font-bold text-black text-sm hover:bg-brand-400 transition-all active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-2"
                   >
                     {isSubmitting ? (
                       <>
