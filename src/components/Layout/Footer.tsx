@@ -4,7 +4,7 @@ import { MapPin, Phone, Mail, Clock } from "lucide-react";
 export default function Footer() {
   return (
     <footer className="border-t border-border bg-card/80 py-16 backdrop-blur-xl">
-      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-12 px-4 sm:px-6 lg:px-8 md:grid-cols-4">
+      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-12 px-4 sm:px-6 lg:px-8 md:grid-cols-3">
         {/* Brand column */}
         <div className="col-span-1 md:col-span-2">
           <div className="mb-4 flex items-center gap-3">
@@ -29,32 +29,7 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Quick Navigation */}
-        <div>
-          <h4 className="mb-4 text-sm font-bold text-foreground uppercase tracking-wider">Explore Menu</h4>
-          <ul className="space-y-3 text-sm text-muted-foreground">
-            <li>
-              <Link href="/menu" className="transition-colors hover:text-primary">
-                Menu Explorer
-              </Link>
-            </li>
-            <li>
-              <Link href="/cart" className="transition-colors hover:text-primary">
-                Shopping Cart
-              </Link>
-            </li>
-            <li>
-              <Link href="/orders" className="transition-colors hover:text-primary">
-                Order History & Tracking
-              </Link>
-            </li>
-            <li>
-              <Link href="/admin/dashboard" className="transition-colors hover:text-primary text-primary/80">
-                Admin Control Portal
-              </Link>
-            </li>
-          </ul>
-        </div>
+
 
         {/* Contact Info */}
         <div>

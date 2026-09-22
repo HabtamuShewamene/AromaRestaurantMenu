@@ -28,6 +28,8 @@ interface CartContextType {
   cartTotal: number;
   tableContext: TableContextType | null;
   setTableContext: (context: TableContextType | null) => void;
+  isCartOpen: boolean;
+  setIsCartOpen: (isOpen: boolean) => void;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -36,6 +38,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [cartItems, setCartItems] = useState<CartItemRecord[]>([]);
   const [tableContext, setTableContextState] = useState<TableContextType | null>(null);
   const [isInitialized, setIsInitialized] = useState(false);
+  const [isCartOpen, setIsCartOpen] = useState(false);
 
   // Load cart and table context from localStorage on mount
   useEffect(() => {
@@ -161,6 +164,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         cartTotal,
         tableContext,
         setTableContext,
+        isCartOpen,
+        setIsCartOpen,
       }}
     >
       {children}

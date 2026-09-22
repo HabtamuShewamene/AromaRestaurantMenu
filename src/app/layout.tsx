@@ -4,6 +4,7 @@ import "./globals.css";
 import NextAuthProvider from "@/components/providers/SessionProvider";
 import { CartProvider } from "@/components/providers/CartProvider";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
+import CartModal from "@/features/cart/components/CartModal";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -44,6 +45,7 @@ export default function RootLayout({
           <NextAuthProvider>
             <CartProvider>
               {children}
+              <CartModal />
             </CartProvider>
           </NextAuthProvider>
         </ThemeProvider>

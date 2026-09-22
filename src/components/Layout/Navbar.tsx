@@ -11,7 +11,7 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { data: session } = useSession();
-  const { cartCount } = useCart();
+  const { cartCount, setIsCartOpen } = useCart();
   const pathname = usePathname();
   const role = (session?.user as { role?: string } | undefined)?.role;
 
@@ -83,9 +83,9 @@ export default function Navbar() {
               <ThemeToggle />
               
               {/* Cart Button with Dynamic Badge */}
-              <Link
-                href="/cart"
-                className="relative flex items-center justify-center w-11 h-11 rounded-2xl bg-white/[0.04] border border-border text-foreground hover:text-primary hover:border-primary/40 hover:bg-primary/10 transition-all group"
+              <button
+                onClick={() => setIsCartOpen(true)}
+                className="relative flex items-center justify-center w-11 h-11 rounded-2xl bg-foreground/5 border border-border text-foreground hover:text-primary hover:border-primary/40 hover:bg-primary/10 transition-all group cursor-pointer"
                 aria-label="Shopping Cart"
               >
                 <ShoppingBag className="w-5 h-5 transition-transform group-hover:scale-110" />
@@ -94,7 +94,7 @@ export default function Navbar() {
                     {cartCount}
                   </span>
                 )}
-              </Link>
+              </button>
 
               {/* User Session */}
               {session ? (
@@ -126,9 +126,9 @@ export default function Navbar() {
           {/* Mobile Actions */}
           <div className="flex items-center gap-4 md:hidden">
             <ThemeToggle />
-            <Link
-              href="/cart"
-              className="relative p-2.5 rounded-xl bg-foreground/5 border border-border text-muted-foreground hover:text-primary"
+            <button
+              onClick={() => setIsCartOpen(true)}
+              className="relative p-2.5 rounded-xl bg-foreground/5 border border-border text-muted-foreground hover:text-primary cursor-pointer"
             >
               <ShoppingBag className="w-5 h-5" />
               {cartCount > 0 && (
@@ -136,7 +136,7 @@ export default function Navbar() {
                   {cartCount}
                 </span>
               )}
-            </Link>
+            </button>
 
             <button
               onClick={() => setIsMenuOpen((open) => !open)}
