@@ -146,7 +146,7 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
       <div 
         ref={modalRef}
         tabIndex={-1}
-        className="relative flex flex-col w-full max-h-[92vh] sm:max-h-[90vh] max-w-2xl overflow-hidden rounded-t-[2rem] sm:rounded-3xl bg-[#111111] shadow-[0_-10px_40px_rgba(182,141,64,0.15)] border-t sm:border border-gold-500/20 outline-none"
+        className="relative flex flex-col w-full max-h-[80vh] sm:max-h-[85vh] max-w-xl overflow-hidden rounded-t-[2rem] sm:rounded-3xl bg-[#111111] shadow-[0_-10px_40px_rgba(182,141,64,0.15)] border-t sm:border border-gold-500/20 outline-none"
         role="dialog"
         aria-modal="true"
         aria-labelledby="modal-title"
@@ -154,7 +154,7 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
         {/* Mobile Drag Handle Indicator */}
         <div className="absolute top-3 left-1/2 -translate-x-1/2 w-12 h-1.5 bg-white/20 rounded-full z-40 sm:hidden" />
         {/* Edge-to-edge Image Header */}
-        <div className="relative h-56 sm:h-72 w-full flex-shrink-0">
+        <div className="relative h-48 sm:h-64 w-full flex-shrink-0">
           <Image
             src={item.image || "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800&q=80"}
             alt={item.name}
