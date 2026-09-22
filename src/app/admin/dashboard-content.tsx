@@ -1,168 +1,239 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, BarChart3, ListTree, Utensils, Star, Clock, Users } from "lucide-react";
+import { Plus, QrCode, ChefHat, ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
-
-type Stats = {
-  totalItems: number;
-  totalReviews: number;
-  pendingReviews: number;
-  averageRating: number;
-  topItems: Array<{ id: string; name: string; avgRating: number; count: number }>;
-};
-
-const adminCapabilities = [
-  {
-    title: "Menu Control",
-    description: "Add items, update price and descriptions, toggle availability, or delete outdated products.",
-    href: "/admin/menu",
-    icon: Utensils,
-  },
-  {
-    title: "Categories",
-    description: "Manage menu categories like Coffee, Tea, Cold Drinks, and Pastries.",
-    href: "/admin/categories",
-    icon: ListTree,
-  },
-  {
-    title: "Review Moderation",
-    description: "Moderate customer reviews and manage approval workflow for menu item feedback.",
-    href: "/admin/reviews",
-    icon: Star,
-  },
-  {
-    title: "System Analytics",
-    description: "Track popular items, revenue, and system-wide performance data.",
-    href: "/admin/analytics",
-    icon: BarChart3,
-  },
-];
+import { useSession } from "next-auth/react";
 
 export default function AdminDashboardContent() {
-  const [stats, setStats] = useState<Stats | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { data: session } = useSession();
+  const [dateStr, setDateStr] = useState("");
 
   useEffect(() => {
-    fetch("/api/admin/stats")
-      .then(res => res.json())
-      .then(data => {
-        setStats(data);
-        setLoading(false);
-      })
-      .catch(() => setLoading(false));
+    const today = new Date();
+    setDateStr(today.toLocaleDateString("en-US", { weekday: 'long', month: 'long', day: 'numeric' }));
   }, []);
 
   return (
-    <div className="space-y-12">
-      <div>
-        <h1 className="mb-3 text-5xl font-bold">
-          Admin <span className="text-primary">Control Center</span>
-        </h1>
-        <p className="max-w-3xl text-lg text-muted-foreground">
-          Full control over menu data, review moderation, and system reporting.
-        </p>
+    <div className="space-y-6 md:space-y-8 max-w-7xl mx-auto">
+      {/* ── Header ── */}
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div>
+          <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-foreground mb-1">
+            Good morning, {session?.user?.name?.split(" ")[0] || "Admin"}
+          </h1>
+          <p className="text-sm text-muted-foreground">
+            {dateStr ? `${dateStr} · Aroma overview` : "Here is what is happening at Aroma today."}
+          </p>
+        </div>
+        
+        <div className="hidden md:flex items-center gap-3">
+          <div className="px-4 py-2 bg-card border border-border rounded-full text-xs font-semibold text-foreground">
+            Today
+          </div>
+        </div>
       </div>
 
       {/* ── Stats Overview ── */}
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
         <StatCard 
-          title="Menu Items" 
-          value={loading ? "..." : stats?.totalItems ?? 0} 
-          icon={Utensils} 
-          color="blue"
+          title="TODAY'S ORDERS" 
+          value="48" 
+          subtext="↑ 12.5%" 
+          subtextColor="text-primary"
         />
         <StatCard 
-          title="Total Reviews" 
-          value={loading ? "..." : stats?.totalReviews ?? 0} 
-          icon={Users} 
-          color="purple"
+          title="REVENUE" 
+          value="24,850" 
+          subtext="ETB" 
+          subtextColor="text-muted-foreground"
         />
         <StatCard 
-          title="Pending Approval" 
-          value={loading ? "..." : stats?.pendingReviews ?? 0} 
-          icon={Clock} 
-          color="amber"
-          highlight={stats?.pendingReviews ? stats.pendingReviews > 0 : false}
+          title="ACTIVE TABLES" 
+          value="12/18" 
+          subtext="67% occupied" 
+          subtextColor="text-primary"
         />
         <StatCard 
-          title="Avg Rating" 
-          value={loading ? "..." : (stats?.averageRating ?? 0).toFixed(1)} 
-          icon={Star} 
-          color="gold"
+          title="PENDING REQUESTS" 
+          value="7" 
+          badge="Attention"
         />
       </div>
 
-      <div className="grid gap-8 lg:grid-cols-3">
-        {/* ── Main Actions ── */}
-        <div className="lg:col-span-2 grid gap-6 md:grid-cols-2">
-          {adminCapabilities.map((capability) => (
-            <Link key={capability.title} href={capability.href} className="glass-card rounded-3xl p-8 transition-all hover:border-primary/40 group">
-              <div className="mb-6 flex items-center justify-between">
-                <div className="rounded-2xl bg-primary/10 p-3 text-primary group-hover:bg-primary/20 transition-colors">
-                  <capability.icon className="h-6 w-6" />
-                </div>
-                <ArrowRight className="h-5 w-5 text-muted-foreground group-hover:text-primary transition-colors" />
-              </div>
-              <h2 className="mb-3 text-2xl font-bold">{capability.title}</h2>
-              <p className="text-muted-foreground text-sm leading-relaxed">{capability.description}</p>
-            </Link>
-          ))}
-        </div>
-
-        {/* ── Top Rated Items ── */}
-        <div className="glass-card rounded-3xl p-8">
-          <div className="flex items-center gap-2 mb-6">
-            <Star className="h-5 w-5 text-primary" />
-            <h2 className="text-xl font-bold">Top Rated</h2>
+      <div className="grid gap-6 lg:grid-cols-3">
+        {/* ── Sales Overview Chart (Mock) ── */}
+        <div className="lg:col-span-2 bg-card rounded-3xl p-6 border border-border flex flex-col">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h2 className="text-lg font-bold text-foreground">Sales overview</h2>
+              <p className="text-xs text-muted-foreground mt-1">Order performance over the last 7 days</p>
+            </div>
+            <div className="px-3 py-1.5 bg-background border border-border rounded-lg text-xs font-medium text-muted-foreground">
+              This week
+            </div>
           </div>
           
-          <div className="space-y-6">
-            {loading ? (
-              <div className="animate-pulse space-y-4">
-                {[1,2,3].map(i => <div key={i} className="h-12 bg-foreground/5 rounded-2xl" />)}
-              </div>
-            ) : stats?.topItems && stats.topItems.length > 0 ? (
-              stats.topItems.map((item, idx) => (
-                <div key={item.id} className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <span className="text-xs font-bold text-zinc-600 w-4">{idx + 1}</span>
-                    <div>
-                      <p className="font-semibold text-sm">{item.name}</p>
-                      <p className="text-[10px] text-muted-foreground">{item.count} reviews</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-1 bg-primary/10 px-2 py-1 rounded-lg">
-                    <Star className="h-3 w-3 fill-brand-500 text-primary" />
-                    <span className="text-xs font-bold text-primary">{item.avgRating.toFixed(1)}</span>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <p className="text-sm text-zinc-600 italic">No ratings yet</p>
-            )}
+          <div className="flex-1 relative min-h-[200px] w-full flex items-end">
+            {/* Simple Mock SVG Line Chart */}
+            <svg viewBox="0 0 400 100" className="w-full h-full preserve-3d" preserveAspectRatio="none">
+              <path 
+                d="M0,80 Q50,75 100,60 T200,50 T300,10 T400,20" 
+                fill="none" 
+                stroke="#8BD43F" 
+                strokeWidth="3" 
+                strokeLinecap="round"
+                className="drop-shadow-[0_4px_12px_rgba(139,212,63,0.3)]"
+              />
+            </svg>
+            
+            {/* X-Axis labels */}
+            <div className="absolute bottom-0 left-0 right-0 flex justify-between text-[9px] uppercase tracking-wider text-muted-foreground/60 transform translate-y-6">
+              <span>Mon</span>
+              <span>Tue</span>
+              <span>Wed</span>
+              <span>Thu</span>
+              <span>Fri</span>
+              <span>Sat</span>
+              <span>Sun</span>
+            </div>
           </div>
+        </div>
+
+        {/* ── Live Order Queue ── */}
+        <div className="bg-card rounded-3xl p-6 border border-border flex flex-col">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-lg font-bold text-foreground">Live order queue</h2>
+            <div className="flex items-center gap-1.5 px-2.5 py-1 bg-primary/10 border border-primary/20 rounded-full">
+              <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+              <span className="text-[9px] font-bold text-primary uppercase tracking-widest">Live</span>
+            </div>
+          </div>
+
+          <div className="space-y-3">
+            <OrderQueueItem 
+              id="#A7F2C" table="Table 4" items={2} time="4 min ago" 
+              status="NEW" statusColor="text-amber-500" indicatorColor="bg-amber-500" 
+            />
+            <OrderQueueItem 
+              id="#A7E91" table="Table 8" items={5} time="8 min ago" 
+              status="READY" statusColor="text-primary" indicatorColor="bg-primary" 
+            />
+            <OrderQueueItem 
+              id="#A7D38" table="Table 2" items={3} time="12 min ago" 
+              status="SERVED" statusColor="text-muted-foreground" indicatorColor="bg-muted-foreground" 
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* ── Quick Management ── */}
+      <div className="bg-card rounded-3xl p-6 border border-border">
+        <h2 className="text-lg font-bold text-foreground mb-1">Quick management</h2>
+        <p className="text-xs text-muted-foreground mb-6">Common actions for daily restaurant operations</p>
+        
+        <div className="grid gap-4 grid-cols-1 md:grid-cols-3">
+          <QuickAction 
+            href="/admin/menu" 
+            icon={Plus} 
+            title="Add menu item" 
+            description="Create a new dish" 
+          />
+          <QuickAction 
+            href="/admin/tables" 
+            icon={QrCode} 
+            title="Manage tables" 
+            description="QR and availability" 
+          />
+          <QuickAction 
+            href="/kitchen" 
+            icon={ChefHat} 
+            title="Open Kitchen Display" 
+            description="Monitor live preparation" 
+            isPrimary 
+          />
         </div>
       </div>
     </div>
   );
 }
 
-function StatCard({ title, value, icon: Icon, highlight = false }: { title: string; value: string | number; icon: any; highlight?: boolean; color?: string }) {
+function StatCard({ 
+  title, 
+  value, 
+  subtext, 
+  subtextColor, 
+  badge 
+}: { 
+  title: string; 
+  value: string | number; 
+  subtext?: string; 
+  subtextColor?: string;
+  badge?: string;
+}) {
   return (
-    <div className={`glass-card rounded-3xl p-6 relative overflow-hidden ${highlight ? 'border-amber-500/30 ring-1 ring-amber-500/20' : ''}`}>
-      <div className="flex items-center gap-4">
-        <div className={`p-3 rounded-2xl bg-card border border-border`}>
-          <Icon className="h-5 w-5 text-muted-foreground" />
-        </div>
+    <div className="bg-card rounded-2xl p-5 border border-border flex flex-col justify-between h-[100px]">
+      <p className="text-[10px] text-muted-foreground uppercase tracking-[0.2em] font-medium">{title}</p>
+      <div className="flex items-end justify-between">
+        <p className="text-3xl font-extrabold text-foreground">{value}</p>
+        {subtext && (
+          <p className={`text-xs font-semibold mb-1 ${subtextColor}`}>{subtext}</p>
+        )}
+        {badge && (
+          <div className="px-2.5 py-1 bg-[#D6A84F]/10 text-[#D6A84F] border border-[#D6A84F]/20 rounded-full text-[10px] font-bold tracking-wider uppercase mb-1">
+            {badge}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function OrderQueueItem({
+  id, table, items, time, status, statusColor, indicatorColor
+}: {
+  id: string; table: string; items: number; time: string; status: string; statusColor: string; indicatorColor: string;
+}) {
+  return (
+    <div className="flex items-center justify-between p-3.5 bg-background rounded-xl border border-border">
+      <div className="flex items-center gap-3">
+        <div className={`w-2.5 h-2.5 rounded-full ${indicatorColor}`} />
         <div>
-          <p className="text-xs text-muted-foreground uppercase tracking-widest font-medium mb-1">{title}</p>
-          <p className="text-2xl font-bold">{value}</p>
+          <p className="text-sm font-bold text-foreground">{id} - {table}</p>
+          <p className="text-[10px] text-muted-foreground">{items} items · {time}</p>
         </div>
       </div>
-      {highlight && (
-        <div className="absolute top-2 right-2 w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
-      )}
+      <span className={`text-[10px] font-extrabold tracking-widest uppercase ${statusColor}`}>
+        {status}
+      </span>
     </div>
+  );
+}
+
+function QuickAction({ 
+  href, icon: Icon, title, description, isPrimary 
+}: { 
+  href: string; icon: any; title: string; description: string; isPrimary?: boolean;
+}) {
+  return (
+    <Link 
+      href={href} 
+      className={`group flex items-center justify-between p-4 rounded-2xl border transition-all ${
+        isPrimary 
+        ? "bg-primary text-primary-foreground border-primary hover:bg-[#7bc235]" 
+        : "bg-background border-border hover:border-primary/40 hover:bg-foreground/5"
+      }`}
+    >
+      <div className="flex items-center gap-3">
+        <div className={`p-2 rounded-full ${isPrimary ? "bg-black/10" : "bg-foreground/5"}`}>
+          <Icon className={`w-5 h-5 ${isPrimary ? "text-primary-foreground" : "text-primary"}`} />
+        </div>
+        <div>
+          <p className={`text-sm font-bold ${isPrimary ? "text-primary-foreground" : "text-foreground"}`}>{title}</p>
+          <p className={`text-[10px] mt-0.5 ${isPrimary ? "text-primary-foreground/80" : "text-muted-foreground"}`}>{description}</p>
+        </div>
+      </div>
+      {isPrimary && <ArrowRight className="w-4 h-4 opacity-70 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />}
+    </Link>
   );
 }
