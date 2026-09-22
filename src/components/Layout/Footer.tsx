@@ -72,6 +72,12 @@ export default function Footer() {
               <Mail className="w-4 h-4 text-gold-500 flex-shrink-0" />
               <span>contact@aromarestaurant.com</span>
             </li>
+            <li className="flex items-center gap-2.5 pt-2 border-t border-white/5">
+              <span className="w-4 h-4 text-gold-500 flex-shrink-0 font-extrabold flex items-center justify-center text-lg leading-none">♪</span>
+              <a href="https://www.tiktok.com/@aromarestaurantdb" target="_blank" rel="noopener noreferrer" className="hover:text-gold-400 transition-colors">
+                @aromarestaurantdb on TikTok
+              </a>
+            </li>
           </ul>
         </div>
       </div>
