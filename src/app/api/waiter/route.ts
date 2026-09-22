@@ -4,7 +4,6 @@ import { isAdminRequest } from "@/server/auth/session";
 
 export async function GET() {
   try {
-    if (!(await isAdminRequest())) return NextResponse.json({ message: "Admin access required" }, { status: 403 });
     const requests = await getActiveWaiterRequests();
     return NextResponse.json(requests);
   } catch {

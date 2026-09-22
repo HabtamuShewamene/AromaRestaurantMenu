@@ -50,7 +50,7 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
   useEffect(() => {
     const loadReviews = async () => {
       try {
-        const response = await fetch(`/api/reviews?menuItemId=Birr {item.id}`);
+        const response = await fetch(`/api/reviews?menuItemId=${item.id}`);
         const data = await response.json();
         setReviews(data.reviews || []);
         setAverageRating(data.averageRating || 0);
@@ -125,7 +125,7 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
 
   const handleReviewSubmitted = async () => {
     try {
-      const response = await fetch(`/api/reviews?menuItemId=Birr {item.id}`);
+      const response = await fetch(`/api/reviews?menuItemId=${item.id}`);
       const data = await response.json();
       setReviews(data.reviews || []);
       setAverageRating(data.averageRating || 0);
@@ -182,10 +182,10 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-xs uppercase tracking-[0.2em] text-gold-500 font-semibold">{categoryName}</p>
-                  <p className="text-3xl font-bold text-gold-400 font-playfair">Birr {item.price.toFixed(2)}</p>
+                  <p className="text-3xl font-bold text-gold-400 font-playfair">{item.price.toFixed(2)} ETB</p>
                 </div>
                 <span
-                  className={`rounded-full px-3.5 py-1.5 font-bold text-xs uppercase tracking-wider Birr {
+                  className={`rounded-full px-3.5 py-1.5 font-bold text-xs uppercase tracking-wider ${
                     item.isAvailable
                       ? "bg-green-500/15 text-green-400 border border-green-500/30"
                       : "bg-red-500/15 text-red-400 border border-red-500/30"
@@ -213,7 +213,7 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
                         {group.name} {group.required && <span className="text-gold-400 text-xs">*Required</span>}
                       </h4>
                       <span className="text-[11px] text-zinc-500">
-                        {group.maxSelect === 1 ? "Select 1" : `Up to Birr {group.maxSelect}`}
+                        {group.maxSelect === 1 ? "Select 1" : `Up to ${group.maxSelect}`}
                       </span>
                     </div>
 
@@ -233,7 +233,7 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
                                 group.maxSelect
                               )
                             }
-                            className={`flex items-center justify-between p-3 rounded-xl border text-xs font-medium transition-all Birr {
+                            className={`flex items-center justify-between p-3 rounded-xl border text-xs font-medium transition-all ${
                               !opt.isAvailable
                                 ? "opacity-40 cursor-not-allowed bg-zinc-900 border-zinc-800 text-zinc-600"
                                 : isSelected
@@ -243,7 +243,7 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
                           >
                             <span className="truncate">{opt.name}</span>
                             <span className="font-bold text-zinc-400 ml-2">
-                              {opt.price > 0 ? `+$Birr {opt.price.toFixed(2)}` : "Free"}
+                              {opt.price > 0 ? `+${opt.price.toFixed(2)} ETB` : "Free"}
                             </span>
                           </button>
                         );
@@ -293,7 +293,7 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
               type="button"
               disabled={!canAddToCart}
               onClick={handleAddToCart}
-              className={`flex-1 min-w-[200px] flex items-center justify-center gap-2 py-3.5 px-6 rounded-2xl font-bold text-sm transition-all shadow-lg Birr {
+              className={`flex-1 min-w-[200px] flex items-center justify-center gap-2 py-3.5 px-6 rounded-2xl font-bold text-sm transition-all shadow-lg ${
                 !item.isAvailable
                   ? "bg-zinc-800 text-zinc-500 cursor-not-allowed"
                   : missingRequiredGroup
@@ -306,14 +306,14 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
               {justAdded ? (
                 <>
                   <Check className="w-4 h-4 stroke-[2.5]" />
-                  <span>Added to Cart (Birr {totalPrice.toFixed(2)})</span>
+                  <span>Added to Cart ({totalPrice.toFixed(2)} ETB)</span>
                 </>
               ) : missingRequiredGroup ? (
                 <span>Please select: {missingRequiredGroup.name}</span>
               ) : (
                 <>
                   <ShoppingBag className="w-4 h-4" />
-                  <span>Add to Cart • Birr {totalPrice.toFixed(2)}</span>
+                  <span>Add to Cart • {totalPrice.toFixed(2)} ETB</span>
                 </>
               )}
             </button>

@@ -2,7 +2,7 @@ export type CategoryRecord = {
   id: string;
   name: string;
   slug?: string | null;
-  image?: string | null;`r`n  videoUrl?: string | null;  // TikTok video URL for hover preview
+  image?: string | null;
   description?: string | null;
   orderIndex: number;
   status: boolean;
@@ -49,7 +49,8 @@ export type MenuItemRecord = {
   name: string;
   description?: string | null;
   price: number;
-  image?: string | null;`r`n  videoUrl?: string | null;  // TikTok video URL for hover preview
+  image?: string | null;
+  videoUrl?: string | null;
   category: CategoryRecord | string;
   categoryId: string;
   isAvailable: boolean;
@@ -82,7 +83,7 @@ export type CartItemRecord = {
   name: string;
   price: number;
   quantity: number;
-  image?: string | null;`r`n  videoUrl?: string | null;  // TikTok video URL for hover preview
+  image?: string | null;
   category: string;
   isAvailable: boolean;
   addons?: OrderItemAddonRecord[];
@@ -102,7 +103,7 @@ export type ReviewRecord = {
   item?: {
     id: string;
     name: string;
-    image?: string | null;`r`n  videoUrl?: string | null;  // TikTok video URL for hover preview
+    image?: string | null;
   };
 };
 
@@ -218,4 +219,3 @@ export type AnalyticsRecord = {
     count: number;
   }>;
 };
-

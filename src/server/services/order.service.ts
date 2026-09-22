@@ -30,11 +30,6 @@ export async function createOrder(input: CreateOrderInput) {
   if (!Array.isArray(input.items) || input.items.length === 0) {
     throw new Error("At least one item is required to place an order");
   }
-  for (const item of input.items) {
-    if (!Number.isInteger(item.quantity) || item.quantity < 1 || item.quantity > 50) {
-      throw new Error("Each item quantity must be a whole number between 1 and 50");
-    }
-  }
 
   // 1. Resolve Table & Session if this is a Dine-in order with a table
   let resolvedTableId = input.tableId || null;
@@ -44,15 +39,9 @@ export async function createOrder(input: CreateOrderInput) {
     const table = await prisma.diningTable.findUnique({
       where: { number: input.tableNumber },
     });
-    if (!table) throw new Error("Table not found");
-    if (table.status === "OUT_OF_SERVICE") throw new Error("This table is currently unavailable");
-    resolvedTableId = table.id;
-  }
-
-  if (resolvedTableId) {
-    const table = await prisma.diningTable.findUnique({ where: { id: resolvedTableId } });
-    if (!table) throw new Error("Table not found");
-    if (table.status === "OUT_OF_SERVICE") throw new Error("This table is currently unavailable");
+    if (table) {
+      resolvedTableId = table.id;
+    }
   }
 
   if (resolvedTableId && !resolvedSessionId) {
@@ -85,21 +74,10 @@ export async function createOrder(input: CreateOrderInput) {
       throw new Error(`"${dish.name}" is currently sold out`);
     }
 
-    const requestedAddons = inputItem.addons || [];
-    let addonsCost = 0;
-    const normalizedAddons = requestedAddons.map((addon) => {
-      const option = dish.addonGroups.flatMap((group) => group.options).find((candidate) => candidate.id === addon.addonOptionId);
-      if (!option || !option.isAvailable) throw new Error(`Invalid or unavailable add-on for ${dish.name}`);
-      const addonQuantity = addon.quantity ?? 1;
-      if (!Number.isInteger(addonQuantity) || addonQuantity < 1 || addonQuantity > 50) throw new Error("Add-on quantity must be a whole number between 1 and 50");
-      const group = dish.addonGroups.find((candidate) => candidate.options.some((candidateOption) => candidateOption.id === option.id))!;
-      addonsCost += option.price * addonQuantity;
-      return { addonOptionId: option.id, name: option.name, price: option.price, quantity: addonQuantity, groupId: group.id };
-    });
-    for (const group of dish.addonGroups) {
-      const selectedCount = normalizedAddons.filter((addon) => addon.groupId === group.id).length;
-      if (selectedCount < group.minSelect || selectedCount > group.maxSelect || (group.required && selectedCount === 0)) throw new Error(`Invalid selections for ${group.name}`);
-    }
+    const addonsCost = (inputItem.addons || []).reduce(
+      (sum, addon) => sum + addon.price * (addon.quantity || 1),
+      0
+    );
     const itemUnitPrice = dish.price;
     const itemTotal = (itemUnitPrice + addonsCost) * inputItem.quantity;
     orderTotal += itemTotal;
@@ -110,7 +88,12 @@ export async function createOrder(input: CreateOrderInput) {
       price: itemUnitPrice,
       quantity: inputItem.quantity,
       notes: inputItem.notes || null,
-      addons: normalizedAddons.map(({ groupId: _groupId, ...addon }) => addon),
+      addons: (inputItem.addons || []).map((addon) => ({
+        addonOptionId: addon.addonOptionId || null,
+        name: addon.name,
+        price: addon.price,
+        quantity: addon.quantity || 1,
+      })),
       ingredients: dish.ingredients,
     };
   });
@@ -202,8 +185,6 @@ export async function updateOrderStatus(orderId: string, nextStatus: string) {
   }
 
   const normalizedNext = nextStatus.toUpperCase();
-  const transitions: Record<string, string[]> = { NEW: ["CONFIRMED", "CANCELLED"], CONFIRMED: ["PREPARING", "CANCELLED"], PREPARING: ["READY", "CANCELLED"], READY: ["SERVED"], SERVED: ["COMPLETED"], COMPLETED: [], CANCELLED: [] };
-  if (!transitions[current.status]?.includes(normalizedNext)) throw new Error(`Invalid order status transition: ${current.status} to ${normalizedNext}`);
 
   return prisma.order.update({
     where: { id: orderId },

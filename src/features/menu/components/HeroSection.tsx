@@ -67,8 +67,8 @@ export default function HeroSection({ mode = "compact" }: HeroSectionProps) {
           transition={{ duration: 0.6, ease: "easeOut" }}
           className="flex flex-col items-center mb-2 sm:mb-3"
         >
-          <div className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full border border-gold-500/40 mb-1.5 sm:mb-2 shadow-[0_0_20px_rgba(216,196,145,0.2)] overflow-hidden">
-            <img src="/aroma-logo.webp" alt="Aroma Logo" className="w-full h-full object-cover" />
+          <div className="flex items-center justify-center w-20 h-20 sm:w-24 sm:h-24 md:w-32 md:h-32 mb-2 sm:mb-4 relative animate-fade-in z-10" style={{ animationDelay: "100ms" }}>
+            <img src="/aroma-logo.png?v=3" alt="Aroma Logo" className="w-full h-full object-contain" />
           </div>
           <p className="text-[10px] sm:text-xs uppercase tracking-[0.3em] text-gold-400/90 font-medium mb-0.5">
             Welcome to

@@ -8,8 +8,8 @@ export default function Footer() {
         {/* Brand column */}
         <div className="col-span-1 md:col-span-2">
           <div className="mb-4 flex items-center gap-3">
-            <div className="flex items-center justify-center w-10 h-10 rounded-2xl bg-gold-500/15 border border-gold-500/30">
-              <ChefHat className="h-5 w-5 text-gold-400" />
+            <div className="flex items-center justify-center w-12 h-12 relative">
+              <img src="/aroma-logo.png?v=3" alt="Aroma Logo" className="w-full h-full object-contain" />
             </div>
             <div className="flex flex-col">
               <span className="text-xl font-bold tracking-tight text-white font-playfair">

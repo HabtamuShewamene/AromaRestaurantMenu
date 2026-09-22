@@ -92,8 +92,7 @@ export default function KitchenDisplay() {
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(true);
-  // Keep the first render deterministic: Date.now() differs between SSR and hydration.
-  const [currentTime, setCurrentTime] = useState<Date | null>(null);
+  const [currentTime, setCurrentTime] = useState<Date>(new Date());
   const [actionInProgress, setActionInProgress] = useState<string | null>(null);
   const [newOrderAlert, setNewOrderAlert] = useState<string | null>(null);
 
@@ -231,8 +230,8 @@ export default function KitchenDisplay() {
       <header className="sticky top-0 z-40 bg-[#0c0c0c] border-b border-white/10 px-4 sm:px-6 py-3 shadow-2xl flex flex-wrap items-center justify-between gap-4">
         {/* Brand & KDS Title */}
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gold-500/20 border border-gold-500/40 flex items-center justify-center shadow-[0_0_15px_rgba(182,141,64,0.3)]">
-            <ChefHat className="w-5 h-5 text-gold-400" />
+          <div className="w-12 h-12 flex items-center justify-center">
+            <img src="/aroma-logo.png?v=3" alt="Aroma Logo" className="w-full h-full object-contain" />
           </div>
           <div>
             <div className="flex items-center gap-2">
@@ -255,9 +254,7 @@ export default function KitchenDisplay() {
           <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-zinc-900/90 border border-zinc-800 text-zinc-300 font-mono">
             <Clock className="w-3.5 h-3.5 text-gold-400" />
             <span>
-              {currentTime
-                ? currentTime.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" })
-                : "--:--:--"}
+              {currentTime.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" })}
             </span>
           </div>
 
@@ -414,7 +411,7 @@ export default function KitchenDisplay() {
               const isPreparing = statusNorm === "PREPARING";
               const isReady = statusNorm === "READY";
 
-              const minutesElapsed = currentTime ? getMinutesElapsed(order.createdAt, currentTime) : 0;
+              const minutesElapsed = getMinutesElapsed(order.createdAt, currentTime);
               const isUrgent = minutesElapsed >= 15;
               const orderRef = order.id.slice(-6).toUpperCase();
 
@@ -455,7 +452,7 @@ export default function KitchenDisplay() {
                         }`}
                       >
                         <Timer className="w-3.5 h-3.5" />
-                        <span>{currentTime ? formatElapsedTime(order.createdAt, currentTime) : "—"}</span>
+                        <span>{formatElapsedTime(order.createdAt, currentTime)}</span>
                       </div>
                     </div>
 

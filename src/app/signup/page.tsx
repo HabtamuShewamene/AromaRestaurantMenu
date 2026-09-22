@@ -58,8 +58,8 @@ export default function SignupPage() {
       <div className="w-full max-w-md">
         <div className="mb-10 text-center">
           <Link href="/" className="mb-6 inline-flex items-center gap-2">
-            <div className="flex items-center justify-center w-12 h-12 rounded-2xl bg-gold-500/15 border border-gold-500/30 shadow-[0_0_20px_rgba(182,141,64,0.2)]">
-              <ChefHat className="h-7 w-7 text-gold-400" />
+            <div className="flex items-center justify-center w-14 h-14 relative">
+              <img src="/aroma-logo.png?v=3" alt="Aroma Logo" className="w-full h-full object-contain" />
             </div>
             <div className="flex flex-col text-left">
               <span className="text-2xl font-bold tracking-tight text-white font-playfair">AROMA</span>
