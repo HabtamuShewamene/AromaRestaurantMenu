@@ -140,7 +140,7 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
 
   return (
     <div 
-      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/80 backdrop-blur-sm sm:p-4 transition-all duration-300"
+      className="fixed inset-0 z-[70] flex items-end sm:items-center justify-center bg-black/80 backdrop-blur-sm sm:p-4 transition-all duration-300"
       onClick={handleBackdropClick}
     >
       <div 
@@ -184,7 +184,7 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
             <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2 sm:gap-4">
               <div>
                 <p className="text-[10px] sm:text-xs uppercase tracking-[0.25em] text-gold-500 font-bold mb-1.5">{categoryName}</p>
-                <h2 id="modal-title" className="text-2xl sm:text-3xl font-bold text-white font-playfair leading-tight">{item.name}</h2>
+                <h2 id="modal-title" className="text-lg sm:text-2xl font-bold text-white font-playfair leading-tight line-clamp-3">{item.name}</h2>
               </div>
               <p className="text-xl sm:text-3xl font-bold text-gold-400 font-playfair whitespace-nowrap">{item.price.toFixed(2)} Birr</p>
             </div>
