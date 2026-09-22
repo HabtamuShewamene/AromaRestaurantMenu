@@ -62,12 +62,12 @@ export default function SignupPage() {
               <img src="/aroma-logo.png?v=3" alt="Aroma Logo" className="w-full h-full object-contain" />
             </div>
             <div className="flex flex-col text-left">
-              <span className="text-2xl font-bold tracking-tight text-white font-playfair">AROMA</span>
-              <span className="text-[9px] tracking-[0.25em] text-brand-500 font-semibold uppercase -mt-1">Restaurant</span>
+              <span className="text-2xl font-bold tracking-tight text-foreground font-playfair">AROMA</span>
+              <span className="text-[9px] tracking-[0.25em] text-primary font-semibold uppercase -mt-1">Restaurant</span>
             </div>
           </Link>
           <h1 className="mb-2 text-4xl font-bold">Create Account</h1>
-          <p className="text-zinc-500">Join us to place orders and track your dining experience.</p>
+          <p className="text-muted-foreground">Join us to place orders and track your dining experience.</p>
         </div>
 
         <div className="glass-card rounded-[40px] p-10">
@@ -79,38 +79,38 @@ export default function SignupPage() {
             )}
 
             <div className="space-y-2">
-              <label className="ml-1 text-sm font-medium text-zinc-400">Full Name</label>
+              <label className="ml-1 text-sm font-medium text-muted-foreground">Full Name</label>
               <input
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Sophia Martinez"
-                className="w-full rounded-2xl border border-zinc-800 bg-[#292C2B] px-6 py-4 outline-none transition-all focus:border-brand-500 text-white"
+                className="w-full rounded-2xl border border-border bg-card px-6 py-4 outline-none transition-all focus:border-primary text-foreground"
                 required
               />
             </div>
 
             <div className="space-y-2">
-              <label className="ml-1 text-sm font-medium text-zinc-400">Email Address</label>
+              <label className="ml-1 text-sm font-medium text-muted-foreground">Email Address</label>
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="sophia@example.com"
-                className="w-full rounded-2xl border border-zinc-800 bg-[#292C2B] px-6 py-4 outline-none transition-all focus:border-brand-500 text-white"
+                className="w-full rounded-2xl border border-border bg-card px-6 py-4 outline-none transition-all focus:border-primary text-foreground"
                 required
               />
             </div>
 
             <div className="space-y-2">
-              <label className="ml-1 text-sm font-medium text-zinc-400">Password</label>
+              <label className="ml-1 text-sm font-medium text-muted-foreground">Password</label>
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Minimum 6 characters"
                 minLength={6}
-                className="w-full rounded-2xl border border-zinc-800 bg-[#292C2B] px-6 py-4 outline-none transition-all focus:border-brand-500 text-white"
+                className="w-full rounded-2xl border border-border bg-card px-6 py-4 outline-none transition-all focus:border-primary text-foreground"
                 required
               />
             </div>
@@ -118,15 +118,15 @@ export default function SignupPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="flex w-full items-center justify-center gap-2 rounded-2xl bg-brand-600 py-4 text-lg font-bold text-black transition-all hover:scale-[1.02] hover:bg-brand-500 active:scale-[0.98] disabled:opacity-50"
+              className="flex w-full items-center justify-center gap-2 rounded-2xl bg-brand-600 py-4 text-lg font-bold text-primary-foreground transition-all hover:scale-[1.02] hover:bg-primary active:scale-[0.98] disabled:opacity-50"
             >
               {isLoading ? "Creating Account..." : "Create Account"} <ArrowRight className="h-5 w-5" />
             </button>
           </form>
 
-          <div className="mt-8 text-center text-sm text-zinc-500">
+          <div className="mt-8 text-center text-sm text-muted-foreground">
             Already have an account?{" "}
-            <Link href="/login" className="font-bold text-brand-500 hover:underline">
+            <Link href="/login" className="font-bold text-primary hover:underline">
               Sign In
             </Link>
           </div>

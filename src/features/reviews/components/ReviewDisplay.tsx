@@ -17,11 +17,11 @@ export default function ReviewDisplay({
   return (
     <div className="space-y-6">
       {/* Rating Summary */}
-      <div className="flex items-center gap-4 rounded-2xl border border-zinc-800/50 bg-[#292C2B]/20 p-6">
+      <div className="flex items-center gap-4 rounded-2xl border border-border/50 bg-card/20 p-6">
         <div>
           <div className="flex items-baseline gap-2">
             <span className="text-4xl font-bold">{averageRating}</span>
-            <span className="text-lg text-zinc-500">/5</span>
+            <span className="text-lg text-muted-foreground">/5</span>
           </div>
           <div className="mt-2 flex gap-1">
             {[...Array(5)].map((_, i) => (
@@ -33,24 +33,24 @@ export default function ReviewDisplay({
               />
             ))}
           </div>
-          <p className="mt-2 text-sm text-zinc-400">{totalReviews} reviews</p>
+          <p className="mt-2 text-sm text-muted-foreground">{totalReviews} reviews</p>
         </div>
       </div>
 
       {/* Reviews List */}
       {reviews.length === 0 ? (
-        <p className="py-8 text-center text-zinc-500">No reviews yet. Be the first to review!</p>
+        <p className="py-8 text-center text-muted-foreground">No reviews yet. Be the first to review!</p>
       ) : (
         <div className="space-y-4">
           {reviews.map((review) => (
             <div
               key={review.id}
-              className="rounded-2xl border border-zinc-800/50 bg-[#292C2B]/20 p-5 hover:border-brand-500/20 transition-all"
+              className="rounded-2xl border border-border/50 bg-card/20 p-5 hover:border-primary/20 transition-all"
             >
               <div className="mb-3 flex items-start justify-between">
                 <div>
-                  <p className="font-semibold text-zinc-100">{review.name}</p>
-                  <p className="text-xs text-zinc-500">
+                  <p className="font-semibold text-foreground">{review.name}</p>
+                  <p className="text-xs text-muted-foreground">
                     {new Date(review.createdAt).toLocaleDateString()}
                   </p>
                 </div>
@@ -65,7 +65,7 @@ export default function ReviewDisplay({
                   ))}
                 </div>
               </div>
-              <p className="text-sm text-zinc-300">{review.comment}</p>
+              <p className="text-sm text-muted-foreground">{review.comment}</p>
             </div>
           ))}
         </div>

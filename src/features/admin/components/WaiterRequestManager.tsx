@@ -19,7 +19,7 @@ const REQUEST_TYPE_INFO: Record<string, { label: string; icon: any; color: strin
   REQUEST_WATER: { label: "Water Refill", icon: Droplets, color: "text-blue-400 bg-blue-500/10 border-blue-500/30" },
   REQUEST_CUTLERY: { label: "Extra Cutlery", icon: Utensils, color: "text-purple-400 bg-purple-500/10 border-purple-500/30" },
   REQUEST_BILL: { label: "Bill Requested", icon: Receipt, color: "text-green-400 bg-green-500/10 border-green-500/30" },
-  CUSTOM: { label: "Custom Request", icon: BellRing, color: "text-brand-400 bg-brand-500/10 border-brand-500/30" },
+  CUSTOM: { label: "Custom Request", icon: BellRing, color: "text-primary bg-primary/10 border-primary/30" },
 };
 
 export default function WaiterRequestManager() {
@@ -84,12 +84,12 @@ export default function WaiterRequestManager() {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <div className="flex items-center gap-3 mb-1">
-            <h1 className="text-3xl sm:text-4xl font-bold text-white font-playfair">
+            <h1 className="text-3xl sm:text-4xl font-bold text-foreground font-playfair">
               Waiter & Table Assistance
             </h1>
-            {isRefreshing && <RefreshCw className="w-4 h-4 text-brand-400 animate-spin" />}
+            {isRefreshing && <RefreshCw className="w-4 h-4 text-primary animate-spin" />}
           </div>
-          <p className="text-zinc-400 text-sm">
+          <p className="text-muted-foreground text-sm">
             Real-time feed of guest service calls, water refills, cutlery, and bill requests.
           </p>
         </div>
@@ -103,19 +103,19 @@ export default function WaiterRequestManager() {
       </div>
 
       {message && (
-        <div className="rounded-2xl border border-brand-500/20 bg-brand-500/10 p-4 text-sm text-brand-300">
+        <div className="rounded-2xl border border-primary/20 bg-primary/10 p-4 text-sm text-brand-300">
           {message}
         </div>
       )}
 
       {/* Requests List */}
       {isLoading ? (
-        <div className="py-16 text-center text-zinc-500">Loading requests...</div>
+        <div className="py-16 text-center text-muted-foreground">Loading requests...</div>
       ) : requests.length === 0 ? (
-        <div className="glass-card rounded-3xl p-12 text-center text-zinc-400 space-y-2">
+        <div className="glass-card rounded-3xl p-12 text-center text-muted-foreground space-y-2">
           <CheckCircle2 className="w-10 h-10 text-green-400 mx-auto" />
-          <p className="font-semibold text-white">All caught up!</p>
-          <p className="text-xs text-zinc-500">No active waiter requests right now. New calls will appear automatically.</p>
+          <p className="font-semibold text-foreground">All caught up!</p>
+          <p className="text-xs text-muted-foreground">No active waiter requests right now. New calls will appear automatically.</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
@@ -127,16 +127,16 @@ export default function WaiterRequestManager() {
             return (
               <div
                 key={req.id}
-                className="glass-card rounded-3xl p-6 border border-white/5 space-y-4 flex flex-col justify-between"
+                className="glass-card rounded-3xl p-6 border border-border space-y-4 flex flex-col justify-between"
               >
                 <div className="space-y-3">
                   <div className="flex items-start justify-between">
                     <div>
-                      <span className="text-xs font-mono text-brand-400 font-bold uppercase tracking-wider block">
+                      <span className="text-xs font-mono text-primary font-bold uppercase tracking-wider block">
                         Table {tableNum} {req.table?.label ? `• ${req.table.label}` : ""}
                       </span>
-                      <h3 className="text-lg font-bold text-white flex items-center gap-2 mt-0.5">
-                        <Icon className="w-4 h-4 text-brand-400" />
+                      <h3 className="text-lg font-bold text-foreground flex items-center gap-2 mt-0.5">
+                        <Icon className="w-4 h-4 text-primary" />
                         <span>{typeInfo.label}</span>
                       </h3>
                     </div>
@@ -155,19 +155,19 @@ export default function WaiterRequestManager() {
                   </div>
 
                   {req.note && (
-                    <div className="p-3 rounded-xl bg-[#292C2B] border border-white/5 text-xs text-zinc-300 italic">
+                    <div className="p-3 rounded-xl bg-card border border-border text-xs text-muted-foreground italic">
                       "{req.note}"
                     </div>
                   )}
 
-                  <p className="text-[11px] text-zinc-500 flex items-center gap-1">
+                  <p className="text-[11px] text-muted-foreground flex items-center gap-1">
                     <Clock className="w-3 h-3" />
                     <span>Requested {new Date(req.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</span>
                   </p>
                 </div>
 
                 {/* Actions */}
-                <div className="pt-3 border-t border-white/5 grid grid-cols-2 gap-2">
+                <div className="pt-3 border-t border-border grid grid-cols-2 gap-2">
                   {req.status === "PENDING" && (
                     <button
                       onClick={() => updateStatus(req.id, "IN_PROGRESS")}
@@ -189,7 +189,7 @@ export default function WaiterRequestManager() {
                   {req.status === "PENDING" && (
                     <button
                       onClick={() => updateStatus(req.id, "CANCELLED")}
-                      className="py-2.5 px-3 rounded-xl bg-white/5 text-zinc-500 font-semibold text-xs hover:bg-red-500/10 hover:text-red-400 transition-all"
+                      className="py-2.5 px-3 rounded-xl bg-foreground/5 text-muted-foreground font-semibold text-xs hover:bg-red-500/10 hover:text-red-400 transition-all"
                     >
                       Dismiss
                     </button>

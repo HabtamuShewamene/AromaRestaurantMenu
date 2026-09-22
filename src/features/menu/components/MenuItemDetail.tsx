@@ -140,13 +140,13 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
 
   return (
     <div 
-      className="fixed inset-0 z-[70] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 transition-all duration-300"
+      className="fixed inset-0 z-[70] flex items-center justify-center bg-background/80 backdrop-blur-sm p-4 transition-all duration-300"
       onClick={handleBackdropClick}
     >
       <div 
         ref={modalRef}
         tabIndex={-1}
-        className="relative flex flex-col w-full max-w-xl max-h-[85vh] overflow-hidden rounded-[2rem] sm:rounded-3xl bg-[#292C2B] shadow-[0_0_40px_rgba(182,141,64,0.15)] border border-brand-500/20 outline-none"
+        className="relative flex flex-col w-full max-w-xl max-h-[85vh] overflow-hidden rounded-[2rem] sm:rounded-3xl bg-card shadow-[0_0_40px_rgba(182,141,64,0.15)] border border-primary/20 outline-none"
         role="dialog"
         aria-modal="true"
         aria-labelledby="modal-title"
@@ -167,7 +167,7 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
           {/* Close button layered on top of image */}
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 sm:top-5 sm:right-5 z-30 rounded-full bg-black/40 backdrop-blur-md p-2.5 text-white/90 hover:bg-black/60 hover:text-white hover:scale-105 active:scale-95 transition-all shadow-lg border border-white/10"
+            className="absolute top-4 right-4 sm:top-5 sm:right-5 z-30 rounded-full bg-background/40 backdrop-blur-md p-2.5 text-foreground/90 hover:bg-background/60 hover:text-foreground hover:scale-105 active:scale-95 transition-all shadow-lg border border-border"
             aria-label="Close details"
           >
             <X className="h-5 w-5" />
@@ -181,19 +181,19 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
           <div className="space-y-3">
             <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2 sm:gap-4">
               <div>
-                <p className="text-[10px] sm:text-xs uppercase tracking-[0.25em] text-brand-500 font-bold mb-1.5">{categoryName}</p>
-                <h2 id="modal-title" className="text-lg sm:text-2xl font-bold text-white font-playfair leading-tight line-clamp-3">{item.name}</h2>
+                <p className="text-[10px] sm:text-xs uppercase tracking-[0.25em] text-primary font-bold mb-1.5">{categoryName}</p>
+                <h2 id="modal-title" className="text-lg sm:text-2xl font-bold text-foreground font-playfair leading-tight line-clamp-3">{item.name}</h2>
               </div>
-              <p className="text-xl sm:text-3xl font-bold text-brand-400 font-playfair whitespace-nowrap">{item.price.toFixed(2)} Birr</p>
+              <p className="text-xl sm:text-3xl font-bold text-primary font-playfair whitespace-nowrap">{item.price.toFixed(2)} Birr</p>
             </div>
             
             {/* Rating Summary & Badges */}
             <div className="flex flex-wrap items-center gap-3 pt-1">
               {/* Mock compact rating summary */}
-              <div className="flex items-center gap-1 bg-white/5 px-2.5 py-1 rounded-lg border border-white/5 w-fit shadow-inner">
-                <span className="text-brand-400 text-sm leading-none">★</span>
-                <span className="text-white text-sm font-bold leading-none">4.8</span>
-                <span className="text-zinc-500 text-xs ml-0.5 leading-none">(24)</span>
+              <div className="flex items-center gap-1 bg-foreground/5 px-2.5 py-1 rounded-lg border border-border w-fit shadow-inner">
+                <span className="text-primary text-sm leading-none">★</span>
+                <span className="text-foreground text-sm font-bold leading-none">4.8</span>
+                <span className="text-muted-foreground text-xs ml-0.5 leading-none">(24)</span>
               </div>
 
               <span
@@ -214,25 +214,25 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
               ))}
             </div>
 
-            <p className="text-zinc-300 text-sm leading-relaxed mt-2">{item.description}</p>
+            <p className="text-muted-foreground text-sm leading-relaxed mt-2">{item.description}</p>
           </div>
 
           {/* Customization Options */}
           {item.addonGroups && item.addonGroups.length > 0 && (
-            <div className="space-y-5 pt-4 border-t border-white/10">
-              <h3 className="text-sm font-bold uppercase tracking-wider text-brand-400">Customizations</h3>
+            <div className="space-y-5 pt-4 border-t border-border">
+              <h3 className="text-sm font-bold uppercase tracking-wider text-primary">Customizations</h3>
 
               {item.addonGroups.map((group) => {
                 const selectedInGroup = selectedAddons[group.id] || [];
 
                 return (
-                  <div key={group.id} className="p-4 sm:p-5 rounded-2xl bg-[#292C2B]/80 border border-brand-500/10 space-y-4">
+                  <div key={group.id} className="p-4 sm:p-5 rounded-2xl bg-card/80 border border-primary/10 space-y-4">
                     <div className="flex items-center justify-between">
-                      <h4 className="text-sm font-semibold text-white flex items-center gap-2">
+                      <h4 className="text-sm font-semibold text-foreground flex items-center gap-2">
                         {group.name} 
-                        {group.required && <span className="bg-brand-500/20 text-brand-400 text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full border border-brand-500/20">Required</span>}
+                        {group.required && <span className="bg-primary/20 text-primary text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full border border-primary/20">Required</span>}
                       </h4>
-                      <span className="text-xs font-medium text-zinc-500 bg-black/40 px-2 py-1 rounded-md">
+                      <span className="text-xs font-medium text-muted-foreground bg-background/40 px-2 py-1 rounded-md">
                         {group.maxSelect === 1 ? "Select 1" : `Up to ${group.maxSelect}`}
                       </span>
                     </div>
@@ -255,14 +255,14 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
                             }
                             className={`flex items-center justify-between p-3.5 rounded-xl border text-sm font-medium transition-all active:scale-[0.98] ${
                               !opt.isAvailable
-                                ? "opacity-40 cursor-not-allowed bg-[#292C2B] border-zinc-800 text-zinc-600"
+                                ? "opacity-40 cursor-not-allowed bg-card border-border text-zinc-600"
                                 : isSelected
-                                ? "bg-brand-500/15 border-brand-500/40 text-brand-300 shadow-[0_0_15px_rgba(182,141,64,0.15)] ring-1 ring-brand-500/50"
-                                : "bg-[#292C2B] border-zinc-800 text-zinc-300 hover:bg-zinc-800 hover:border-zinc-700"
+                                ? "bg-primary/15 border-primary/40 text-brand-300 shadow-[0_0_15px_rgba(182,141,64,0.15)] ring-1 ring-primary/50"
+                                : "bg-card border-border text-muted-foreground hover:bg-zinc-800 hover:border-zinc-700"
                             }`}
                           >
                             <span className="truncate pr-2">{opt.name}</span>
-                            <span className={`font-bold ml-2 whitespace-nowrap ${isSelected ? 'text-brand-400' : 'text-zinc-400'}`}>
+                            <span className={`font-bold ml-2 whitespace-nowrap ${isSelected ? 'text-primary' : 'text-muted-foreground'}`}>
                               {opt.price > 0 ? `+${opt.price.toFixed(2)} Birr` : "Free"}
                             </span>
                           </button>
@@ -276,12 +276,12 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
           )}
 
           {/* Special Requests */}
-          <div className="pt-4 border-t border-white/10 space-y-3">
+          <div className="pt-4 border-t border-border space-y-3">
             <div className="flex items-center justify-between">
-              <label htmlFor="special-instructions" className="text-xs font-bold text-zinc-400 uppercase tracking-wider">
+              <label htmlFor="special-instructions" className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
                 Special Instructions
               </label>
-              <span className={`text-[10px] font-bold tracking-wider ${notes.length > 130 ? 'text-red-400' : 'text-zinc-500'}`}>
+              <span className={`text-[10px] font-bold tracking-wider ${notes.length > 130 ? 'text-red-400' : 'text-muted-foreground'}`}>
                 {notes.length}/150
               </span>
             </div>
@@ -291,29 +291,29 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
               maxLength={150}
               onChange={(e) => setNotes(e.target.value)}
               placeholder="e.g. Extra hot, no cinnamon, sauce on side..."
-              className="w-full bg-[#292C2B]/80 border border-zinc-800 rounded-xl px-4 py-3.5 text-sm text-white placeholder-zinc-600 outline-none focus:border-brand-500 focus:bg-[#292C2B] transition-colors resize-none h-24 shadow-inner"
+              className="w-full bg-card/80 border border-border rounded-xl px-4 py-3.5 text-sm text-foreground placeholder-zinc-600 outline-none focus:border-primary focus:bg-card transition-colors resize-none h-24 shadow-inner"
             />
           </div>
         </div>
 
         {/* Sticky Glassmorphism Footer */}
-        <div className="flex-shrink-0 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-brand-500/20 bg-[#292C2B]/95 backdrop-blur-xl px-5 sm:px-7 py-4 pb-8 sm:pb-5 sm:py-5 z-30 relative">
+        <div className="flex-shrink-0 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-primary/20 bg-card/95 backdrop-blur-xl px-5 sm:px-7 py-4 pb-8 sm:pb-5 sm:py-5 z-30 relative">
           
           {/* Quantity Controls - Large Touch Targets */}
-          <div className="flex items-center justify-between w-full sm:w-auto bg-[#292C2B] p-1.5 rounded-2xl border border-white/10 shadow-inner">
+          <div className="flex items-center justify-between w-full sm:w-auto bg-card p-1.5 rounded-2xl border border-border shadow-inner">
             <button
               type="button"
               onClick={() => setQuantity(Math.max(1, quantity - 1))}
-              className="w-12 h-12 sm:w-10 sm:h-10 rounded-xl bg-[#292C2B] flex items-center justify-center text-zinc-300 hover:text-white hover:bg-zinc-800 transition-colors active:bg-zinc-700"
+              className="w-12 h-12 sm:w-10 sm:h-10 rounded-xl bg-card flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-zinc-800 transition-colors active:bg-zinc-700"
               aria-label="Decrease quantity"
             >
               <Minus className="w-5 h-5 sm:w-4 sm:h-4" />
             </button>
-            <span className="w-12 sm:w-10 text-center font-bold text-white text-lg sm:text-base">{quantity}</span>
+            <span className="w-12 sm:w-10 text-center font-bold text-foreground text-lg sm:text-base">{quantity}</span>
             <button
               type="button"
               onClick={() => setQuantity(quantity + 1)}
-              className="w-12 h-12 sm:w-10 sm:h-10 rounded-xl bg-[#292C2B] flex items-center justify-center text-zinc-300 hover:text-white hover:bg-zinc-800 transition-colors active:bg-zinc-700"
+              className="w-12 h-12 sm:w-10 sm:h-10 rounded-xl bg-card flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-zinc-800 transition-colors active:bg-zinc-700"
               aria-label="Increase quantity"
             >
               <Plus className="w-5 h-5 sm:w-4 sm:h-4" />
@@ -327,12 +327,12 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
             onClick={handleAddToCart}
             className={`w-full sm:flex-1 sm:min-w-[240px] flex items-center justify-center gap-2 py-4 sm:py-3.5 px-6 rounded-2xl font-bold text-base sm:text-sm transition-all shadow-lg ${
               !item.isAvailable
-                ? "bg-zinc-800 text-zinc-500 cursor-not-allowed"
+                ? "bg-zinc-800 text-muted-foreground cursor-not-allowed"
                 : missingRequiredGroup
-                ? "bg-zinc-800 text-zinc-400 border border-brand-500/30 cursor-not-allowed"
+                ? "bg-zinc-800 text-muted-foreground border border-primary/30 cursor-not-allowed"
                 : justAdded
-                ? "bg-green-500 text-black shadow-[0_0_20px_rgba(34,197,94,0.4)] scale-[1.02]"
-                : "bg-brand-500 text-black hover:bg-brand-400 hover:scale-[1.02] active:scale-[0.98] shadow-[0_4px_20px_rgba(182,141,64,0.3)]"
+                ? "bg-green-500 text-primary-foreground shadow-[0_0_20px_rgba(34,197,94,0.4)] scale-[1.02]"
+                : "bg-primary text-primary-foreground hover:bg-primary hover:scale-[1.02] active:scale-[0.98] shadow-[0_4px_20px_rgba(182,141,64,0.3)]"
             }`}
           >
             {justAdded ? (

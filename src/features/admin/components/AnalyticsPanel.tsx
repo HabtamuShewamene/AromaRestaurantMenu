@@ -28,33 +28,33 @@ export default function AnalyticsPanel() {
   }
 
   if (!analytics) {
-    return <p className="text-zinc-500">Loading analytics...</p>;
+    return <p className="text-muted-foreground">Loading analytics...</p>;
   }
 
   return (
     <div className="space-y-8">
       <div>
         <h1 className="mb-2 text-4xl font-bold">Analytics</h1>
-        <p className="text-zinc-500">
+        <p className="text-muted-foreground">
           Admin-only sales insights for revenue, order flow, and popular items.
         </p>
       </div>
 
       <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
         <div className="glass-card rounded-3xl p-6">
-          <p className="text-sm text-zinc-500">Revenue</p>
-          <p className="mt-3 text-3xl font-bold text-brand-500">${analytics.totalRevenue.toFixed(2)}</p>
+          <p className="text-sm text-muted-foreground">Revenue</p>
+          <p className="mt-3 text-3xl font-bold text-primary">${analytics.totalRevenue.toFixed(2)}</p>
         </div>
         <div className="glass-card rounded-3xl p-6">
-          <p className="text-sm text-zinc-500">Orders</p>
+          <p className="text-sm text-muted-foreground">Orders</p>
           <p className="mt-3 text-3xl font-bold">{analytics.totalOrders}</p>
         </div>
         <div className="glass-card rounded-3xl p-6">
-          <p className="text-sm text-zinc-500">Pending</p>
+          <p className="text-sm text-muted-foreground">Pending</p>
           <p className="mt-3 text-3xl font-bold text-orange-400">{analytics.pendingOrders}</p>
         </div>
         <div className="glass-card rounded-3xl p-6">
-          <p className="text-sm text-zinc-500">Avg Order</p>
+          <p className="text-sm text-muted-foreground">Avg Order</p>
           <p className="mt-3 text-3xl font-bold">${analytics.averageOrderValue.toFixed(2)}</p>
         </div>
       </div>
@@ -64,12 +64,12 @@ export default function AnalyticsPanel() {
           <h2 className="mb-6 text-2xl font-bold">Popular Items</h2>
           <div className="space-y-4">
             {analytics.popularItems.map((item) => (
-              <div key={item.name} className="flex items-center justify-between rounded-2xl border border-white/5 p-4">
+              <div key={item.name} className="flex items-center justify-between rounded-2xl border border-border p-4">
                 <div>
                   <h3 className="font-semibold">{item.name}</h3>
-                  <p className="text-sm text-zinc-500">{item.quantity} sold</p>
+                  <p className="text-sm text-muted-foreground">{item.quantity} sold</p>
                 </div>
-                <span className="font-mono text-brand-500">${item.revenue.toFixed(2)}</span>
+                <span className="font-mono text-primary">${item.revenue.toFixed(2)}</span>
               </div>
             ))}
           </div>
@@ -79,7 +79,7 @@ export default function AnalyticsPanel() {
           <h2 className="mb-6 text-2xl font-bold">Order Status Mix</h2>
           <div className="space-y-4">
             {analytics.salesByStatus.map((entry) => (
-              <div key={entry.status} className="flex items-center justify-between rounded-2xl border border-white/5 p-4">
+              <div key={entry.status} className="flex items-center justify-between rounded-2xl border border-border p-4">
                 <span>{entry.status}</span>
                 <span className="font-bold">{entry.count}</span>
               </div>

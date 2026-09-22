@@ -20,13 +20,13 @@ export default async function TablePage({ params }: PageProps) {
 
   if (table.status === "OUT_OF_SERVICE") {
     return (
-      <main className="min-h-screen bg-[#171918] flex items-center justify-center p-4">
+      <main className="min-h-screen bg-background flex items-center justify-center p-4">
         <div className="glass-card max-w-md p-8 rounded-3xl text-center space-y-4">
           <div className="w-16 h-16 rounded-full bg-red-500/10 border border-red-500/20 mx-auto flex items-center justify-center text-2xl">
             🛑
           </div>
-          <h1 className="text-2xl font-bold text-white font-playfair">Table Unavailable</h1>
-          <p className="text-sm text-zinc-400">
+          <h1 className="text-2xl font-bold text-foreground font-playfair">Table Unavailable</h1>
+          <p className="text-sm text-muted-foreground">
             Table {table.number} is currently marked out of service. Please speak with a restaurant staff member for assistance.
           </p>
         </div>
@@ -46,7 +46,7 @@ export default async function TablePage({ params }: PageProps) {
 
   return (
     <TableSessionInitializer context={tableContext}>
-      <main className="relative min-h-screen bg-[#171918]">
+      <main className="relative min-h-screen bg-background">
         <Navbar />
         <TableActionBar />
         <MenuExplorer showHero={false} />

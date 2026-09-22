@@ -72,32 +72,32 @@ export default function OrderStatusView({ initialOrder }: { initialOrder: OrderR
       <div className="flex items-center justify-between">
         <Link
           href={order.tableNumber ? `/table/${order.tableNumber}` : "/menu"}
-          className="inline-flex items-center gap-2 text-sm text-zinc-400 hover:text-white transition-colors"
+          className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>Back to Menu</span>
         </Link>
         {isRefreshing && (
-          <span className="text-[11px] text-zinc-500 flex items-center gap-1.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-brand-400 animate-ping" />
+          <span className="text-[11px] text-muted-foreground flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-primary animate-ping" />
             Live Sync
           </span>
         )}
       </div>
 
       {/* Hero Header */}
-      <div className="glass-card p-6 sm:p-8 rounded-3xl text-center space-y-3 relative overflow-hidden border border-white/10 shadow-2xl">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-400 text-xs font-semibold uppercase tracking-wider">
+      <div className="glass-card p-6 sm:p-8 rounded-3xl text-center space-y-3 relative overflow-hidden border border-border shadow-2xl">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-semibold uppercase tracking-wider">
           Order #{orderRef}
         </div>
-        <h1 className="text-3xl sm:text-4xl font-bold text-white font-playfair">
+        <h1 className="text-3xl sm:text-4xl font-bold text-foreground font-playfair">
           {isCancelled
             ? "Order Cancelled"
             : order.status.toUpperCase() === "COMPLETED"
             ? "Order Completed"
             : "We're Preparing Your Order"}
         </h1>
-        <p className="text-zinc-400 text-sm max-w-md mx-auto leading-relaxed">
+        <p className="text-muted-foreground text-sm max-w-md mx-auto leading-relaxed">
           {order.tableNumber
             ? `Table ${order.tableNumber} • Dine-in Experience`
             : "Takeaway • Pickup Order"}
@@ -106,8 +106,8 @@ export default function OrderStatusView({ initialOrder }: { initialOrder: OrderR
 
       {/* Lifecycle Progress Bar */}
       {!isCancelled ? (
-        <div className="p-6 rounded-3xl bg-[#292C2B] border border-white/5 space-y-6">
-          <h2 className="text-xs font-semibold uppercase tracking-wider text-zinc-400">
+        <div className="p-6 rounded-3xl bg-card border border-border space-y-6">
+          <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
             Live Kitchen & Serving Progress
           </h2>
 
@@ -123,19 +123,19 @@ export default function OrderStatusView({ initialOrder }: { initialOrder: OrderR
                   key={stage.status}
                   className={`flex items-start gap-4 p-3.5 rounded-2xl transition-all ${
                     isCurrent
-                      ? "bg-brand-500/10 border border-brand-500/30 shadow-[0_0_20px_rgba(182,141,64,0.1)]"
+                      ? "bg-primary/10 border border-primary/30 shadow-[0_0_20px_rgba(182,141,64,0.1)]"
                       : isPast
-                      ? "opacity-60 bg-[#292C2B]/40"
-                      : "opacity-30 bg-[#292C2B]/20"
+                      ? "opacity-60 bg-card/40"
+                      : "opacity-30 bg-card/20"
                   }`}
                 >
                   <div
                     className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-colors ${
                       isCurrent
-                        ? "bg-brand-500 text-black shadow-[0_0_15px_rgba(182,141,64,0.5)]"
+                        ? "bg-primary text-primary-foreground shadow-[0_0_15px_rgba(182,141,64,0.5)]"
                         : isPast
                         ? "bg-green-500/20 text-green-400 border border-green-500/40"
-                        : "bg-zinc-800 text-zinc-500"
+                        : "bg-zinc-800 text-muted-foreground"
                     }`}
                   >
                     <Icon className="w-5 h-5" />
@@ -145,13 +145,13 @@ export default function OrderStatusView({ initialOrder }: { initialOrder: OrderR
                     <div className="flex items-center justify-between">
                       <h3
                         className={`text-sm font-bold ${
-                          isCurrent ? "text-brand-300" : isPast ? "text-white" : "text-zinc-500"
+                          isCurrent ? "text-brand-300" : isPast ? "text-foreground" : "text-muted-foreground"
                         }`}
                       >
                         {stage.label}
                       </h3>
                       {isCurrent && (
-                        <span className="text-[10px] uppercase tracking-wider font-bold text-brand-400 animate-pulse">
+                        <span className="text-[10px] uppercase tracking-wider font-bold text-primary animate-pulse">
                           Active Stage
                         </span>
                       )}
@@ -159,7 +159,7 @@ export default function OrderStatusView({ initialOrder }: { initialOrder: OrderR
                         <CheckCircle2 className="w-4 h-4 text-green-400 flex-shrink-0" />
                       )}
                     </div>
-                    <p className="text-xs text-zinc-400 mt-0.5">{stage.description}</p>
+                    <p className="text-xs text-muted-foreground mt-0.5">{stage.description}</p>
                   </div>
                 </div>
               );
@@ -174,8 +174,8 @@ export default function OrderStatusView({ initialOrder }: { initialOrder: OrderR
       )}
 
       {/* Order Summary Breakdown */}
-      <div className="p-6 rounded-3xl bg-[#292C2B] border border-white/5 space-y-4">
-        <h2 className="text-xs font-semibold uppercase tracking-wider text-zinc-400">
+      <div className="p-6 rounded-3xl bg-card border border-border space-y-4">
+        <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
           Ordered Items
         </h2>
 
@@ -183,12 +183,12 @@ export default function OrderStatusView({ initialOrder }: { initialOrder: OrderR
           {order.items.map((item, idx) => (
             <div key={idx} className="py-3 flex items-start justify-between gap-4 text-sm">
               <div className="space-y-1">
-                <p className="font-semibold text-white">
-                  <span className="text-brand-400 mr-2">{item.quantity}x</span>
+                <p className="font-semibold text-foreground">
+                  <span className="text-primary mr-2">{item.quantity}x</span>
                   {item.name}
                 </p>
                 {item.addons && item.addons.length > 0 && (
-                  <div className="text-xs text-zinc-400 space-y-0.5 ml-6">
+                  <div className="text-xs text-muted-foreground space-y-0.5 ml-6">
                     {item.addons.map((a, i) => (
                       <p key={i}>
                         + {a.name} {a.price > 0 ? `(${a.price.toFixed(2)} ETB)` : ""}
@@ -197,19 +197,19 @@ export default function OrderStatusView({ initialOrder }: { initialOrder: OrderR
                   </div>
                 )}
                 {item.notes && (
-                  <p className="text-xs text-zinc-500 italic ml-6">"{item.notes}"</p>
+                  <p className="text-xs text-muted-foreground italic ml-6">"{item.notes}"</p>
                 )}
               </div>
-              <span className="font-mono text-zinc-300 font-medium">
+              <span className="font-mono text-muted-foreground font-medium">
                 {item.price * item.quantity > 0 ? `${(item.price * item.quantity).toFixed(2)} ETB` : "Free"}
               </span>
             </div>
           ))}
         </div>
 
-        <div className="pt-4 border-t border-white/10 flex items-center justify-between">
-          <span className="font-bold text-white text-base">Total</span>
-          <span className="font-mono font-bold text-xl text-brand-400 font-playfair">
+        <div className="pt-4 border-t border-border flex items-center justify-between">
+          <span className="font-bold text-foreground text-base">Total</span>
+          <span className="font-mono font-bold text-xl text-primary font-playfair">
             {order.totalAmount.toFixed(2)} ETB
           </span>
         </div>
@@ -219,7 +219,7 @@ export default function OrderStatusView({ initialOrder }: { initialOrder: OrderR
       <div className="flex flex-col sm:flex-row gap-3 pt-2">
         <Link
           href={order.tableNumber ? `/table/${order.tableNumber}` : "/menu"}
-          className="flex-1 py-3.5 px-6 rounded-2xl bg-brand-500 text-black font-bold text-sm text-center hover:bg-brand-400 transition-all flex items-center justify-center gap-2"
+          className="flex-1 py-3.5 px-6 rounded-2xl bg-primary text-primary-foreground font-bold text-sm text-center hover:bg-primary transition-all flex items-center justify-center gap-2"
         >
           <ShoppingBag className="w-4 h-4" />
           <span>Add More Dishes</span>

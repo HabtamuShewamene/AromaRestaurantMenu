@@ -81,7 +81,7 @@ export default function SearchBar({
       >
         {/* Search icon */}
         <div className="flex-shrink-0">
-          <Search className={`w-5 h-5 transition-colors ${isFocused ? 'text-brand-400' : 'text-brand-500/70'}`} strokeWidth={1.5} />
+          <Search className={`w-5 h-5 transition-colors ${isFocused ? 'text-primary' : 'text-primary/70'}`} strokeWidth={1.5} />
         </div>
 
         {/* Input */}
@@ -96,7 +96,7 @@ export default function SearchBar({
             }
           }}
           placeholder={placeholder}
-          className="flex-1 bg-transparent text-white placeholder-zinc-600 text-sm font-medium outline-none"
+          className="flex-1 bg-transparent text-foreground placeholder-zinc-600 text-sm font-medium outline-none"
         />
 
         {/* Clear icon */}
@@ -105,21 +105,21 @@ export default function SearchBar({
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             onClick={() => onChange("")}
-            className="flex-shrink-0 flex items-center justify-center w-6 h-6 rounded-full bg-zinc-800 text-zinc-400 hover:text-zinc-200 transition-colors"
+            className="flex-shrink-0 flex items-center justify-center w-6 h-6 rounded-full bg-zinc-800 text-muted-foreground hover:text-foreground transition-colors"
           >
             <X className="w-3.5 h-3.5" />
           </motion.button>
         )}
 
         {/* Divider */}
-        <div className="w-px h-5 bg-white/10 flex-shrink-0 mx-1" />
+        <div className="w-px h-5 bg-foreground/10 flex-shrink-0 mx-1" />
 
         {/* Filter button */}
         <button 
           onClick={onFilterToggle}
-          className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-xl bg-brand-500/10 border border-brand-500/20 hover:bg-brand-500/20 transition-all"
+          className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-xl bg-primary/10 border border-primary/20 hover:bg-primary/20 transition-all"
         >
-          <SlidersHorizontal className="w-3.5 h-3.5 text-brand-400" />
+          <SlidersHorizontal className="w-3.5 h-3.5 text-primary" />
         </button>
       </div>
 
@@ -131,7 +131,7 @@ export default function SearchBar({
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 10, scale: 0.98 }}
             transition={{ duration: 0.2 }}
-            className="absolute top-full left-0 right-0 mt-2 p-4 rounded-2xl border border-zinc-800 shadow-2xl overflow-hidden"
+            className="absolute top-full left-0 right-0 mt-2 p-4 rounded-2xl border border-border shadow-2xl overflow-hidden"
             style={{
               background: "rgba(18, 18, 18, 0.98)",
               backdropFilter: "blur(20px)",
@@ -140,10 +140,10 @@ export default function SearchBar({
             {recentSearches.length > 0 && (
               <div className="mb-4">
                 <div className="flex items-center justify-between mb-2">
-                  <h4 className="text-xs font-semibold text-zinc-500 uppercase tracking-wider flex items-center gap-1.5">
+                  <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5">
                     <History className="w-3.5 h-3.5" /> Recent
                   </h4>
-                  <button onClick={clearRecent} className="text-[10px] text-zinc-600 hover:text-zinc-400 uppercase">Clear</button>
+                  <button onClick={clearRecent} className="text-[10px] text-zinc-600 hover:text-muted-foreground uppercase">Clear</button>
                 </div>
                 <div className="flex flex-wrap gap-2">
                   {recentSearches.map((term, i) => (
@@ -153,7 +153,7 @@ export default function SearchBar({
                         e.preventDefault(); // Prevents input onBlur
                         handleSearch(term);
                       }}
-                      className="px-3 py-1.5 rounded-lg bg-[#292C2B] border border-zinc-800 text-sm text-zinc-300 hover:bg-zinc-800 hover:text-white transition-colors"
+                      className="px-3 py-1.5 rounded-lg bg-card border border-border text-sm text-muted-foreground hover:bg-zinc-800 hover:text-foreground transition-colors"
                     >
                       {term}
                     </button>
@@ -164,7 +164,7 @@ export default function SearchBar({
 
             {popularSearches.length > 0 && (
               <div>
-                <h4 className="text-xs font-semibold text-brand-500/80 uppercase tracking-wider flex items-center gap-1.5 mb-2">
+                <h4 className="text-xs font-semibold text-primary/80 uppercase tracking-wider flex items-center gap-1.5 mb-2">
                   <TrendingUp className="w-3.5 h-3.5" /> Popular
                 </h4>
                 <div className="flex flex-wrap gap-2">
@@ -175,7 +175,7 @@ export default function SearchBar({
                         e.preventDefault(); // Prevents input onBlur
                         handleSearch(term);
                       }}
-                      className="px-3 py-1.5 rounded-lg bg-brand-500/5 border border-brand-500/10 text-sm text-brand-200 hover:bg-brand-500/10 transition-colors"
+                      className="px-3 py-1.5 rounded-lg bg-primary/5 border border-primary/10 text-sm text-brand-200 hover:bg-primary/10 transition-colors"
                     >
                       {term}
                     </button>

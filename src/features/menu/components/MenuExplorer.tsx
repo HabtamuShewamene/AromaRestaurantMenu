@@ -135,7 +135,7 @@ export default function MenuExplorer({ showHero = false }: { showHero?: boolean 
     .map((item) => item.name);
 
   return (
-    <div id="menu-explorer" className="relative min-h-screen bg-[#171918]">
+    <div id="menu-explorer" className="relative min-h-screen bg-background">
       {/* ── Hero ── (rendered only when requested) */}
       {showHero && <HeroSection mode="full" />}
 
@@ -156,11 +156,11 @@ export default function MenuExplorer({ showHero = false }: { showHero?: boolean 
               exit={{ opacity: 0, height: 0 }}
               className="overflow-hidden"
             >
-              <div className="p-5 rounded-3xl bg-[#121212] border border-white/10 shadow-2xl space-y-5">
+              <div className="p-5 rounded-3xl bg-[#121212] border border-border shadow-2xl space-y-5">
                 
                 {/* Properties */}
                 <div>
-                  <h4 className="text-xs font-semibold text-zinc-400 mb-3 uppercase tracking-wider">Properties & Diet</h4>
+                  <h4 className="text-xs font-semibold text-muted-foreground mb-3 uppercase tracking-wider">Properties & Diet</h4>
                   <div className="flex flex-wrap gap-2">
                     {[
                       { key: 'vegetarian', label: 'Vegetarian', color: 'bg-green-500/10 text-green-400 border-green-500/30' },
@@ -174,7 +174,7 @@ export default function MenuExplorer({ showHero = false }: { showHero?: boolean 
                         className={`px-4 py-2 rounded-xl text-xs font-bold border transition-all ${
                           filters[prop.key as keyof typeof filters] 
                             ? prop.color 
-                            : 'bg-[#292C2B] border-zinc-800 text-zinc-400 hover:bg-zinc-800'
+                            : 'bg-card border-border text-muted-foreground hover:bg-zinc-800'
                         }`}
                       >
                         {prop.label}
@@ -185,27 +185,27 @@ export default function MenuExplorer({ showHero = false }: { showHero?: boolean 
 
                 {/* Price */}
                 <div>
-                  <h4 className="text-xs font-semibold text-zinc-400 mb-3 uppercase tracking-wider">Price Range ($)</h4>
+                  <h4 className="text-xs font-semibold text-muted-foreground mb-3 uppercase tracking-wider">Price Range ($)</h4>
                   <div className="flex items-center gap-4">
                     <div className="relative flex-1">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500">$</span>
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
                       <input 
                         type="number" 
                         placeholder="Min"
                         value={filters.minPrice}
                         onChange={(e) => setFilters({ ...filters, minPrice: e.target.value })}
-                        className="w-full bg-[#292C2B] border border-zinc-800 rounded-xl py-2 pl-7 pr-3 text-white placeholder-zinc-600 outline-none focus:border-brand-500/50 text-sm"
+                        className="w-full bg-card border border-border rounded-xl py-2 pl-7 pr-3 text-foreground placeholder-zinc-600 outline-none focus:border-primary/50 text-sm"
                       />
                     </div>
                     <span className="text-zinc-600">-</span>
                     <div className="relative flex-1">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500">$</span>
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
                       <input 
                         type="number" 
                         placeholder="Max"
                         value={filters.maxPrice}
                         onChange={(e) => setFilters({ ...filters, maxPrice: e.target.value })}
-                        className="w-full bg-[#292C2B] border border-zinc-800 rounded-xl py-2 pl-7 pr-3 text-white placeholder-zinc-600 outline-none focus:border-brand-500/50 text-sm"
+                        className="w-full bg-card border border-border rounded-xl py-2 pl-7 pr-3 text-foreground placeholder-zinc-600 outline-none focus:border-primary/50 text-sm"
                       />
                     </div>
                   </div>
@@ -221,7 +221,7 @@ export default function MenuExplorer({ showHero = false }: { showHero?: boolean 
       <div ref={filterRef} />
       <div
         className={`sticky top-20 z-30 transition-all duration-400 ${
-          filterSticky ? "shadow-2xl bg-[#171918]/95 backdrop-blur-2xl border-b border-white/10" : "bg-transparent"
+          filterSticky ? "shadow-2xl bg-background/95 backdrop-blur-2xl border-b border-border" : "bg-transparent"
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
@@ -247,8 +247,8 @@ export default function MenuExplorer({ showHero = false }: { showHero?: boolean 
               border: "1px solid rgba(182,141,64,0.25)",
             }}
           >
-            <Sparkles className="w-4 h-4 text-brand-400 flex-shrink-0" />
-            <span className="text-sm text-zinc-200 whitespace-nowrap">
+            <Sparkles className="w-4 h-4 text-primary flex-shrink-0" />
+            <span className="text-sm text-foreground whitespace-nowrap">
               {message}
             </span>
           </motion.div>
@@ -278,7 +278,7 @@ export default function MenuExplorer({ showHero = false }: { showHero?: boolean 
             >
               <span className="text-4xl">🍽️</span>
             </div>
-            <p className="font-semibold text-zinc-300 mb-2">
+            <p className="font-semibold text-muted-foreground mb-2">
               Nothing found
             </p>
             <p className="text-sm text-zinc-600">
@@ -293,12 +293,12 @@ export default function MenuExplorer({ showHero = false }: { showHero?: boolean 
                 <div className="flex items-center gap-4 mb-6">
                   <div>
                     <h2
-                      className="text-2xl sm:text-3xl font-bold text-white tracking-tight"
+                      className="text-2xl sm:text-3xl font-bold text-foreground tracking-tight"
                       style={{ fontFamily: "var(--font-playfair, serif)" }}
                     >
                       {category}
                     </h2>
-                    <p className="text-xs text-zinc-500 mt-0.5">
+                    <p className="text-xs text-muted-foreground mt-0.5">
                       {categoryItems.length} curated dish{categoryItems.length !== 1 ? "es" : ""}
                     </p>
                   </div>

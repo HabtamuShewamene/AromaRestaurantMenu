@@ -57,9 +57,9 @@ export default function AdminDashboardContent() {
     <div className="space-y-12">
       <div>
         <h1 className="mb-3 text-5xl font-bold">
-          Admin <span className="text-brand-500">Control Center</span>
+          Admin <span className="text-primary">Control Center</span>
         </h1>
-        <p className="max-w-3xl text-lg text-zinc-500">
+        <p className="max-w-3xl text-lg text-muted-foreground">
           Full control over menu data, review moderation, and system reporting.
         </p>
       </div>
@@ -97,15 +97,15 @@ export default function AdminDashboardContent() {
         {/* ── Main Actions ── */}
         <div className="lg:col-span-2 grid gap-6 md:grid-cols-2">
           {adminCapabilities.map((capability) => (
-            <Link key={capability.title} href={capability.href} className="glass-card rounded-3xl p-8 transition-all hover:border-brand-500/40 group">
+            <Link key={capability.title} href={capability.href} className="glass-card rounded-3xl p-8 transition-all hover:border-primary/40 group">
               <div className="mb-6 flex items-center justify-between">
-                <div className="rounded-2xl bg-brand-500/10 p-3 text-brand-500 group-hover:bg-brand-500/20 transition-colors">
+                <div className="rounded-2xl bg-primary/10 p-3 text-primary group-hover:bg-primary/20 transition-colors">
                   <capability.icon className="h-6 w-6" />
                 </div>
-                <ArrowRight className="h-5 w-5 text-zinc-500 group-hover:text-brand-500 transition-colors" />
+                <ArrowRight className="h-5 w-5 text-muted-foreground group-hover:text-primary transition-colors" />
               </div>
               <h2 className="mb-3 text-2xl font-bold">{capability.title}</h2>
-              <p className="text-zinc-500 text-sm leading-relaxed">{capability.description}</p>
+              <p className="text-muted-foreground text-sm leading-relaxed">{capability.description}</p>
             </Link>
           ))}
         </div>
@@ -113,14 +113,14 @@ export default function AdminDashboardContent() {
         {/* ── Top Rated Items ── */}
         <div className="glass-card rounded-3xl p-8">
           <div className="flex items-center gap-2 mb-6">
-            <Star className="h-5 w-5 text-brand-500" />
+            <Star className="h-5 w-5 text-primary" />
             <h2 className="text-xl font-bold">Top Rated</h2>
           </div>
           
           <div className="space-y-6">
             {loading ? (
               <div className="animate-pulse space-y-4">
-                {[1,2,3].map(i => <div key={i} className="h-12 bg-white/5 rounded-2xl" />)}
+                {[1,2,3].map(i => <div key={i} className="h-12 bg-foreground/5 rounded-2xl" />)}
               </div>
             ) : stats?.topItems && stats.topItems.length > 0 ? (
               stats.topItems.map((item, idx) => (
@@ -129,12 +129,12 @@ export default function AdminDashboardContent() {
                     <span className="text-xs font-bold text-zinc-600 w-4">{idx + 1}</span>
                     <div>
                       <p className="font-semibold text-sm">{item.name}</p>
-                      <p className="text-[10px] text-zinc-500">{item.count} reviews</p>
+                      <p className="text-[10px] text-muted-foreground">{item.count} reviews</p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-1 bg-brand-500/10 px-2 py-1 rounded-lg">
-                    <Star className="h-3 w-3 fill-brand-500 text-brand-500" />
-                    <span className="text-xs font-bold text-brand-500">{item.avgRating.toFixed(1)}</span>
+                  <div className="flex items-center gap-1 bg-primary/10 px-2 py-1 rounded-lg">
+                    <Star className="h-3 w-3 fill-brand-500 text-primary" />
+                    <span className="text-xs font-bold text-primary">{item.avgRating.toFixed(1)}</span>
                   </div>
                 </div>
               ))
@@ -152,11 +152,11 @@ function StatCard({ title, value, icon: Icon, highlight = false }: { title: stri
   return (
     <div className={`glass-card rounded-3xl p-6 relative overflow-hidden ${highlight ? 'border-amber-500/30 ring-1 ring-amber-500/20' : ''}`}>
       <div className="flex items-center gap-4">
-        <div className={`p-3 rounded-2xl bg-[#292C2B] border border-white/5`}>
-          <Icon className="h-5 w-5 text-zinc-400" />
+        <div className={`p-3 rounded-2xl bg-card border border-border`}>
+          <Icon className="h-5 w-5 text-muted-foreground" />
         </div>
         <div>
-          <p className="text-xs text-zinc-500 uppercase tracking-widest font-medium mb-1">{title}</p>
+          <p className="text-xs text-muted-foreground uppercase tracking-widest font-medium mb-1">{title}</p>
           <p className="text-2xl font-bold">{value}</p>
         </div>
       </div>

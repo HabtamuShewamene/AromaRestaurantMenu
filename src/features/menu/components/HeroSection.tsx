@@ -93,10 +93,10 @@ export default function HeroSection({ mode = "compact" }: HeroSectionProps) {
           className="flex flex-col items-center mb-2 sm:mb-3"
         >
 
-          <p className="text-[10px] sm:text-xs uppercase tracking-[0.3em] text-brand-400/90 font-medium mb-0.5">
+          <p className="text-[10px] sm:text-xs uppercase tracking-[0.3em] text-primary/90 font-medium mb-0.5">
             Welcome to
           </p>
-          <h1 className="font-playfair text-2xl sm:text-4xl md:text-5xl font-bold text-white tracking-wide text-center">
+          <h1 className="font-playfair text-2xl sm:text-4xl md:text-5xl font-bold text-foreground tracking-wide text-center">
             {restaurant.name}
           </h1>
         </motion.div>
@@ -111,7 +111,7 @@ export default function HeroSection({ mode = "compact" }: HeroSectionProps) {
         >
           <button 
             onClick={scrollToMenu}
-            className="group relative overflow-hidden rounded-full bg-brand-500 text-black px-5 sm:px-7 py-2 sm:py-2.5 text-xs sm:text-sm font-bold tracking-wide transition-transform hover:scale-105 active:scale-95 shadow-[0_2px_15px_rgba(182,141,64,0.3)]"
+            className="group relative overflow-hidden rounded-full bg-primary text-primary-foreground px-5 sm:px-7 py-2 sm:py-2.5 text-xs sm:text-sm font-bold tracking-wide transition-transform hover:scale-105 active:scale-95 shadow-[0_2px_15px_rgba(182,141,64,0.3)]"
           >
             <span className="relative z-10">View Menu</span>
             <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />

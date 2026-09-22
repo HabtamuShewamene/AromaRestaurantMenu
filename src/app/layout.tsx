@@ -3,6 +3,7 @@ import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import NextAuthProvider from "@/components/providers/SessionProvider";
 import { CartProvider } from "@/components/providers/CartProvider";
+import { ThemeProvider } from "@/components/providers/ThemeProvider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -30,15 +31,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark" data-scroll-behavior="smooth">
+    <html lang="en" suppressHydrationWarning data-scroll-behavior="smooth">
       <body
-        className={`${inter.variable} ${playfair.variable} font-inter bg-[#171918] text-zinc-100 min-h-screen antialiased`}
+        className={`${inter.variable} ${playfair.variable} font-inter bg-background text-foreground min-h-screen antialiased`}
       >
-        <NextAuthProvider>
-          <CartProvider>
-            {children}
-          </CartProvider>
-        </NextAuthProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <NextAuthProvider>
+            <CartProvider>
+              {children}
+            </CartProvider>
+          </NextAuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -133,7 +133,7 @@ export default function MenuForm({
     <form onSubmit={handleSubmit} className="glass-card space-y-6 rounded-3xl p-8">
       <div>
         <h2 className="text-2xl font-bold">{initialValues?.id ? "Edit Menu Item" : "Create Menu Item"}</h2>
-        <p className="mt-2 text-sm text-zinc-500">Add products, change pricing, and build recipes.</p>
+        <p className="mt-2 text-sm text-muted-foreground">Add products, change pricing, and build recipes.</p>
       </div>
       
       {error ? <p className="rounded-2xl border border-red-500/20 bg-red-500/10 p-4 text-sm text-red-500">{error}</p> : null}
@@ -144,14 +144,14 @@ export default function MenuForm({
             value={name}
             onChange={(event) => setName(event.target.value)}
             placeholder="Item name"
-            className="w-full rounded-2xl border border-zinc-800 bg-[#292C2B] px-5 py-4 outline-none transition-all focus:border-brand-500"
+            className="w-full rounded-2xl border border-border bg-card px-5 py-4 outline-none transition-all focus:border-primary"
             required
           />
           <textarea
             value={description}
             onChange={(event) => setDescription(event.target.value)}
             placeholder="Description"
-            className="min-h-32 w-full rounded-2xl border border-zinc-800 bg-[#292C2B] px-5 py-4 outline-none transition-all focus:border-brand-500"
+            className="min-h-32 w-full rounded-2xl border border-border bg-card px-5 py-4 outline-none transition-all focus:border-primary"
             required
           />
           <div className="grid gap-4 md:grid-cols-2">
@@ -160,7 +160,7 @@ export default function MenuForm({
               value={price}
               onChange={(event) => setPrice(event.target.value)}
               placeholder="Price"
-              className="w-full rounded-2xl border border-zinc-800 bg-[#292C2B] px-5 py-4 outline-none transition-all focus:border-brand-500"
+              className="w-full rounded-2xl border border-border bg-card px-5 py-4 outline-none transition-all focus:border-primary"
               min="0"
               step="0.01"
               required
@@ -168,7 +168,7 @@ export default function MenuForm({
             <select
               value={category}
               onChange={(event) => setCategory(event.target.value)}
-              className="w-full rounded-2xl border border-zinc-800 bg-[#292C2B] px-5 py-4 outline-none transition-all focus:border-brand-500"
+              className="w-full rounded-2xl border border-border bg-card px-5 py-4 outline-none transition-all focus:border-primary"
             >
               <option value="">Create from new category</option>
               {categories.map((category) => (
@@ -183,7 +183,7 @@ export default function MenuForm({
               value={categoryName}
               onChange={(event) => setCategoryName(event.target.value)}
               placeholder="New category name"
-              className="w-full rounded-2xl border border-zinc-800 bg-[#292C2B] px-5 py-4 outline-none transition-all focus:border-brand-500"
+              className="w-full rounded-2xl border border-border bg-card px-5 py-4 outline-none transition-all focus:border-primary"
               required
             />
           ) : null}
@@ -191,13 +191,13 @@ export default function MenuForm({
 
         <div className="space-y-6">
           {/* Image Upload */}
-          <div className="rounded-2xl border border-zinc-800 bg-[#292C2B]/50 p-5">
-            <label className="block text-sm text-zinc-400 mb-3">Item Image URL or Upload</label>
+          <div className="rounded-2xl border border-border bg-card/50 p-5">
+            <label className="block text-sm text-muted-foreground mb-3">Item Image URL or Upload</label>
             <input
               value={image}
               onChange={(event) => setImage(event.target.value)}
               placeholder="https://..."
-              className="w-full rounded-xl border border-zinc-800 bg-[#292C2B] px-4 py-3 outline-none transition-all focus:border-brand-500 mb-3"
+              className="w-full rounded-xl border border-border bg-card px-4 py-3 outline-none transition-all focus:border-primary mb-3"
               required
             />
             <input
@@ -205,25 +205,25 @@ export default function MenuForm({
               accept="image/*"
               onChange={handleImageUpload}
               disabled={isUploading}
-              className="w-full text-sm file:mr-4 file:rounded-xl file:border-0 file:bg-brand-600 file:px-4 file:py-2 file:font-bold file:text-black hover:file:bg-brand-500 transition-all"
+              className="w-full text-sm file:mr-4 file:rounded-xl file:border-0 file:bg-brand-600 file:px-4 file:py-2 file:font-bold file:text-primary-foreground hover:file:bg-primary transition-all"
             />
-            {isUploading ? <p className="text-sm text-brand-500 mt-2">Uploading image...</p> : null}
+            {isUploading ? <p className="text-sm text-primary mt-2">Uploading image...</p> : null}
           </div>
 
           {/* Recipe Builder */}
-          <div className="rounded-2xl border border-zinc-800 bg-[#292C2B]/50 p-5">
-            <h3 className="text-sm font-semibold text-zinc-300 mb-3 uppercase tracking-wider">Recipe Builder</h3>
-            <p className="text-xs text-zinc-500 mb-4">Connect raw inventory to automatically deduct stock on sale.</p>
+          <div className="rounded-2xl border border-border bg-card/50 p-5">
+            <h3 className="text-sm font-semibold text-muted-foreground mb-3 uppercase tracking-wider">Recipe Builder</h3>
+            <p className="text-xs text-muted-foreground mb-4">Connect raw inventory to automatically deduct stock on sale.</p>
             
             {recipe.length > 0 && (
               <ul className="space-y-2 mb-4">
                 {recipe.map((r, i) => {
                    const ing = ingredients?.find(x => x.id === r.ingredientId);
                    return (
-                     <li key={i} className="flex items-center justify-between bg-[#292C2B] p-3 rounded-xl border border-white/5 text-sm">
-                       <span className="font-medium text-zinc-200">{ing?.name || "Unknown"}</span>
+                     <li key={i} className="flex items-center justify-between bg-card p-3 rounded-xl border border-border text-sm">
+                       <span className="font-medium text-foreground">{ing?.name || "Unknown"}</span>
                        <div className="flex items-center gap-4">
-                         <span className="text-brand-400 font-mono">{r.quantity} {ing?.unit}</span>
+                         <span className="text-primary font-mono">{r.quantity} {ing?.unit}</span>
                          <button type="button" onClick={() => setRecipe(recipe.filter((_, idx) => idx !== i))} className="text-red-500/80 hover:text-red-400 transition-colors">
                            Remove
                          </button>
@@ -238,7 +238,7 @@ export default function MenuForm({
                <select 
                   value={selectedIng} 
                   onChange={e => setSelectedIng(e.target.value)}
-                  className="flex-1 rounded-xl border border-zinc-800 bg-[#292C2B] px-4 py-2 text-sm outline-none focus:border-brand-500"
+                  className="flex-1 rounded-xl border border-border bg-card px-4 py-2 text-sm outline-none focus:border-primary"
                >
                  <option value="">Select Ingredient</option>
                  {ingredients?.map(ing => <option key={ing.id} value={ing.id}>{ing.name} ({ing.unit})</option>)}
@@ -249,18 +249,18 @@ export default function MenuForm({
                   placeholder="Qty" 
                   value={ingQty} 
                   onChange={e => setIngQty(e.target.value)}
-                  className="w-24 rounded-xl border border-zinc-800 bg-[#292C2B] px-4 py-2 text-sm outline-none focus:border-brand-500"
+                  className="w-24 rounded-xl border border-border bg-card px-4 py-2 text-sm outline-none focus:border-primary"
                />
-               <button type="button" onClick={handleAddIngredient} className="bg-zinc-800 text-zinc-300 px-4 rounded-xl font-bold text-sm hover:bg-zinc-700 hover:text-white transition-colors">Add</button>
+               <button type="button" onClick={handleAddIngredient} className="bg-zinc-800 text-muted-foreground px-4 rounded-xl font-bold text-sm hover:bg-zinc-700 hover:text-foreground transition-colors">Add</button>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="flex items-center justify-between border-t border-white/5 pt-6 mt-4">
-        <label className="flex items-center gap-3 text-sm text-zinc-300 cursor-pointer group">
-          <div className={`w-5 h-5 rounded border flex items-center justify-center transition-colors ${isAvailable ? 'bg-brand-500 border-brand-500' : 'bg-[#292C2B] border-zinc-700 group-hover:border-zinc-500'}`}>
-            {isAvailable && <span className="text-black text-xs font-bold">✓</span>}
+      <div className="flex items-center justify-between border-t border-border pt-6 mt-4">
+        <label className="flex items-center gap-3 text-sm text-muted-foreground cursor-pointer group">
+          <div className={`w-5 h-5 rounded border flex items-center justify-center transition-colors ${isAvailable ? 'bg-primary border-primary' : 'bg-card border-zinc-700 group-hover:border-zinc-500'}`}>
+            {isAvailable && <span className="text-primary-foreground text-xs font-bold">✓</span>}
           </div>
           <input
             type="checkbox"
@@ -273,14 +273,14 @@ export default function MenuForm({
         
         <div className="flex gap-3">
           {onCancel ? (
-            <button type="button" onClick={onCancel} className="rounded-xl border border-white/10 px-6 py-2.5 font-bold text-zinc-400 transition-colors hover:border-white/20 hover:text-white hover:bg-white/5">
+            <button type="button" onClick={onCancel} className="rounded-xl border border-border px-6 py-2.5 font-bold text-muted-foreground transition-colors hover:border-white/20 hover:text-foreground hover:bg-foreground/5">
               Cancel
             </button>
           ) : null}
           <button
             type="submit"
             disabled={isSaving}
-            className="rounded-xl bg-brand-600 px-6 py-2.5 font-bold text-black transition-all hover:bg-brand-500 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none"
+            className="rounded-xl bg-brand-600 px-6 py-2.5 font-bold text-primary-foreground transition-all hover:bg-primary hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none"
           >
             {isSaving ? "Saving..." : submitLabel}
           </button>

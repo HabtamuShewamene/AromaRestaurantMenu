@@ -54,15 +54,15 @@ export default function AdminLayout({
   return (
     <div className="flex min-h-screen bg-[#050505]">
       {/* Sidebar */}
-      <aside className="fixed z-40 h-full w-64 border-r border-white/5 bg-[#292C2B]/80 backdrop-blur-xl flex flex-col justify-between overflow-y-auto no-scrollbar">
+      <aside className="fixed z-40 h-full w-64 border-r border-border bg-card/80 backdrop-blur-xl flex flex-col justify-between overflow-y-auto no-scrollbar">
         <div className="p-6">
           <Link href="/admin/dashboard" className="mb-8 flex items-center gap-2.5">
             <div className="flex items-center justify-center w-10 h-10 relative">
               <img src="/aroma-logo.png?v=3" alt="Aroma Logo" className="w-full h-full object-contain" />
             </div>
             <div className="flex flex-col">
-              <span className="text-base font-bold tracking-tight text-white font-playfair">AROMA</span>
-              <span className="text-[9px] tracking-[0.2em] text-brand-500 font-semibold uppercase -mt-1">
+              <span className="text-base font-bold tracking-tight text-foreground font-playfair">AROMA</span>
+              <span className="text-[9px] tracking-[0.2em] text-primary font-semibold uppercase -mt-1">
                 Admin Portal
               </span>
             </div>
@@ -71,7 +71,7 @@ export default function AdminLayout({
           <nav className="space-y-6">
             {navGroups.map((group) => (
               <div key={group.label} className="space-y-1.5">
-                <p className="px-3 text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500">
+                <p className="px-3 text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">
                   {group.label}
                 </p>
                 {group.items.map((item) => {
@@ -84,11 +84,11 @@ export default function AdminLayout({
                       href={item.href}
                       className={`flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-xs font-semibold transition-all ${
                         isActive
-                          ? "bg-brand-500/15 text-brand-300 border border-brand-500/30 shadow-[0_0_12px_rgba(182,141,64,0.15)]"
-                          : "text-zinc-400 hover:bg-white/5 hover:text-white"
+                          ? "bg-primary/15 text-brand-300 border border-primary/30 shadow-[0_0_12px_rgba(182,141,64,0.15)]"
+                          : "text-muted-foreground hover:bg-foreground/5 hover:text-foreground"
                       }`}
                     >
-                      <Icon className={`h-4 w-4 ${isActive ? "text-brand-400" : "text-zinc-500"}`} />
+                      <Icon className={`h-4 w-4 ${isActive ? "text-primary" : "text-muted-foreground"}`} />
                       <span>{item.label}</span>
                     </Link>
                   );
@@ -98,12 +98,12 @@ export default function AdminLayout({
           </nav>
         </div>
 
-        <div className="p-6 border-t border-white/5">
+        <div className="p-6 border-t border-border">
           <Link
             href="/"
-            className="flex items-center gap-2.5 rounded-xl px-3.5 py-2 text-xs font-semibold text-zinc-400 hover:bg-white/5 hover:text-white transition-all"
+            className="flex items-center gap-2.5 rounded-xl px-3.5 py-2 text-xs font-semibold text-muted-foreground hover:bg-foreground/5 hover:text-foreground transition-all"
           >
-            <Store className="h-4 w-4 text-zinc-500" />
+            <Store className="h-4 w-4 text-muted-foreground" />
             <span>Customer Storefront</span>
           </Link>
         </div>

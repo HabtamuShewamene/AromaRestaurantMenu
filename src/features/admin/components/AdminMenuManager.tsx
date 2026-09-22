@@ -138,27 +138,27 @@ export default function AdminMenuManager() {
       <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         <div>
           <h1 className="mb-2 text-4xl font-bold">Menu Management</h1>
-          <p className="text-zinc-500">
+          <p className="text-muted-foreground">
             Admins can add, edit, delete, and hide menu items while clients stay read-only.
           </p>
         </div>
         <div className="grid gap-3 md:grid-cols-3">
           <div className="glass-card rounded-2xl p-4">
-            <p className="text-sm text-zinc-500">Items</p>
+            <p className="text-sm text-muted-foreground">Items</p>
             <p className="text-2xl font-bold">{items.length}</p>
           </div>
           <div className="glass-card rounded-2xl p-4">
-            <p className="text-sm text-zinc-500">Available</p>
+            <p className="text-sm text-muted-foreground">Available</p>
             <p className="text-2xl font-bold text-green-500">{items.filter((item) => item.isAvailable).length}</p>
           </div>
           <div className="glass-card rounded-2xl p-4">
-            <p className="text-sm text-zinc-500">Categories</p>
+            <p className="text-sm text-muted-foreground">Categories</p>
             <p className="text-2xl font-bold">{categories.length}</p>
           </div>
         </div>
       </div>
 
-      {message ? <div className="rounded-2xl border border-brand-500/20 bg-brand-500/10 p-4 text-sm text-brand-400">{message}</div> : null}
+      {message ? <div className="rounded-2xl border border-primary/20 bg-primary/10 p-4 text-sm text-primary">{message}</div> : null}
 
       <MenuForm
         key={editingItem?.id ?? "new-item-form"}
@@ -177,9 +177,9 @@ export default function AdminMenuManager() {
       </div>
 
       {isLoading ? (
-        <p className="text-zinc-500">Loading menu items...</p>
+        <p className="text-muted-foreground">Loading menu items...</p>
       ) : filteredItems.length === 0 ? (
-        <div className="glass-card rounded-3xl p-10 text-center text-zinc-400">
+        <div className="glass-card rounded-3xl p-10 text-center text-muted-foreground">
           No menu items matched the current search or category filter.
         </div>
       ) : (

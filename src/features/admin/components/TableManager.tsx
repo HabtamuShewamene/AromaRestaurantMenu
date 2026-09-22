@@ -69,17 +69,17 @@ export default function TableManager() {
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-3xl sm:text-4xl font-bold text-white font-playfair">
+          <h1 className="text-3xl sm:text-4xl font-bold text-foreground font-playfair">
             Tables & QR Management
           </h1>
-          <p className="text-zinc-400 text-sm mt-1">
+          <p className="text-muted-foreground text-sm mt-1">
             Manage restaurant dining tables, inspect active visits, and generate QR code endpoints.
           </p>
         </div>
 
         <button
           onClick={() => loadTables()}
-          className="self-start sm:self-auto flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-xs font-semibold text-zinc-300 hover:bg-white/10 transition-all"
+          className="self-start sm:self-auto flex items-center gap-2 px-4 py-2 rounded-xl bg-foreground/5 border border-border text-xs font-semibold text-muted-foreground hover:bg-foreground/10 transition-all"
         >
           <RefreshCw className="w-3.5 h-3.5" />
           <span>Refresh Tables</span>
@@ -87,14 +87,14 @@ export default function TableManager() {
       </div>
 
       {message && (
-        <div className="rounded-2xl border border-brand-500/20 bg-brand-500/10 p-4 text-sm text-brand-300">
+        <div className="rounded-2xl border border-primary/20 bg-primary/10 p-4 text-sm text-brand-300">
           {message}
         </div>
       )}
 
       {/* Tables Grid */}
       {isLoading ? (
-        <div className="py-16 text-center text-zinc-500">Loading dining tables...</div>
+        <div className="py-16 text-center text-muted-foreground">Loading dining tables...</div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
           {tables.map((table) => {
@@ -108,16 +108,16 @@ export default function TableManager() {
             return (
               <div
                 key={table.id}
-                className="glass-card rounded-3xl p-6 border border-white/5 flex flex-col justify-between space-y-5 relative overflow-hidden"
+                className="glass-card rounded-3xl p-6 border border-border flex flex-col justify-between space-y-5 relative overflow-hidden"
               >
                 {/* Table Header */}
                 <div className="space-y-2">
                   <div className="flex items-start justify-between">
                     <div>
-                      <span className="text-xs font-mono text-zinc-500 uppercase tracking-wider block">
+                      <span className="text-xs font-mono text-muted-foreground uppercase tracking-wider block">
                         Table #{table.number}
                       </span>
-                      <h3 className="text-xl font-bold text-white font-playfair">
+                      <h3 className="text-xl font-bold text-foreground font-playfair">
                         {table.label || `Table ${table.number}`}
                       </h3>
                     </div>
@@ -135,12 +135,12 @@ export default function TableManager() {
                     </span>
                   </div>
 
-                  <div className="flex items-center gap-4 text-xs text-zinc-400 pt-1">
+                  <div className="flex items-center gap-4 text-xs text-muted-foreground pt-1">
                     <span className="flex items-center gap-1">
-                      <Users className="w-3.5 h-3.5 text-zinc-500" /> Capacity: {table.capacity}
+                      <Users className="w-3.5 h-3.5 text-muted-foreground" /> Capacity: {table.capacity}
                     </span>
                     {activeSession && (
-                      <span className="text-brand-400 font-semibold">
+                      <span className="text-primary font-semibold">
                         {orders.length} active order{orders.length !== 1 ? "s" : ""}
                       </span>
                     )}
@@ -149,32 +149,32 @@ export default function TableManager() {
 
                 {/* Active Session Info */}
                 {activeSession ? (
-                  <div className="p-3.5 rounded-2xl bg-[#292C2B] border border-white/5 space-y-1.5 text-xs">
-                    <div className="flex justify-between text-zinc-400">
+                  <div className="p-3.5 rounded-2xl bg-card border border-border space-y-1.5 text-xs">
+                    <div className="flex justify-between text-muted-foreground">
                       <span>Session Total:</span>
-                      <span className="font-mono font-bold text-brand-400 text-sm">
+                      <span className="font-mono font-bold text-primary text-sm">
                         ${sessionTotal.toFixed(2)}
                       </span>
                     </div>
-                    <div className="flex justify-between text-zinc-500 text-[11px]">
+                    <div className="flex justify-between text-muted-foreground text-[11px]">
                       <span>Opened:</span>
                       <span>{new Date(activeSession.openedAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</span>
                     </div>
                   </div>
                 ) : (
-                  <div className="p-3.5 rounded-2xl bg-[#292C2B]/40 border border-white/5 text-center text-xs text-zinc-600">
+                  <div className="p-3.5 rounded-2xl bg-card/40 border border-border text-center text-xs text-zinc-600">
                     No active session
                   </div>
                 )}
 
                 {/* Action Buttons */}
-                <div className="space-y-2 pt-2 border-t border-white/5">
+                <div className="space-y-2 pt-2 border-t border-border">
                   <div className="grid grid-cols-2 gap-2">
                     <button
                       onClick={() => setSelectedQrTable(table)}
-                      className="flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-white/5 hover:bg-brand-500/15 hover:text-brand-300 text-zinc-300 text-xs font-semibold transition-all border border-white/5"
+                      className="flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-foreground/5 hover:bg-primary/15 hover:text-brand-300 text-muted-foreground text-xs font-semibold transition-all border border-border"
                     >
-                      <QrCode className="w-3.5 h-3.5 text-brand-400" />
+                      <QrCode className="w-3.5 h-3.5 text-primary" />
                       <span>View QR</span>
                     </button>
 
@@ -182,16 +182,16 @@ export default function TableManager() {
                       href={qrDest}
                       target="_blank"
                       rel="noreferrer"
-                      className="flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-300 text-xs font-semibold transition-all border border-white/5"
+                      className="flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-foreground/5 hover:bg-foreground/10 text-muted-foreground text-xs font-semibold transition-all border border-border"
                     >
-                      <ExternalLink className="w-3.5 h-3.5 text-zinc-400" />
+                      <ExternalLink className="w-3.5 h-3.5 text-muted-foreground" />
                       <span>Test Menu</span>
                     </a>
                   </div>
 
                   <button
                     onClick={() => handleToggleStatus(table.id, table.status)}
-                    className="w-full py-2 text-[11px] text-zinc-500 hover:text-zinc-300 transition-colors flex items-center justify-center gap-1"
+                    className="w-full py-2 text-[11px] text-muted-foreground hover:text-muted-foreground transition-colors flex items-center justify-center gap-1"
                   >
                     <Ban className="w-3 h-3" />
                     <span>{isOutOfService ? "Enable Table" : "Mark Out of Service"}</span>
@@ -206,14 +206,14 @@ export default function TableManager() {
       {/* QR Code Printable Modal */}
       {selectedQrTable && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4 backdrop-blur-md">
-          <div className="bg-[#292C2B] border border-white/10 rounded-3xl max-w-sm w-full p-6 text-center space-y-6 shadow-2xl">
-            <div className="flex items-center justify-between border-b border-white/10 pb-3">
-              <h3 className="font-bold text-white text-base font-playfair">
+          <div className="bg-card border border-border rounded-3xl max-w-sm w-full p-6 text-center space-y-6 shadow-2xl">
+            <div className="flex items-center justify-between border-b border-border pb-3">
+              <h3 className="font-bold text-foreground text-base font-playfair">
                 Table {selectedQrTable.number} QR Code
               </h3>
               <button
                 onClick={() => setSelectedQrTable(null)}
-                className="w-7 h-7 rounded-full bg-zinc-800 flex items-center justify-center text-zinc-400 hover:text-white"
+                className="w-7 h-7 rounded-full bg-zinc-800 flex items-center justify-center text-muted-foreground hover:text-foreground"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -222,7 +222,7 @@ export default function TableManager() {
             {/* QR Card Template for Printing */}
             <div
               id="printable-qr"
-              className="bg-white p-6 rounded-2xl text-black space-y-3 shadow-lg mx-auto max-w-[260px]"
+              className="bg-white p-6 rounded-2xl text-primary-foreground space-y-3 shadow-lg mx-auto max-w-[260px]"
             >
               <p className="text-[10px] uppercase font-bold tracking-[0.2em] text-zinc-600">
                 Aroma Restaurant
@@ -230,7 +230,7 @@ export default function TableManager() {
               <h4 className="text-xl font-bold font-playfair">
                 Table {selectedQrTable.number}
               </h4>
-              <p className="text-xs text-zinc-500 font-medium">
+              <p className="text-xs text-muted-foreground font-medium">
                 {selectedQrTable.label || "Scan to view digital menu & order"}
               </p>
 
@@ -247,13 +247,13 @@ export default function TableManager() {
                 />
               </div>
 
-              <p className="text-[10px] text-zinc-400">Scan with phone camera</p>
+              <p className="text-[10px] text-muted-foreground">Scan with phone camera</p>
             </div>
 
             <div className="flex gap-2">
               <button
                 onClick={() => window.print()}
-                className="flex-1 py-3 rounded-xl bg-brand-500 font-bold text-black text-xs hover:bg-brand-400 transition-all flex items-center justify-center gap-1.5"
+                className="flex-1 py-3 rounded-xl bg-primary font-bold text-primary-foreground text-xs hover:bg-primary transition-all flex items-center justify-center gap-1.5"
               >
                 <Printer className="w-4 h-4" />
                 <span>Print QR Card</span>

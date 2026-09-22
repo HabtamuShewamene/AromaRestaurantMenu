@@ -36,15 +36,15 @@ export default function OrdersHistory() {
   }, [status]);
 
   if (status === "loading") {
-    return <p className="text-zinc-500">Loading your account...</p>;
+    return <p className="text-muted-foreground">Loading your account...</p>;
   }
 
   if (!session?.user) {
     return (
       <div className="glass-card rounded-3xl p-10 text-center">
         <h2 className="mb-3 text-2xl font-bold">Sign in to view your order history</h2>
-        <p className="mb-6 text-zinc-500">Clients can place orders and track only their own purchases.</p>
-        <Link href="/login" className="rounded-full bg-brand-600 px-6 py-3 font-bold text-black transition-colors hover:bg-brand-700">
+        <p className="mb-6 text-muted-foreground">Clients can place orders and track only their own purchases.</p>
+        <Link href="/login" className="rounded-full bg-brand-600 px-6 py-3 font-bold text-primary-foreground transition-colors hover:bg-brand-700">
           Go To Login
         </Link>
       </div>
@@ -55,9 +55,9 @@ export default function OrdersHistory() {
     <div className="space-y-5">
       {message ? <div className="rounded-2xl border border-red-500/20 bg-red-500/10 p-4 text-sm text-red-500">{message}</div> : null}
       {isLoading ? (
-        <p className="text-zinc-500">Loading orders...</p>
+        <p className="text-muted-foreground">Loading orders...</p>
       ) : orders.length === 0 ? (
-        <div className="glass-card rounded-3xl p-10 text-center text-zinc-400">
+        <div className="glass-card rounded-3xl p-10 text-center text-muted-foreground">
           No orders yet. Place one from your cart and it will show up here.
         </div>
       ) : (

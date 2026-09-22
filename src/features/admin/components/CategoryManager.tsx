@@ -97,12 +97,12 @@ export default function CategoryManager() {
     <div className="space-y-8">
       <div>
         <h1 className="mb-2 text-4xl font-bold">Category Management</h1>
-        <p className="text-zinc-500">
+        <p className="text-muted-foreground">
           Create and maintain menu groups like Coffee, Tea, Pastries, and seasonal specials.
         </p>
       </div>
 
-      {message ? <div className="rounded-2xl border border-brand-500/20 bg-brand-500/10 p-4 text-sm text-brand-400">{message}</div> : null}
+      {message ? <div className="rounded-2xl border border-primary/20 bg-primary/10 p-4 text-sm text-primary">{message}</div> : null}
 
       <form onSubmit={handleSubmit} className="glass-card space-y-4 rounded-3xl p-8">
         <div className="grid gap-4 md:grid-cols-2">
@@ -110,22 +110,22 @@ export default function CategoryManager() {
             value={name}
             onChange={(event) => setName(event.target.value)}
             placeholder="Category name"
-            className="rounded-2xl border border-zinc-800 bg-[#292C2B] px-5 py-4 outline-none transition-all focus:border-brand-500"
+            className="rounded-2xl border border-border bg-card px-5 py-4 outline-none transition-all focus:border-primary"
             required
           />
           <input
             value={image}
             onChange={(event) => setImage(event.target.value)}
             placeholder="Optional image URL"
-            className="rounded-2xl border border-zinc-800 bg-[#292C2B] px-5 py-4 outline-none transition-all focus:border-brand-500"
+            className="rounded-2xl border border-border bg-card px-5 py-4 outline-none transition-all focus:border-primary"
           />
         </div>
         <div className="flex gap-3">
-          <button className="rounded-2xl bg-brand-600 px-6 py-3 font-bold text-black transition-colors hover:bg-brand-700">
+          <button className="rounded-2xl bg-brand-600 px-6 py-3 font-bold text-primary-foreground transition-colors hover:bg-brand-700">
             {editingCategory ? "Update Category" : "Create Category"}
           </button>
           {editingCategory ? (
-            <button type="button" onClick={resetForm} className="rounded-2xl border border-white/10 px-6 py-3 font-bold text-zinc-200 transition-colors hover:border-brand-500 hover:text-brand-500">
+            <button type="button" onClick={resetForm} className="rounded-2xl border border-border px-6 py-3 font-bold text-foreground transition-colors hover:border-primary hover:text-primary">
               Cancel
             </button>
           ) : null}
@@ -144,9 +144,9 @@ export default function CategoryManager() {
               <div className="mb-4 flex items-start justify-between gap-4">
                 <div>
                   <h3 className="text-xl font-bold">{category.name}</h3>
-                  <p className="text-sm text-zinc-500">{usageCount} menu items</p>
+                  <p className="text-sm text-muted-foreground">{usageCount} menu items</p>
                 </div>
-                <span className="rounded-full bg-white/5 px-3 py-1 text-xs uppercase tracking-[0.2em] text-zinc-400">
+                <span className="rounded-full bg-foreground/5 px-3 py-1 text-xs uppercase tracking-[0.2em] text-muted-foreground">
                   {category.slug}
                 </span>
               </div>
@@ -156,7 +156,7 @@ export default function CategoryManager() {
                 </div>
               ) : null}
               <div className="flex gap-3">
-                <button onClick={() => handleEdit(category)} className="rounded-xl border border-white/10 px-4 py-2 text-sm transition-colors hover:border-brand-500 hover:text-brand-500">
+                <button onClick={() => handleEdit(category)} className="rounded-xl border border-border px-4 py-2 text-sm transition-colors hover:border-primary hover:text-primary">
                   Edit
                 </button>
                 <button onClick={() => handleDelete(category.id)} className="rounded-xl border border-red-500/20 px-4 py-2 text-sm text-red-400 transition-colors hover:bg-red-500/10">

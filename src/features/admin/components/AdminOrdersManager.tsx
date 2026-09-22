@@ -99,14 +99,14 @@ export default function AdminOrdersManager() {
       <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         <div>
           <div className="flex items-center gap-3 mb-1">
-            <h1 className="text-3xl sm:text-4xl font-bold text-white font-playfair">
+            <h1 className="text-3xl sm:text-4xl font-bold text-foreground font-playfair">
               Live Order Management
             </h1>
             {isRefreshing && (
-              <RefreshCw className="w-4 h-4 text-brand-400 animate-spin" />
+              <RefreshCw className="w-4 h-4 text-primary animate-spin" />
             )}
           </div>
-          <p className="text-zinc-400 text-sm">
+          <p className="text-muted-foreground text-sm">
             Monitor incoming table guest & customer orders and advance them through the kitchen & serving stages.
           </p>
         </div>
@@ -117,21 +117,21 @@ export default function AdminOrdersManager() {
             <div className="flex items-center gap-1.5 text-xs text-blue-400 font-semibold mb-1">
               <Clock className="w-3.5 h-3.5" /> New
             </div>
-            <p className="text-2xl font-bold text-white font-mono">{newOrdersCount}</p>
+            <p className="text-2xl font-bold text-foreground font-mono">{newOrdersCount}</p>
           </div>
 
           <div className="glass-card rounded-2xl p-4 border border-amber-500/20 bg-amber-500/5">
             <div className="flex items-center gap-1.5 text-xs text-amber-400 font-semibold mb-1">
               <ChefHat className="w-3.5 h-3.5" /> In Prep
             </div>
-            <p className="text-2xl font-bold text-white font-mono">{preparingCount}</p>
+            <p className="text-2xl font-bold text-foreground font-mono">{preparingCount}</p>
           </div>
 
           <div className="glass-card rounded-2xl p-4 border border-green-500/20 bg-green-500/5">
             <div className="flex items-center gap-1.5 text-xs text-green-400 font-semibold mb-1">
               <BellRing className="w-3.5 h-3.5" /> Ready
             </div>
-            <p className="text-2xl font-bold text-white font-mono">{readyCount}</p>
+            <p className="text-2xl font-bold text-foreground font-mono">{readyCount}</p>
           </div>
         </div>
       </div>
@@ -144,18 +144,18 @@ export default function AdminOrdersManager() {
       />
 
       {message && (
-        <div className="rounded-2xl border border-brand-500/20 bg-brand-500/10 p-4 text-sm text-brand-300 animate-fade-in">
+        <div className="rounded-2xl border border-primary/20 bg-primary/10 p-4 text-sm text-brand-300 animate-fade-in">
           {message}
         </div>
       )}
 
       {isLoading ? (
-        <div className="py-16 text-center text-zinc-500">Loading orders...</div>
+        <div className="py-16 text-center text-muted-foreground">Loading orders...</div>
       ) : filteredOrders.length === 0 ? (
-        <div className="glass-card rounded-3xl p-12 text-center text-zinc-400 space-y-2">
+        <div className="glass-card rounded-3xl p-12 text-center text-muted-foreground space-y-2">
           <ShoppingBag className="w-8 h-8 text-zinc-600 mx-auto" />
-          <p className="font-semibold text-white">No orders in this status</p>
-          <p className="text-xs text-zinc-500">New customer orders will appear here automatically in real time.</p>
+          <p className="font-semibold text-foreground">No orders in this status</p>
+          <p className="text-xs text-muted-foreground">New customer orders will appear here automatically in real time.</p>
         </div>
       ) : (
         <div className="grid gap-6 lg:grid-cols-2">

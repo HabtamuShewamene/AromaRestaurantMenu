@@ -5,9 +5,9 @@ export default function AdminReviewsPage() {
     <div className="space-y-8">
       <div>
         <h1 className="mb-3 text-5xl font-bold">
-          Review <span className="text-brand-500">Moderation</span>
+          Review <span className="text-primary">Moderation</span>
         </h1>
-        <p className="max-w-3xl text-lg text-zinc-500">
+        <p className="max-w-3xl text-lg text-muted-foreground">
           Approve or reject customer reviews. Pending reviews are hidden until approved. Approved reviews appear on menu items for other customers to see.
         </p>
       </div>

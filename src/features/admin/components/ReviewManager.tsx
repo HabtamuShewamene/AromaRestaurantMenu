@@ -66,7 +66,7 @@ export default function AdminReviewManager() {
   const approvedReviews = reviews.filter((review) => review.isApproved);
 
   if (isLoading) {
-    return <div className="py-20 text-center text-zinc-500 animate-pulse">Loading moderation queue...</div>;
+    return <div className="py-20 text-center text-muted-foreground animate-pulse">Loading moderation queue...</div>;
   }
 
   return (
@@ -82,9 +82,9 @@ export default function AdminReviewManager() {
         </div>
 
         {pendingReviews.length === 0 ? (
-          <div className="glass-card rounded-[2rem] p-12 text-center border-dashed border-white/5">
+          <div className="glass-card rounded-[2rem] p-12 text-center border-dashed border-border">
             <Shield className="w-10 h-10 text-zinc-800 mx-auto mb-4" />
-            <p className="text-zinc-500">Moderation queue is empty.</p>
+            <p className="text-muted-foreground">Moderation queue is empty.</p>
           </div>
         ) : (
           <div className="grid gap-4">
@@ -101,7 +101,7 @@ export default function AdminReviewManager() {
       </section>
 
       {/* ── Approved Reviews ── */}
-      <section className="pt-8 border-t border-white/5">
+      <section className="pt-8 border-t border-border">
         <div className="flex items-center gap-3 mb-6">
           <div className="w-2 h-2 rounded-full bg-green-500" />
           <h3 className="text-xl font-bold">Approved History</h3>
@@ -111,14 +111,14 @@ export default function AdminReviewManager() {
           {approvedReviews.map((review) => (
             <div
               key={review.id}
-              className="group flex items-center justify-between gap-4 p-4 rounded-2xl bg-[#292C2B]/40 border border-white/5 hover:bg-[#292C2B] transition-colors"
+              className="group flex items-center justify-between gap-4 p-4 rounded-2xl bg-card/40 border border-border hover:bg-card transition-colors"
             >
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-1">
-                  <p className="font-bold text-zinc-100 text-sm">{review.name}</p>
+                  <p className="font-bold text-foreground text-sm">{review.name}</p>
                   <span className="text-[10px] px-1.5 py-0.5 rounded-md bg-green-500/10 text-green-500 font-bold uppercase">Approved</span>
                 </div>
-                <p className="text-xs text-zinc-500 line-clamp-1 italic">
+                <p className="text-xs text-muted-foreground line-clamp-1 italic">
                   "{review.comment}"
                 </p>
               </div>
@@ -150,12 +150,12 @@ function ReviewModerationCard({ review, onApprove, onReject }: any) {
         {/* Reviewer Details */}
         <div className="md:w-1/3 space-y-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-brand-500/10 flex items-center justify-center text-brand-500 font-bold text-lg">
+            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-lg">
               {review.name[0]}
             </div>
             <div>
-              <p className="font-bold text-white">{review.name}</p>
-              <div className="flex items-center gap-1.5 text-brand-500">
+              <p className="font-bold text-foreground">{review.name}</p>
+              <div className="flex items-center gap-1.5 text-primary">
                 {[...Array(5)].map((_, i) => (
                   <Star 
                     key={i} 
@@ -166,7 +166,7 @@ function ReviewModerationCard({ review, onApprove, onReject }: any) {
             </div>
           </div>
           
-          <div className="space-y-2 pt-2 border-t border-white/5">
+          <div className="space-y-2 pt-2 border-t border-border">
             <DetailRow icon={Mail} label="Email" value={review.email} />
             <DetailRow icon={Globe} label="IP Address" value={review.ipAddress || "Unknown"} />
             <DetailRow icon={Calendar} label="Submitted" value={new Date(review.createdAt).toLocaleString()} />
@@ -177,7 +177,7 @@ function ReviewModerationCard({ review, onApprove, onReject }: any) {
         {/* Content & Actions */}
         <div className="flex-1 flex flex-col justify-between">
           <div className="bg-white/[0.03] rounded-2xl p-5 mb-6">
-             <p className="text-zinc-200 leading-relaxed">
+             <p className="text-foreground leading-relaxed">
                "{review.comment}"
              </p>
           </div>
@@ -185,13 +185,13 @@ function ReviewModerationCard({ review, onApprove, onReject }: any) {
           <div className="flex items-center gap-3">
             <button
               onClick={() => onApprove(review.id)}
-              className="flex-1 flex items-center justify-center gap-2 py-3 rounded-2xl bg-green-500 text-black font-bold hover:bg-green-400 transition-all shadow-[0_4px_20px_rgba(34,197,94,0.3)]"
+              className="flex-1 flex items-center justify-center gap-2 py-3 rounded-2xl bg-green-500 text-primary-foreground font-bold hover:bg-green-400 transition-all shadow-[0_4px_20px_rgba(34,197,94,0.3)]"
             >
               <CheckCircle className="w-4 h-4" /> Approve Review
             </button>
             <button
               onClick={() => onReject(review.id)}
-              className="flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-[#292C2B] text-zinc-400 border border-white/5 font-bold hover:bg-red-500/10 hover:text-red-500 hover:border-red-500/20 transition-all"
+              className="flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-card text-muted-foreground border border-border font-bold hover:bg-red-500/10 hover:text-red-500 hover:border-red-500/20 transition-all"
             >
               <Trash2 className="w-4 h-4" />
             </button>
@@ -206,8 +206,8 @@ function DetailRow({ icon: Icon, label, value }: any) {
   return (
     <div className="flex items-center gap-2 text-[11px]">
       <Icon className="w-3.5 h-3.5 text-zinc-600" />
-      <span className="text-zinc-500">{label}:</span>
-      <span className="text-zinc-300 font-mono truncate">{value}</span>
+      <span className="text-muted-foreground">{label}:</span>
+      <span className="text-muted-foreground font-mono truncate">{value}</span>
     </div>
   );
 }
