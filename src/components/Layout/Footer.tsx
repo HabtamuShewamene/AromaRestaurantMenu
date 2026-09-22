@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ChefHat, MapPin, Phone, Mail, Clock } from "lucide-react";
+import { MapPin, Phone, Mail, Clock, Facebook, Instagram } from "lucide-react";
 
 export default function Footer() {
   return (
@@ -62,20 +62,29 @@ export default function Footer() {
           <ul className="space-y-3 text-sm text-zinc-400">
             <li className="flex items-start gap-2.5">
               <MapPin className="w-4 h-4 text-gold-500 flex-shrink-0 mt-0.5" />
-              <span>450 Grand Avenue, Financial District</span>
+              <span className="flex flex-col">
+                <span>Debre Birhan, Tebasse Gebeyehu</span>
+                <span>Building, 1st Floor</span>
+              </span>
             </li>
             <li className="flex items-center gap-2.5">
               <Phone className="w-4 h-4 text-gold-500 flex-shrink-0" />
-              <span>0959104671</span>
+              <span>+251 959 104 671</span>
             </li>
-            <li className="flex items-center gap-2.5">
-              <Mail className="w-4 h-4 text-gold-500 flex-shrink-0" />
-              <span>contact@aromarestaurant.com</span>
-            </li>
-            <li className="flex items-center gap-2.5 pt-2 border-t border-white/5">
-              <span className="w-4 h-4 text-gold-500 flex-shrink-0 font-extrabold flex items-center justify-center text-lg leading-none">♪</span>
-              <a href="https://www.tiktok.com/@aromarestaurantdb" target="_blank" rel="noopener noreferrer" className="hover:text-gold-400 transition-colors">
-                @aromarestaurantdb on TikTok
+            <li className="flex items-center gap-3 pt-2 border-t border-white/5">
+              <div className="flex items-center gap-1.5">
+                <a href="https://facebook.com/aroma_restaurant" target="_blank" rel="noopener noreferrer" className="w-6 h-6 rounded-full bg-gold-500 text-black flex items-center justify-center hover:bg-gold-400 transition-colors">
+                  <Facebook className="w-3.5 h-3.5" />
+                </a>
+                <a href="https://instagram.com/aroma_restaurant" target="_blank" rel="noopener noreferrer" className="w-6 h-6 rounded-full bg-gold-500 text-black flex items-center justify-center hover:bg-gold-400 transition-colors">
+                  <Instagram className="w-3.5 h-3.5" />
+                </a>
+                <a href="https://www.tiktok.com/@aromarestaurantdb" target="_blank" rel="noopener noreferrer" className="w-6 h-6 rounded-full bg-gold-500 text-black flex items-center justify-center hover:bg-gold-400 transition-colors">
+                  <span className="font-extrabold text-[15px] leading-none mb-0.5">♪</span>
+                </a>
+              </div>
+              <a href="https://www.tiktok.com/@aromarestaurantdb" target="_blank" rel="noopener noreferrer" className="hover:text-gold-400 transition-colors text-sm font-medium">
+                @aromarestaurantdb
               </a>
             </li>
           </ul>
