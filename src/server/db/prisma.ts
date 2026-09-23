@@ -5,7 +5,12 @@ import { PrismaClient } from '@prisma/client';
 const connectionString = process.env.DATABASE_URL || process.env.DIRECT_URL || "postgresql://postgres:postgres@localhost:5432/postgres";
 
 const prismaClientSingleton = () => {
-  const pool = new Pool({ connectionString });
+  // pg-connection-string overrides custom ssl config if sslmode is in the URL
+  const poolUrl = connectionString.replace(/([?&])sslmode=require/, '');
+  const pool = new Pool({ 
+    connectionString: poolUrl,
+    ssl: { rejectUnauthorized: false }
+  });
   const adapter = new PrismaPg(pool);
   return new PrismaClient({ adapter });
 };
