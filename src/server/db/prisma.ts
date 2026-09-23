@@ -25,8 +25,14 @@ if (!rawConnectionString) {
   throw new Error('DATABASE_URL is required');
 }
 
-const connectionString = rawConnectionString.replace(/^["']|["']$/g, '');
+let connectionString = rawConnectionString.replace(/^["']|["']$/g, '');
 const isSupabase = connectionString.includes('supabase.com');
+
+// The pg module crashes with self-signed certificate errors if sslmode=require is in the URL, 
+// even if we provide ssl: { rejectUnauthorized: false } in the Pool config.
+// We must strip it from the connection string and rely on the ssl object below.
+connectionString = connectionString.replace(/[\?&]sslmode=require/, '');
+if (connectionString.endsWith('?')) connectionString = connectionString.slice(0, -1);
 
 const pool = new Pool({
   connectionString,
