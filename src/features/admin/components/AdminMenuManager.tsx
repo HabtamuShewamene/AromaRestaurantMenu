@@ -182,7 +182,7 @@ export default function AdminMenuManager() {
 
       {/* ── Content Grid ── */}
       {isLoading ? (
-        <div className="grid gap-4 sm:gap-5 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+        <div className="grid gap-3 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
           {[1,2,3,4].map((i) => (
             <div key={i} className="h-[360px] rounded-3xl bg-[#242424] animate-pulse" />
           ))}
@@ -204,7 +204,7 @@ export default function AdminMenuManager() {
           </button>
         </div>
       ) : (
-        <div className="grid gap-4 sm:gap-5 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 pb-10">
+        <div className="grid gap-3 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 pb-10">
           {filteredItems.map((item) => (
             <MenuItemCard
               key={item.id}

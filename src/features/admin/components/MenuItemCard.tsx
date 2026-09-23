@@ -35,7 +35,7 @@ export default function MenuItemCard({ item, onEdit, onDelete, onToggleAvailabil
   return (
     <article className="bg-[#242424] rounded-2xl border border-[#3A3D40] overflow-hidden flex flex-col group transition-all hover:border-primary/40 relative">
       {/* ── Image ── */}
-      <div className="relative h-40 sm:h-48 w-full bg-black/40 shrink-0">
+      <div className="relative h-28 sm:h-44 w-full bg-black/40 shrink-0">
         <Image
           src={item.image || "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800&q=80"}
           alt={item.name}
