@@ -138,7 +138,7 @@ export default function AdminLayout({
 
       {/* --- MAIN CONTENT --- */}
       {/* pt-20 for mobile header, pb-24 for mobile bottom nav, md:ml-64 for desktop sidebar */}
-      <main className="flex-1 md:ml-64 pt-20 pb-24 md:pt-8 md:pb-8 p-4 sm:p-8 min-h-screen">
+      <main className="flex-1 md:ml-64 pt-20 pb-24 md:pt-8 md:pb-8 p-4 sm:p-8 min-h-screen overflow-x-hidden w-full">
         {children}
       </main>
 
@@ -177,44 +177,59 @@ export default function AdminLayout({
 
       {/* --- MOBILE MORE MENU --- */}
       {isMoreMenuOpen && (
-        <div className="md:hidden fixed inset-0 z-40 bg-background/95 backdrop-blur-sm pt-20 pb-24 px-4 overflow-y-auto animate-in fade-in duration-200">
-          <div className="max-w-md mx-auto space-y-8">
-            <div className="flex justify-end">
-              <ThemeToggle />
-            </div>
+        <div className="md:hidden fixed inset-0 z-40 bg-background flex flex-col pt-16 pb-20 overflow-y-auto animate-in fade-in duration-200">
+          {/* Header */}
+          <div className="flex items-center justify-between px-5 py-4 border-b border-border">
+            <span className="text-lg font-bold text-foreground">Navigation</span>
+            <button
+              onClick={() => setIsMoreMenuOpen(false)}
+              className="p-2 rounded-xl bg-foreground/5 text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <X className="h-5 w-5" />
+            </button>
+          </div>
+
+          {/* Nav Items */}
+          <div className="flex-1 px-5 py-4 space-y-2">
             {navGroups.map((group) => (
-              <div key={group.label} className="space-y-3">
-                <h3 className="text-[11px] font-bold tracking-widest text-muted-foreground uppercase px-2">
+              <div key={group.label}>
+                <p className="text-[10px] font-bold tracking-widest text-muted-foreground uppercase px-2 mb-2 mt-4">
                   {group.label}
-                </h3>
-                <div className="grid grid-cols-2 gap-3">
-                  {group.items.map((item) => {
-                    const Icon = item.icon;
-                    const isActive = pathname === item.href || (item.href !== "/admin" && pathname.startsWith(item.href));
-                    
-                    return (
-                      <Link
-                        key={item.label}
-                        href={item.href}
-                        onClick={() => setIsMoreMenuOpen(false)}
-                        className={`flex items-center gap-3 p-4 rounded-2xl transition-all ${
-                          isActive 
-                            ? "bg-primary/10 border border-primary/20 text-primary" 
-                            : "bg-card border border-border text-foreground"
-                        }`}
-                      >
+                </p>
+                {group.items.map((item) => {
+                  const Icon = item.icon;
+                  const isActive = pathname === item.href || (item.href !== "/admin" && pathname.startsWith(item.href));
+
+                  return (
+                    <Link
+                      key={item.label}
+                      href={item.href}
+                      onClick={() => setIsMoreMenuOpen(false)}
+                      className={`flex items-center gap-4 w-full px-4 py-4 rounded-2xl transition-all mb-1 ${
+                        isActive
+                          ? "bg-primary/10 border border-primary/20 text-primary"
+                          : "bg-card border border-border text-foreground hover:bg-foreground/5"
+                      }`}
+                    >
+                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${isActive ? "bg-primary/20" : "bg-foreground/5"}`}>
                         <Icon className={`h-5 w-5 ${isActive ? "text-primary" : "text-muted-foreground"}`} />
-                        <span className="text-sm font-semibold">{item.label}</span>
-                      </Link>
-                    );
-                  })}
-                </div>
+                      </div>
+                      <span className="text-base font-semibold">{item.label}</span>
+                      {isActive && <div className="ml-auto w-2 h-2 rounded-full bg-primary" />}
+                    </Link>
+                  );
+                })}
               </div>
             ))}
+          </div>
 
-            <button className="w-full flex items-center justify-center gap-2.5 p-4 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-500 font-semibold mt-8">
-              <LogOut className="h-5 w-5" />
-              <span>Logout</span>
+          {/* Logout */}
+          <div className="px-5 pb-2">
+            <button className="w-full flex items-center gap-4 px-4 py-4 rounded-2xl bg-red-500/10 border border-red-500/20 text-red-500 font-semibold">
+              <div className="w-10 h-10 rounded-xl bg-red-500/10 flex items-center justify-center">
+                <LogOut className="h-5 w-5" />
+              </div>
+              <span className="text-base">Logout</span>
             </button>
           </div>
         </div>

@@ -157,7 +157,7 @@ export default function AdminMenuManager() {
   return (
     <div className="relative min-h-screen">
       {/* ── Page Header ── */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 md:mb-8 sticky top-0 md:relative z-20 bg-background/95 backdrop-blur-md pt-2 pb-4 border-b border-border md:border-none">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 md:mb-8 sticky top-0 md:relative z-20 bg-background/95 backdrop-blur-md pt-2 pb-4 border-b border-border md:border-none w-full">
         <div>
           <h1 className="text-2xl md:text-3xl font-extrabold text-foreground tracking-tight">Menu Management</h1>
           <p className="text-sm text-muted-foreground mt-1 hidden sm:block">
@@ -182,7 +182,7 @@ export default function AdminMenuManager() {
 
       {/* ── Content Grid ── */}
       {isLoading ? (
-        <div className="grid gap-3 sm:gap-5 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+        <div className="grid gap-4 sm:gap-5 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
           {[1,2,3,4].map((i) => (
             <div key={i} className="h-[360px] rounded-3xl bg-[#242424] animate-pulse" />
           ))}
@@ -204,7 +204,7 @@ export default function AdminMenuManager() {
           </button>
         </div>
       ) : (
-        <div className="grid gap-3 sm:gap-5 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 pb-10">
+        <div className="grid gap-4 sm:gap-5 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 pb-10">
           {filteredItems.map((item) => (
             <MenuItemCard
               key={item.id}

@@ -24,7 +24,7 @@ export default function FilterBar({
   onSelect,
 }: FilterBarProps) {
   return (
-    <div className="relative">
+    <div className="relative overflow-hidden">
       <div className="flex gap-3 overflow-x-auto pb-1 no-scrollbar">
         {categories.map((category, idx) => {
           const isActive = category === activeCategory;
