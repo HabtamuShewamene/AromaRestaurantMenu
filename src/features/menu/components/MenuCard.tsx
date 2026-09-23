@@ -132,14 +132,20 @@ export default function MenuCard({ item, onViewDetails, index = 0 }: MenuCardPro
 
         {item.videoUrl && !showVideo && (
           <div
-            className="absolute bottom-2 right-2 z-10 flex items-center gap-1 px-2 py-0.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+            className="absolute bottom-2 right-2 z-10 flex items-center gap-1 px-2 py-0.5 rounded-full md:opacity-0 md:group-hover:opacity-100 opacity-100 transition-opacity duration-300"
             style={{ background: "rgba(0,0,0,0.72)", border: "1px solid rgba(255,255,255,0.18)", backdropFilter: "blur(8px)" }}
           >
             {hasVideo ? (
-              <>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowVideo(true);
+                }}
+                className="flex items-center gap-1"
+              >
                 <Play className="w-2.5 h-2.5 fill-white text-foreground" />
                 <span className="text-[9px] font-bold text-foreground">Watch</span>
-              </>
+              </button>
             ) : (
               <a
                 href={item.videoUrl}
