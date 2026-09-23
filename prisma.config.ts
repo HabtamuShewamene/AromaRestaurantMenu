@@ -22,6 +22,7 @@ export default defineConfig({
     path: "database/prisma/migrations",
   },
   datasource: {
-    url: process.env.DATABASE_URL ?? "postgresql://postgres:1921@localhost:5432/aroma_restaurant_menu",
+    url: process.env.DIRECT_URL ?? "",
+    directUrl: process.env.DIRECT_URL,
   },
 });

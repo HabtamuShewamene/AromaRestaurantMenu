@@ -1,6 +1,6 @@
 import { PrismaPg } from '@prisma/adapter-pg';
 import { PrismaClient } from '@prisma/client';
-
+import { Pool } from 'pg';
 import fs from 'fs';
 import path from 'path';
 
@@ -26,14 +26,20 @@ if (!rawConnectionString) {
 }
 
 const connectionString = rawConnectionString.replace(/^["']|["']$/g, '');
-const adapter = new PrismaPg({ connectionString });
+const isSupabase = connectionString.includes('supabase.com');
+
+const pool = new Pool({
+  connectionString,
+  ...(isSupabase && { ssl: { rejectUnauthorized: false } }),
+});
+
+const adapter = new PrismaPg(pool);
 
 let prisma: PrismaClient;
 
 if (process.env.NODE_ENV === 'production') {
   prisma = new PrismaClient({ adapter });
 } else {
-  // Avoid exhausting database connection limit during development
   if (!global.prisma) {
     global.prisma = new PrismaClient({ adapter });
   }
@@ -45,3 +51,4 @@ export default prisma;
 declare global {
   var prisma: PrismaClient;
 }
+
