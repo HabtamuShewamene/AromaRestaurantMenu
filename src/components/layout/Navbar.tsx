@@ -44,7 +44,7 @@ export default function Navbar() {
                 pathname === "/" ? "text-primary font-semibold" : "text-muted-foreground hover:text-primary"
               }`}
             >
-              Home
+              {t("navigation.home")}
             </Link>
             <Link
               href="/menu"
@@ -52,7 +52,7 @@ export default function Navbar() {
                 pathname === "/menu" ? "text-primary font-semibold" : "text-muted-foreground hover:text-primary"
               }`}
             >
-              Menu
+              {t("navigation.menu")}
             </Link>
             {session && (
               <Link
@@ -61,7 +61,7 @@ export default function Navbar() {
                   pathname === "/orders" ? "text-primary font-semibold" : "text-muted-foreground hover:text-primary"
                 }`}
               >
-                My Orders
+                {t("navigation.my_orders")}
               </Link>
             )}
             {role === "ADMIN" && (
@@ -118,7 +118,7 @@ export default function Navbar() {
                     onClick={() => signOut()}
                     className="text-xs text-muted-foreground hover:text-red-400 transition-colors"
                   >
-                    Sign Out
+                    {t("navigation.logout")}
                   </button>
                 </div>
               ) : (
@@ -126,7 +126,7 @@ export default function Navbar() {
                   href="/login"
                   className="rounded-2xl bg-primary px-5 py-2.5 text-xs font-bold text-primary-foreground transition-all hover:scale-105 hover:bg-primary shadow-[0_2px_12px_rgba(182,141,64,0.3)]"
                 >
-                  Sign In
+                  {t("navigation.login")}
                 </Link>
               )}
             </div>
@@ -173,23 +173,23 @@ export default function Navbar() {
               onClick={() => setIsMenuOpen(false)}
               className="block py-2 text-base font-medium text-foreground hover:text-primary"
             >
-              Home
+              {t("navigation.home")}
             </Link>
             <Link
               href="/menu"
               onClick={() => setIsMenuOpen(false)}
               className="block py-2 text-base font-medium text-foreground hover:text-primary"
             >
-              Menu Explorer
+              {t("navigation.menu_explorer")}
             </Link>
             <Link
               href="/cart"
               onClick={() => setIsMenuOpen(false)}
               className="flex items-center justify-between py-2 text-base font-medium text-foreground hover:text-primary"
             >
-              <span>Shopping Cart</span>
+              <span>{t("navigation.shopping_cart")}</span>
               <span className="px-2 py-0.5 rounded-full bg-primary/20 text-primary text-xs font-bold">
-                {cartCount} items
+                {cartCount} {t("cart.items")}
               </span>
             </Link>
             {session && (
@@ -198,7 +198,7 @@ export default function Navbar() {
                 onClick={() => setIsMenuOpen(false)}
                 className="block py-2 text-base font-medium text-foreground hover:text-primary"
               >
-                Order History
+                {t("navigation.order_history")}
               </Link>
             )}
             {role === "ADMIN" && (
@@ -207,7 +207,7 @@ export default function Navbar() {
                 onClick={() => setIsMenuOpen(false)}
                 className="block py-2 text-base font-medium text-primary"
               >
-                Admin Dashboard
+                {t("navigation.admin_dashboard")}
               </Link>
             )}
             <div className="border-t border-border pt-4 mt-2 flex items-center justify-between">
@@ -221,7 +221,7 @@ export default function Navbar() {
                     }}
                     className="text-sm font-bold text-red-400 hover:underline"
                   >
-                    Sign Out
+                    {t("navigation.logout")}
                   </button>
                 </div>
               ) : (
@@ -230,7 +230,7 @@ export default function Navbar() {
                   onClick={() => setIsMenuOpen(false)}
                   className="w-full text-center py-3 rounded-xl bg-primary font-bold text-primary-foreground"
                 >
-                  Sign In / Register
+                  {t("navigation.sign_in_register")}
                 </Link>
               )}
             </div>

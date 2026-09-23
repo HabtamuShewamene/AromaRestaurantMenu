@@ -3,6 +3,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, SlidersHorizontal, History, TrendingUp, X } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 
 type SearchBarProps = {
   value: string;
@@ -16,12 +17,14 @@ export default function SearchBar({
   value,
   onChange,
   onFilterToggle,
-  placeholder = "Search dishes, drinks...",
+  placeholder,
   popularSearches = [],
 }: SearchBarProps) {
   const [isFocused, setIsFocused] = useState(false);
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
+  const { locale, t } = useLanguage();
+  const resolvedPlaceholder = placeholder || t("menu.search_placeholder");
 
   useEffect(() => {
     const saved = localStorage.getItem("recentSearches");
@@ -95,7 +98,7 @@ export default function SearchBar({
               handleSearch(value);
             }
           }}
-          placeholder={placeholder}
+          placeholder={resolvedPlaceholder}
           className="flex-1 bg-transparent text-foreground placeholder-zinc-600 text-sm font-medium outline-none"
         />
 
@@ -141,9 +144,9 @@ export default function SearchBar({
               <div className="mb-4">
                 <div className="flex items-center justify-between mb-2">
                   <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5">
-                    <History className="w-3.5 h-3.5" /> Recent
+                    <History className="w-3.5 h-3.5" /> {t("menu.recent")}
                   </h4>
-                  <button onClick={clearRecent} className="text-[10px] text-zinc-600 hover:text-muted-foreground uppercase">Clear</button>
+                  <button onClick={clearRecent} className="text-[10px] text-zinc-600 hover:text-muted-foreground uppercase">{t("menu.clear")}</button>
                 </div>
                 <div className="flex flex-wrap gap-2">
                   {recentSearches.map((term, i) => (
@@ -165,7 +168,7 @@ export default function SearchBar({
             {popularSearches.length > 0 && (
               <div>
                 <h4 className="text-xs font-semibold text-primary/80 uppercase tracking-wider flex items-center gap-1.5 mb-2">
-                  <TrendingUp className="w-3.5 h-3.5" /> Popular
+                  <TrendingUp className="w-3.5 h-3.5" /> {t("menu.popular")}
                 </h4>
                 <div className="flex flex-wrap gap-2">
                   {popularSearches.map((term, i) => (

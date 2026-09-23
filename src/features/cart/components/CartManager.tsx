@@ -5,11 +5,13 @@ import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import Cart from "@/features/cart/components/Cart";
 import { useCart } from "@/components/providers/CartProvider";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 import { Utensils, AlertCircle } from "lucide-react";
 
 export default function CartManager() {
   const router = useRouter();
   const { data: session } = useSession();
+  const { locale, t } = useLanguage();
   const {
     cartItems: items,
     updateQuantity,
@@ -36,7 +38,6 @@ export default function CartManager() {
     removeFromCart(id);
   };
 
-  // Checkout is allowed if user is authenticated OR if user is a table guest!
   const hasItems = items.length > 0 && items.every((item) => item.isAvailable);
   const canCheckout = hasItems && (Boolean(session?.user) || Boolean(tableContext));
 
@@ -46,7 +47,7 @@ export default function CartManager() {
         router.push("/login");
         return;
       }
-      setMessage("Please remove any unavailable items before proceeding.");
+      setMessage(t("cart.remove_unavailable"));
       return;
     }
 
@@ -75,14 +76,13 @@ export default function CartManager() {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message || "Failed to submit your order.");
+        throw new Error(data.message || t("cart.unable_place_order"));
       }
 
       clearCart();
-      // Redirect directly to the live Order Confirmation & Status Tracker
       router.push(`/order/${data.id}`);
     } catch (err) {
-      setMessage(err instanceof Error ? err.message : "Unable to place order right now.");
+      setMessage(err instanceof Error ? err.message : t("cart.unable_place_order"));
       setIsCheckingOut(false);
     }
   };
@@ -94,13 +94,13 @@ export default function CartManager() {
         <div className="flex items-center justify-between p-4 rounded-2xl bg-primary/10 border border-primary/20 text-brand-300">
           <div className="flex items-center gap-2.5">
             <Utensils className="w-4 h-4 text-primary flex-shrink-0" />
-            <span className="text-sm font-semibold">
-              Ordering for Table {tableContext.tableNumber}{" "}
+            <span className={`text-sm font-semibold ${locale === "am" ? "font-amharic" : ""}`}>
+              {t("cart.ordering_for")} {tableContext.tableNumber}{" "}
               {tableContext.tableLabel ? `(${tableContext.tableLabel})` : ""}
             </span>
           </div>
-          <span className="text-xs bg-primary/20 px-2.5 py-1 rounded-full font-bold uppercase tracking-wider text-primary">
-            Dine-in
+          <span className={`text-xs bg-primary/20 px-2.5 py-1 rounded-full font-bold uppercase tracking-wider text-primary ${locale === "am" ? "font-amharic normal-case tracking-normal" : ""}`}>
+            {t("cart.dine_in")}
           </span>
         </div>
       )}
@@ -108,37 +108,37 @@ export default function CartManager() {
       {message && (
         <div className="flex items-center gap-2 rounded-2xl border border-red-500/20 bg-red-500/10 p-4 text-sm text-red-400">
           <AlertCircle className="w-4 h-4 flex-shrink-0" />
-          <span>{message}</span>
+          <span className={locale === "am" ? "font-amharic" : ""}>{message}</span>
         </div>
       )}
 
       {items.length === 0 ? (
         <div className="glass-card rounded-3xl p-12 text-center text-muted-foreground space-y-3">
-          <p className="text-base font-semibold text-foreground">Your cart is empty</p>
-          <p className="text-sm text-muted-foreground">Add items from the menu to create your order.</p>
+          <p className={`text-base font-semibold text-foreground ${locale === "am" ? "font-amharic" : ""}`}>{t("cart.empty")}</p>
+          <p className={`text-sm text-muted-foreground ${locale === "am" ? "font-amharic" : ""}`}>{t("cart.empty_sub")}</p>
         </div>
       ) : (
         <div className="space-y-6">
-          {/* Guest Table Contact Information (Optional) */}
+          {/* Guest Contact Information (Optional) */}
           {tableContext && !session?.user && (
             <div className="p-5 rounded-3xl bg-[#121212] border border-border space-y-3">
-              <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                Guest Details (Optional)
+              <h4 className={`text-xs font-semibold uppercase tracking-wider text-muted-foreground ${locale === "am" ? "font-amharic normal-case tracking-normal" : ""}`}>
+                {t("cart.guest_details")}
               </h4>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <input
                   type="text"
-                  placeholder="Your Name (Optional)"
+                  placeholder={t("cart.your_name")}
                   value={guestName}
                   onChange={(e) => setGuestName(e.target.value)}
-                  className="bg-card border border-border rounded-xl px-4 py-2.5 text-sm text-foreground placeholder-zinc-600 outline-none focus:border-primary"
+                  className={`bg-card border border-border rounded-xl px-4 py-2.5 text-sm text-foreground placeholder-zinc-600 outline-none focus:border-primary ${locale === "am" ? "font-amharic" : ""}`}
                 />
                 <input
                   type="tel"
-                  placeholder="Phone Number (Optional)"
+                  placeholder={t("cart.phone_number")}
                   value={guestPhone}
                   onChange={(e) => setGuestPhone(e.target.value)}
-                  className="bg-card border border-border rounded-xl px-4 py-2.5 text-sm text-foreground placeholder-zinc-600 outline-none focus:border-primary"
+                  className={`bg-card border border-border rounded-xl px-4 py-2.5 text-sm text-foreground placeholder-zinc-600 outline-none focus:border-primary ${locale === "am" ? "font-amharic" : ""}`}
                 />
               </div>
             </div>

@@ -4,9 +4,11 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { BellRing, X, CheckCircle2, Droplets, Utensils, HelpCircle, Loader2 } from "lucide-react";
 import { useCart } from "@/components/providers/CartProvider";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 
 export default function TableActionBar() {
   const { tableContext } = useCart();
+  const { locale, t } = useLanguage();
   const [showWaiterModal, setShowWaiterModal] = useState(false);
   const [selectedType, setSelectedType] = useState<"CALL_WAITER" | "REQUEST_WATER" | "REQUEST_CUTLERY" | "CUSTOM">("CALL_WAITER");
   const [customNote, setCustomNote] = useState("");
@@ -31,7 +33,7 @@ export default function TableActionBar() {
       });
 
       if (res.ok) {
-        setSuccessMessage("Your request has been sent! Our staff is on the way.");
+        setSuccessMessage(t("table.request_sent"));
         setTimeout(() => {
           setShowWaiterModal(false);
           setSuccessMessage("");
@@ -54,15 +56,15 @@ export default function TableActionBar() {
             <span className="flex h-2.5 w-2.5 rounded-full bg-green-500 animate-pulse flex-shrink-0" />
             <div>
               <p className="text-sm sm:text-base font-bold text-foreground flex items-center gap-1.5 font-playfair">
-                Table {tableContext.tableNumber}
+                {t("cart.table")} {tableContext.tableNumber}
                 {tableContext.tableLabel && (
                   <span className="text-xs font-normal text-muted-foreground font-sans">
                     • {tableContext.tableLabel}
                   </span>
                 )}
               </p>
-              <p className="text-[10px] text-primary uppercase tracking-wider font-semibold">
-                Dine-in Table Session
+              <p className={`text-[10px] text-primary uppercase tracking-wider font-semibold ${locale === "am" ? "font-amharic normal-case tracking-normal" : ""}`}>
+                {t("table.dine_in_session")}
               </p>
             </div>
           </div>
@@ -73,7 +75,7 @@ export default function TableActionBar() {
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-primary/10 border border-primary/30 text-primary hover:bg-primary/20 text-xs font-bold transition-all hover:scale-105 active:scale-95 shadow-[0_0_12px_rgba(139,212,63,0.15)]"
             >
               <BellRing className="w-4 h-4 text-primary" />
-              <span>Call Waiter</span>
+              <span className={locale === "am" ? "font-amharic" : ""}>{t("table.call_waiter")}</span>
             </button>
           </div>
         </div>
@@ -87,7 +89,7 @@ export default function TableActionBar() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="w-full max-w-md bg-[#242424] border border-[#3A3D40] rounded-3xl p-6 shadow-2xl space-y-5"
+              className={`w-full max-w-md bg-[#242424] border border-[#3A3D40] rounded-3xl p-6 shadow-2xl space-y-5 ${locale === "am" ? "font-amharic" : ""}`}
             >
               <div className="flex items-center justify-between border-b border-[#3A3D40] pb-4">
                 <div className="flex items-center gap-2.5">
@@ -95,8 +97,8 @@ export default function TableActionBar() {
                     <BellRing className="w-5 h-5 text-primary" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-[#F7F7F2] text-lg">Call Waiter</h3>
-                    <p className="text-xs text-[#A7ABB0]">Table {tableContext.tableNumber}</p>
+                    <h3 className="font-bold text-[#F7F7F2] text-lg">{t("table.call_waiter")}</h3>
+                    <p className="text-xs text-[#A7ABB0]">{t("cart.table")} {tableContext.tableNumber}</p>
                   </div>
                 </div>
                 <button
@@ -114,7 +116,7 @@ export default function TableActionBar() {
                 </div>
               ) : (
                 <div className="space-y-4">
-                  <p className="text-sm font-semibold text-[#A7ABB0]">How can we help you?</p>
+                  <p className="text-sm font-semibold text-[#A7ABB0]">{t("table.how_help")}</p>
 
                   <div className="grid grid-cols-2 gap-3">
                     <button
@@ -126,7 +128,7 @@ export default function TableActionBar() {
                       }`}
                     >
                       <BellRing className="w-6 h-6" />
-                      <span className="text-xs font-bold">General</span>
+                      <span className="text-xs font-bold">{t("table.general")}</span>
                     </button>
                     <button
                       onClick={() => setSelectedType("REQUEST_WATER")}
@@ -137,7 +139,7 @@ export default function TableActionBar() {
                       }`}
                     >
                       <Droplets className="w-6 h-6" />
-                      <span className="text-xs font-bold">Water</span>
+                      <span className="text-xs font-bold">{t("table.water")}</span>
                     </button>
                     <button
                       onClick={() => setSelectedType("REQUEST_CUTLERY")}
@@ -148,7 +150,7 @@ export default function TableActionBar() {
                       }`}
                     >
                       <Utensils className="w-6 h-6" />
-                      <span className="text-xs font-bold">Cutlery</span>
+                      <span className="text-xs font-bold">{t("table.cutlery")}</span>
                     </button>
                     <button
                       onClick={() => setSelectedType("CUSTOM")}
@@ -159,7 +161,7 @@ export default function TableActionBar() {
                       }`}
                     >
                       <HelpCircle className="w-6 h-6" />
-                      <span className="text-xs font-bold">Other</span>
+                      <span className="text-xs font-bold">{t("table.other")}</span>
                     </button>
                   </div>
 
@@ -168,7 +170,7 @@ export default function TableActionBar() {
                       <textarea
                         value={customNote}
                         onChange={(e) => setCustomNote(e.target.value)}
-                        placeholder="E.g., We need some extra napkins..."
+                        placeholder={t("table.custom_placeholder")}
                         rows={2}
                         className="w-full bg-[#111111] border border-[#3A3D40] rounded-xl px-4 py-3 text-sm text-[#F7F7F2] placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30 resize-none transition-all"
                       />
@@ -184,10 +186,10 @@ export default function TableActionBar() {
                       {isSubmitting ? (
                         <>
                           <Loader2 className="w-5 h-5 animate-spin" />
-                          <span>Sending...</span>
+                          <span>{t("table.sending")}</span>
                         </>
                       ) : (
-                        <span>Send Request</span>
+                        <span>{t("table.send_request")}</span>
                       )}
                     </button>
                   </div>

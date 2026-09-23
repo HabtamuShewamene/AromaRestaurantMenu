@@ -78,12 +78,13 @@ export default function MenuExplorer({ showHero = false }: { showHero?: boolean 
       } catch {
         setItems([]);
         setCategories([]);
-        setMessage("Unable to load menu right now.");
+        setMessage(t("menu.load_error"));
       } finally {
         setIsLoading(false);
       }
     };
     void loadData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
 
@@ -120,7 +121,8 @@ export default function MenuExplorer({ showHero = false }: { showHero?: boolean 
       item.name.toLowerCase().includes(q) ||
       itemNameLocal.toLowerCase().includes(q) ||
       itemDescLocal.toLowerCase().includes(q) ||
-      catNameLocal.toLowerCase().includes(q);
+      catNameLocal.toLowerCase().includes(q) ||
+      catNameEN.toLowerCase().includes(q);
 
     if (filters.vegetarian && !item.vegetarian) return false;
     if (filters.vegan && !item.vegan) return false;
@@ -133,7 +135,8 @@ export default function MenuExplorer({ showHero = false }: { showHero?: boolean 
     return matchesCat && matchesSearch;
   });
 
-  const filterCategories = [t("menu.all_categories"), ...categories.map((c) => getCatName(c))];
+  const allLabel = t("menu.all_categories");
+  const filterCategories = [allLabel, ...categories.map((c) => getCatName(c))];
 
   // Group filtered items by category for section headers
   const groupedItems: Record<string, MenuItemRecord[]> = {};
@@ -160,6 +163,7 @@ export default function MenuExplorer({ showHero = false }: { showHero?: boolean 
           onChange={setSearch} 
           popularSearches={popularSearches} 
           onFilterToggle={() => setShowAdvancedFilters(!showAdvancedFilters)}
+          placeholder={t("menu.search_placeholder")}
         />
         
         <AnimatePresence>
@@ -174,7 +178,7 @@ export default function MenuExplorer({ showHero = false }: { showHero?: boolean 
                 
                 {/* Properties */}
                 <div>
-                  <h4 className="text-xs font-semibold text-muted-foreground mb-3 uppercase tracking-wider">Properties & Diet</h4>
+                  <h4 className="text-xs font-semibold text-muted-foreground mb-3 uppercase tracking-wider">{t("menu.properties_diet")}</h4>
                   <div className="flex flex-wrap gap-2">
                     {[
                       { key: 'vegetarian', label: t("menu.vegetarian"), color: 'bg-green-500/10 text-green-400 border-green-500/30' },
@@ -198,13 +202,13 @@ export default function MenuExplorer({ showHero = false }: { showHero?: boolean 
 
                 {/* Price */}
                 <div>
-                  <h4 className="text-xs font-semibold text-muted-foreground mb-3 uppercase tracking-wider">Price Range (ETB)</h4>
+                  <h4 className="text-xs font-semibold text-muted-foreground mb-3 uppercase tracking-wider">{t("menu.price_range")}</h4>
                   <div className="flex items-center gap-4">
                     <div className="relative flex-1">
                       <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-[10px]">ETB</span>
                       <input 
                         type="number" 
-                        placeholder="Min"
+                        placeholder={t("menu.min")}
                         value={filters.minPrice}
                         onChange={(e) => setFilters({ ...filters, minPrice: e.target.value })}
                         className="w-full bg-card border border-border rounded-xl py-2 pl-7 pr-3 text-foreground placeholder-zinc-600 outline-none focus:border-primary/50 text-sm"
@@ -215,7 +219,7 @@ export default function MenuExplorer({ showHero = false }: { showHero?: boolean 
                       <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-[10px]">ETB</span>
                       <input 
                         type="number" 
-                        placeholder="Max"
+                        placeholder={t("menu.max")}
                         value={filters.maxPrice}
                         onChange={(e) => setFilters({ ...filters, maxPrice: e.target.value })}
                         className="w-full bg-card border border-border rounded-xl py-2 pl-7 pr-3 text-foreground placeholder-zinc-600 outline-none focus:border-primary/50 text-sm"
@@ -240,10 +244,14 @@ export default function MenuExplorer({ showHero = false }: { showHero?: boolean 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <FilterBar
             categories={filterCategories}
-            activeCategory={activeCategory}
+            activeCategory={activeCategory === "All" ? allLabel : activeCategory}
             onSelect={(cat) => {
-              if (cat === t("menu.all_categories")) setActiveCategory("All");
-              else setActiveCategory(cat);
+              if (cat === allLabel) setActiveCategory("All");
+              else {
+                // map back to English name for filtering
+                const matched = categories.find(c => getCatName(c) === cat);
+                setActiveCategory(matched ? matched.name : cat);
+              }
             }}
           />
         </div>
@@ -264,7 +272,7 @@ export default function MenuExplorer({ showHero = false }: { showHero?: boolean 
             }}
           >
             <Sparkles className="w-4 h-4 text-primary flex-shrink-0" />
-            <span className="text-sm text-foreground whitespace-nowrap">
+            <span className={`text-sm text-foreground whitespace-nowrap ${locale === "am" ? "font-amharic" : ""}`}>
               {message}
             </span>
           </motion.div>
@@ -294,11 +302,11 @@ export default function MenuExplorer({ showHero = false }: { showHero?: boolean 
             >
               <span className="text-4xl">🍽️</span>
             </div>
-            <p className="font-semibold text-muted-foreground mb-2">
-              Nothing found
+            <p className={`font-semibold text-muted-foreground mb-2 ${locale === "am" ? "font-amharic" : ""}`}>
+              {t("menu.nothing_found")}
             </p>
-            <p className="text-sm text-zinc-600">
-              Try a different search query or select another category
+            <p className={`text-sm text-zinc-600 ${locale === "am" ? "font-amharic" : ""}`}>
+              {t("menu.try_different")}
             </p>
           </motion.div>
         ) : (
@@ -313,8 +321,8 @@ export default function MenuExplorer({ showHero = false }: { showHero?: boolean 
                     >
                       {category}
                     </h2>
-                    <p className="text-xs text-muted-foreground mt-0.5">
-                      {categoryItems.length} curated dish{categoryItems.length !== 1 ? "es" : ""}
+                    <p className={`text-xs text-muted-foreground mt-0.5 ${locale === "am" ? "font-amharic" : ""}`}>
+                      {categoryItems.length} {categoryItems.length !== 1 ? t("menu.curated_dishes") : t("menu.curated_dish")}
                     </p>
                   </div>
                   <div className="flex-1 h-px bg-gradient-to-r from-brand-500/20 to-transparent" />

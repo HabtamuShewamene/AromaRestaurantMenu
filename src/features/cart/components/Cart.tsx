@@ -4,6 +4,7 @@ import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { Minus, Plus, Trash2, ShoppingBag, X, Sparkles, MessageSquare } from "lucide-react";
 import { CartItemRecord } from "@/shared/types/app";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 
 type CartProps = {
   items: CartItemRecord[];
@@ -28,11 +29,20 @@ export default function Cart({
   tableNumber,
   onClose,
 }: CartProps) {
+  const { locale, t } = useLanguage();
   const total = items.reduce((sum, item) => {
     return sum + item.price * item.quantity;
   }, 0);
 
   const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
+  const priceUnit = locale === "am" ? "ብር" : "ETB";
+
+  const checkoutLabel = () => {
+    if (isCheckingOut) return t("cart.submitting");
+    if (tableNumber) return `${t("cart.send_to_kitchen").replace("{table}", String(tableNumber))}`;
+    if (canCheckout) return t("cart.place_order");
+    return t("cart.sign_in_checkout");
+  };
 
   return (
     <div className="flex flex-col h-full">
@@ -49,14 +59,12 @@ export default function Cart({
             <ShoppingBag className="w-5 h-5 text-primary" />
           </div>
           <div>
-            <h2
-              className="font-bold text-foreground leading-tight font-playfair text-lg"
-            >
-              Your Order
+            <h2 className={`font-bold text-foreground leading-tight font-playfair text-lg ${locale === "am" ? "font-amharic" : ""}`}>
+              {t("cart.title")}
             </h2>
-            <p className="text-xs text-muted-foreground">
-              {itemCount} item{itemCount !== 1 ? "s" : ""}{" "}
-              {tableNumber ? `• Table ${tableNumber}` : ""}
+            <p className={`text-xs text-muted-foreground ${locale === "am" ? "font-amharic" : ""}`}>
+              {itemCount} {itemCount !== 1 ? t("cart.items") : t("cart.item")}{" "}
+              {tableNumber ? `• ${t("cart.table")} ${tableNumber}` : ""}
             </p>
           </div>
         </div>
@@ -89,8 +97,8 @@ export default function Cart({
               >
                 <ShoppingBag className="w-7 h-7 text-primary/50" />
               </div>
-              <p className="text-muted-foreground text-sm font-medium">Your cart is empty</p>
-              <p className="text-zinc-600 text-xs mt-1">Add some delicious dishes from our menu!</p>
+              <p className={`text-muted-foreground text-sm font-medium ${locale === "am" ? "font-amharic" : ""}`}>{t("cart.empty")}</p>
+              <p className={`text-zinc-600 text-xs mt-1 ${locale === "am" ? "font-amharic" : ""}`}>{t("cart.empty_sub")}</p>
             </motion.div>
           ) : (
             items.map((item) => {
@@ -123,7 +131,6 @@ export default function Cart({
                     <p className="text-sm font-semibold text-foreground truncate">{item.name}</p>
                     <p className="text-[11px] text-primary/80 mb-1">{item.category}</p>
 
-
                     {/* Notes */}
                     {item.notes && (
                       <p className="text-[11px] text-muted-foreground italic mb-2 flex items-center gap-1">
@@ -153,7 +160,7 @@ export default function Cart({
 
                   {/* Price + remove */}
                   <div className="flex flex-col items-end justify-between h-full gap-3 flex-shrink-0">
-                    <span className="text-sm font-bold text-primary font-mono">{lineTotal.toFixed(2)} ETB</span>
+                    <span className="text-sm font-bold text-primary font-mono">{lineTotal.toFixed(2)} {priceUnit}</span>
                     <button
                       onClick={() => onRemove(item.id)}
                       className="w-8 h-8 flex items-center justify-center rounded-full text-muted-foreground hover:bg-red-500/15 hover:text-red-400 transition-all"
@@ -174,17 +181,17 @@ export default function Cart({
         <div className="px-5 pt-4 pb-6 border-t border-border bg-background/95">
           {/* Subtotal row */}
           <div className="flex items-center justify-between mb-2">
-            <span className="text-xs text-muted-foreground">Subtotal</span>
-            <span className="text-sm text-muted-foreground font-mono">{total.toFixed(2)} ETB</span>
+            <span className={`text-xs text-muted-foreground ${locale === "am" ? "font-amharic" : ""}`}>{t("cart.subtotal")}</span>
+            <span className="text-sm text-muted-foreground font-mono">{total.toFixed(2)} {priceUnit}</span>
           </div>
           <div className="flex items-center justify-between mb-1">
-            <span className="text-xs text-muted-foreground">Service charge & Tax</span>
-            <span className="text-xs text-muted-foreground">Included</span>
+            <span className={`text-xs text-muted-foreground ${locale === "am" ? "font-amharic" : ""}`}>{t("cart.service_charge")}</span>
+            <span className={`text-xs text-muted-foreground ${locale === "am" ? "font-amharic" : ""}`}>{t("cart.included")}</span>
           </div>
 
           <div className="flex items-center justify-between py-3 my-3 border-t border-border">
-            <span className="font-semibold text-foreground">Total Amount</span>
-            <span className="font-bold text-xl text-primary font-mono font-playfair">{total.toFixed(2)} ETB</span>
+            <span className={`font-semibold text-foreground ${locale === "am" ? "font-amharic" : ""}`}>{t("cart.total_amount")}</span>
+            <span className="font-bold text-xl text-primary font-mono font-playfair">{total.toFixed(2)} {priceUnit}</span>
           </div>
 
           {/* Checkout button */}
@@ -192,7 +199,7 @@ export default function Cart({
             whileTap={{ scale: 0.98 }}
             onClick={onCheckout}
             disabled={!canCheckout || isCheckingOut}
-            className="w-full py-4 rounded-2xl text-sm font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            className={`w-full py-4 rounded-2xl text-sm font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 ${locale === "am" ? "font-amharic" : ""}`}
             style={
               canCheckout
                 ? {
@@ -207,15 +214,8 @@ export default function Cart({
                   }
             }
           >
-            {isCheckingOut ? (
-              "Submitting Order…"
-            ) : tableNumber ? (
-              `Send Order to Kitchen (Table ${tableNumber}) →`
-            ) : canCheckout ? (
-              "Place Order →"
-            ) : (
-              "Sign In to Checkout"
-            )}
+            <Sparkles className="w-4 h-4 flex-shrink-0" />
+            {checkoutLabel()}
           </motion.button>
         </div>
       )}

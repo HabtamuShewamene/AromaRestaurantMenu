@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { ChefHat, MapPin, Phone, Clock } from "lucide-react";
+import { Clock } from "lucide-react";
 import Image from "next/image";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 
 const HERO_IMAGES = [
   "/slider-0.jpeg",
@@ -38,6 +39,7 @@ const restaurant = {
 
 export default function HeroSection({ mode = "compact" }: HeroSectionProps) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const { locale, t } = useLanguage();
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -94,7 +96,7 @@ export default function HeroSection({ mode = "compact" }: HeroSectionProps) {
         >
 
           <p className="text-[10px] sm:text-xs uppercase tracking-[0.3em] text-primary/90 font-medium mb-0.5">
-            Welcome to
+            {t("hero.welcome_to")}
           </p>
           <h1 className="font-playfair text-2xl sm:text-4xl md:text-5xl font-bold text-foreground tracking-wide text-center">
             {restaurant.name}
@@ -111,9 +113,9 @@ export default function HeroSection({ mode = "compact" }: HeroSectionProps) {
         >
           <button 
             onClick={scrollToMenu}
-            className="group relative overflow-hidden rounded-full bg-primary text-primary-foreground px-5 sm:px-7 py-2 sm:py-2.5 text-xs sm:text-sm font-bold tracking-wide transition-transform hover:scale-105 active:scale-95 shadow-[0_2px_15px_rgba(182,141,64,0.3)]"
+            className={`group relative overflow-hidden rounded-full bg-primary text-primary-foreground px-5 sm:px-7 py-2 sm:py-2.5 text-xs sm:text-sm font-bold tracking-wide transition-transform hover:scale-105 active:scale-95 shadow-[0_2px_15px_rgba(182,141,64,0.3)] ${locale === "am" ? "font-amharic" : ""}`}
           >
-            <span className="relative z-10">View Menu</span>
+            <span className="relative z-10">{t("hero.view_menu")}</span>
             <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
           </button>
         </motion.div>

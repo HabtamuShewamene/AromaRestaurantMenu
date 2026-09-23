@@ -6,7 +6,6 @@ import { Star, Plus, Check, Play, ExternalLink } from "lucide-react";
 import { useState, useRef, useCallback } from "react";
 import { MenuItemRecord } from "@/shared/types/app";
 import { useCart } from "@/components/providers/CartProvider";
-
 import { useLanguage } from "@/components/providers/LanguageProvider";
 
 type MenuCardProps = {
@@ -35,6 +34,7 @@ export default function MenuCard({ item, onViewDetails, index = 0 }: MenuCardPro
 
   const rating = item.averageRating || 0;
   const reviewCount = item.totalReviews || 0;
+  // Fallback: if Amharic missing, show English
   const categoryName = typeof item.category === "string" 
     ? item.category 
     : (locale === "am" && item.category.nameAm ? item.category.nameAm : item.category.name);
@@ -144,7 +144,7 @@ export default function MenuCard({ item, onViewDetails, index = 0 }: MenuCardPro
                 className="flex items-center gap-1"
               >
                 <Play className="w-2.5 h-2.5 fill-white text-foreground" />
-                <span className="text-[9px] font-bold text-foreground">Watch</span>
+                <span className="text-[9px] font-bold text-foreground">{t("menu.watch")}</span>
               </button>
             ) : (
               <a
@@ -177,16 +177,16 @@ export default function MenuCard({ item, onViewDetails, index = 0 }: MenuCardPro
           className="absolute top-2 right-2 sm:top-3 sm:right-3 px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-xs sm:text-sm font-bold text-brand-300 font-playfair shadow-md z-20"
           style={{ background: "rgba(8,8,8,0.85)", backdropFilter: "blur(12px)", border: "1px solid rgba(182,141,64,0.35)" }}
         >
-          {item.price.toFixed(0)} Birr
+          {item.price.toFixed(0)} {locale === "am" ? "ብር" : "Birr"}
         </div>
 
         <div className="absolute top-2 left-2 sm:top-3 sm:left-3 flex items-center gap-1 flex-wrap max-w-[65%] z-20">
           <span className={`px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold uppercase tracking-wider ${item.isAvailable ? "bg-green-500/20 text-green-400 border border-green-500/30" : "bg-red-500/20 text-red-400 border border-red-500/30"}`}>
-            {item.isAvailable ? "Available" : "Sold Out"}
+            {item.isAvailable ? t("menu.available") : t("menu.sold_out")}
           </span>
           {item.isFeatured && (
             <span className="hidden xs:inline-block px-1.5 py-0.5 rounded-full text-[8px] font-bold uppercase tracking-wider bg-primary/20 text-brand-300 border border-primary/40">
-              Chef Pick
+              {t("menu.chef_pick")}
             </span>
           )}
         </div>
@@ -206,13 +206,13 @@ export default function MenuCard({ item, onViewDetails, index = 0 }: MenuCardPro
       <div className="flex flex-col flex-1 p-2.5 sm:p-4 pt-2.5 sm:pt-3.5">
         <p className="text-[9px] sm:text-[10px] uppercase tracking-[0.15em] text-primary font-semibold mb-0.5 truncate">{categoryName}</p>
         <h3 className={`font-semibold text-foreground text-xs sm:text-base leading-snug mb-1 line-clamp-1 group-hover:text-brand-300 transition-colors ${locale === "am" ? "font-amharic" : "font-playfair"}`}>{itemName}</h3>
-        <p className="text-[10px] sm:text-xs text-muted-foreground leading-relaxed line-clamp-2 mb-2.5 sm:mb-4 flex-1">{itemDescription}</p>
+        <p className={`text-[10px] sm:text-xs text-muted-foreground leading-relaxed line-clamp-2 mb-2.5 sm:mb-4 flex-1 ${locale === "am" ? "font-amharic" : ""}`}>{itemDescription}</p>
 
         <div className="mt-auto pt-2 sm:pt-3 border-t border-border flex items-center justify-between gap-1.5">
           <button
             type="button"
             onClick={(e) => { e.stopPropagation(); onViewDetails?.(item); }}
-            className="text-[10px] sm:text-xs font-semibold text-muted-foreground hover:text-foreground transition-colors uppercase tracking-wider py-1 px-1 sm:px-2 rounded hover:bg-foreground/5"
+            className={`text-[10px] sm:text-xs font-semibold text-muted-foreground hover:text-foreground transition-colors uppercase tracking-wider py-1 px-1 sm:px-2 rounded hover:bg-foreground/5 ${locale === "am" ? "font-amharic normal-case tracking-normal" : ""}`}
           >
             {t("menu.view_details")}
           </button>
@@ -223,9 +223,9 @@ export default function MenuCard({ item, onViewDetails, index = 0 }: MenuCardPro
             className={`flex items-center justify-center gap-1 px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-lg sm:rounded-xl text-[10px] sm:text-xs font-bold transition-all ${!item.isAvailable ? "bg-zinc-800 text-muted-foreground cursor-not-allowed" : justAdded ? "bg-green-500 text-primary-foreground shadow-[0_0_12px_rgba(34,197,94,0.4)]" : "bg-primary text-primary-foreground hover:bg-primary hover:scale-[1.03] active:scale-95 shadow-[0_2px_10px_rgba(182,141,64,0.25)]"}`}
           >
             {justAdded ? (
-              <><Check className="w-3 h-3 stroke-[2.5]" /><span>Added</span></>
+              <><Check className="w-3 h-3 stroke-[2.5]" /><span className={locale === "am" ? "font-amharic" : ""}>{t("menu.added")}</span></>
             ) : (
-              <><Plus className="w-3 h-3 stroke-[2.5]" /><span>{t("menu.add_to_cart")}</span></>
+              <><Plus className="w-3 h-3 stroke-[2.5]" /><span className={locale === "am" ? "font-amharic" : ""}>{t("menu.add_to_cart")}</span></>
             )}
           </button>
         </div>

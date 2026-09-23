@@ -7,22 +7,24 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useCart } from "@/components/providers/CartProvider";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 
 export default function BottomNavigation() {
   const pathname = usePathname();
   const { data: session } = useSession();
   const { cartCount } = useCart();
+  const { locale, t } = useLanguage();
   const [ripple, setRipple] = useState<string | null>(null);
   const role = (session?.user as { role?: string } | undefined)?.role;
 
   const navItems = [
-    { icon: Home, label: "Home", href: "/" },
-    { icon: UtensilsCrossed, label: "Menu", href: "/menu" },
-    { icon: ShoppingBag, label: "Cart", href: "/cart", badge: cartCount },
-    { icon: ClipboardList, label: "Orders", href: session ? "/orders" : "/login" },
+    { icon: Home, labelKey: "navigation.home", href: "/" },
+    { icon: UtensilsCrossed, labelKey: "navigation.menu", href: "/menu" },
+    { icon: ShoppingBag, labelKey: "navigation.cart", href: "/cart", badge: cartCount },
+    { icon: ClipboardList, labelKey: "navigation.my_orders", href: session ? "/orders" : "/login" },
     {
       icon: role === "ADMIN" ? Shield : User,
-      label: role === "ADMIN" ? "Admin" : session ? "Account" : "Sign In",
+      labelKey: role === "ADMIN" ? "navigation.dashboard" : session ? "navigation.my_orders" : "navigation.login",
       href: role === "ADMIN" ? "/admin/dashboard" : session ? "/orders" : "/login",
     },
   ];
@@ -42,14 +44,15 @@ export default function BottomNavigation() {
       >
         {navItems.map((item) => {
           const Icon = item.icon;
+          const label = t(item.labelKey);
           const isActive =
             item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
 
           return (
             <Link
-              key={item.label}
+              key={item.labelKey}
               href={item.href}
-              onClick={() => handleClick(item.label)}
+              onClick={() => handleClick(item.labelKey)}
               className="relative flex flex-col items-center justify-center w-14 h-14 rounded-2xl group"
             >
               {/* Active background */}
@@ -62,7 +65,7 @@ export default function BottomNavigation() {
               )}
 
               {/* Ripple effect */}
-              {ripple === item.label && (
+              {ripple === item.labelKey && (
                 <motion.div
                   initial={{ scale: 0, opacity: 0.4 }}
                   animate={{ scale: 2.5, opacity: 0 }}
@@ -100,11 +103,11 @@ export default function BottomNavigation() {
 
               {/* Label */}
               <span
-                className={`text-[9px] mt-1 font-medium tracking-tight transition-colors duration-300 ${
+                className={`text-[9px] mt-1 font-medium tracking-tight transition-colors duration-300 ${locale === "am" ? "font-amharic" : ""} ${
                   isActive ? "text-primary font-bold" : "text-muted-foreground group-hover:text-muted-foreground"
                 }`}
               >
-                {item.label}
+                {label}
               </span>
             </Link>
           );

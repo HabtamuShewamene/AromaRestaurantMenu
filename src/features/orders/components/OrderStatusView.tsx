@@ -15,14 +15,17 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { OrderRecord, OrderStatus } from "@/shared/types/app";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 
-const ORDER_STAGES: Array<{ status: OrderStatus; label: string; description: string; icon: any }> = [
-  { status: "NEW", label: "Order Received", description: "Your order has been sent to our kitchen.", icon: Clock },
-  { status: "CONFIRMED", label: "Confirmed", description: "Kitchen reviewed and accepted your order.", icon: CheckCircle2 },
-  { status: "PREPARING", label: "In Preparation", description: "Our culinary artisans are crafting your dishes.", icon: ChefHat },
-  { status: "READY", label: "Ready to Serve", description: "Your dishes are plated and ready.", icon: Bell },
-  { status: "SERVED", label: "Served", description: "Delivered to your table. Enjoy your meal!", icon: UtensilsCrossed },
-  { status: "COMPLETED", label: "Completed", description: "Dining experience completed. Thank you!", icon: Sparkles },
+type OrderStage = { status: OrderStatus; labelKey: string; descKey: string; icon: React.ElementType };
+
+const ORDER_STAGES: OrderStage[] = [
+  { status: "NEW",       labelKey: "order.stages.new_label",       descKey: "order.stages.new_desc",       icon: Clock },
+  { status: "CONFIRMED", labelKey: "order.stages.confirmed_label", descKey: "order.stages.confirmed_desc", icon: CheckCircle2 },
+  { status: "PREPARING", labelKey: "order.stages.preparing_label", descKey: "order.stages.preparing_desc", icon: ChefHat },
+  { status: "READY",     labelKey: "order.stages.ready_label",     descKey: "order.stages.ready_desc",     icon: Bell },
+  { status: "SERVED",    labelKey: "order.stages.served_label",    descKey: "order.stages.served_desc",    icon: UtensilsCrossed },
+  { status: "COMPLETED", labelKey: "order.stages.completed_label", descKey: "order.stages.completed_desc", icon: Sparkles },
 ];
 
 function getStageIndex(status: string) {
@@ -39,6 +42,7 @@ function getStageIndex(status: string) {
 export default function OrderStatusView({ initialOrder }: { initialOrder: OrderRecord }) {
   const [order, setOrder] = useState<OrderRecord>(initialOrder);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const { locale, t } = useLanguage();
 
   // Poll order status every 5 seconds
   useEffect(() => {
@@ -65,9 +69,20 @@ export default function OrderStatusView({ initialOrder }: { initialOrder: OrderR
   const isCancelled = order.status.toUpperCase() === "CANCELLED";
   const currentStageIdx = getStageIndex(order.status);
   const orderRef = order.id.slice(-6).toUpperCase();
+  const priceUnit = locale === "am" ? "ብር" : "ETB";
+
+  const heroTitle = () => {
+    if (isCancelled) return t("order.cancelled");
+    if (order.status.toUpperCase() === "COMPLETED") return t("order.completed");
+    return t("order.preparing");
+  };
+
+  const tableSubtitle = order.tableNumber
+    ? t("order.table_dine_in").replace("{table}", String(order.tableNumber))
+    : t("order.takeaway");
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-8 space-y-8">
+    <div className={`max-w-3xl mx-auto px-4 py-8 space-y-8 ${locale === "am" ? "font-amharic" : ""}`}>
       {/* Top Navigation */}
       <div className="flex items-center justify-between">
         <Link
@@ -75,12 +90,12 @@ export default function OrderStatusView({ initialOrder }: { initialOrder: OrderR
           className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
-          <span>Back to Menu</span>
+          <span>{t("order.back_to_menu")}</span>
         </Link>
         {isRefreshing && (
           <span className="text-[11px] text-muted-foreground flex items-center gap-1.5">
             <span className="w-1.5 h-1.5 rounded-full bg-primary animate-ping" />
-            Live Sync
+            {t("order.live_sync")}
           </span>
         )}
       </div>
@@ -88,19 +103,13 @@ export default function OrderStatusView({ initialOrder }: { initialOrder: OrderR
       {/* Hero Header */}
       <div className="glass-card p-6 sm:p-8 rounded-3xl text-center space-y-3 relative overflow-hidden border border-border shadow-2xl">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-semibold uppercase tracking-wider">
-          Order #{orderRef}
+          {t("order.number")}{orderRef}
         </div>
-        <h1 className="text-3xl sm:text-4xl font-bold text-foreground font-playfair">
-          {isCancelled
-            ? "Order Cancelled"
-            : order.status.toUpperCase() === "COMPLETED"
-            ? "Order Completed"
-            : "We're Preparing Your Order"}
+        <h1 className={`text-3xl sm:text-4xl font-bold text-foreground ${locale === "am" ? "font-amharic" : "font-playfair"}`}>
+          {heroTitle()}
         </h1>
         <p className="text-muted-foreground text-sm max-w-md mx-auto leading-relaxed">
-          {order.tableNumber
-            ? `Table ${order.tableNumber} • Dine-in Experience`
-            : "Takeaway • Pickup Order"}
+          {tableSubtitle}
         </p>
       </div>
 
@@ -108,14 +117,13 @@ export default function OrderStatusView({ initialOrder }: { initialOrder: OrderR
       {!isCancelled ? (
         <div className="p-6 rounded-3xl bg-card border border-border space-y-6">
           <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            Live Kitchen & Serving Progress
+            {t("order.live_progress")}
           </h2>
 
           <div className="space-y-4">
             {ORDER_STAGES.map((stage, idx) => {
               const isPast = idx < currentStageIdx;
               const isCurrent = idx === currentStageIdx;
-              const isFuture = idx > currentStageIdx;
               const Icon = stage.icon;
 
               return (
@@ -148,18 +156,18 @@ export default function OrderStatusView({ initialOrder }: { initialOrder: OrderR
                           isCurrent ? "text-brand-300" : isPast ? "text-foreground" : "text-muted-foreground"
                         }`}
                       >
-                        {stage.label}
+                        {t(stage.labelKey)}
                       </h3>
                       {isCurrent && (
                         <span className="text-[10px] uppercase tracking-wider font-bold text-primary animate-pulse">
-                          Active Stage
+                          {t("order.active_stage")}
                         </span>
                       )}
                       {isPast && (
                         <CheckCircle2 className="w-4 h-4 text-green-400 flex-shrink-0" />
                       )}
                     </div>
-                    <p className="text-xs text-muted-foreground mt-0.5">{stage.description}</p>
+                    <p className="text-xs text-muted-foreground mt-0.5">{t(stage.descKey)}</p>
                   </div>
                 </div>
               );
@@ -169,14 +177,14 @@ export default function OrderStatusView({ initialOrder }: { initialOrder: OrderR
       ) : (
         <div className="p-6 rounded-3xl bg-red-500/10 border border-red-500/20 flex items-center gap-3 text-red-400">
           <XCircle className="w-6 h-6 flex-shrink-0" />
-          <p className="text-sm font-medium">This order was cancelled. Please speak with staff if this was unexpected.</p>
+          <p className="text-sm font-medium">{t("order.cancelled_notice")}</p>
         </div>
       )}
 
       {/* Order Summary Breakdown */}
       <div className="p-6 rounded-3xl bg-card border border-border space-y-4">
         <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-          Ordered Items
+          {t("order.ordered_items")}
         </h2>
 
         <div className="divide-y divide-white/5">
@@ -193,16 +201,16 @@ export default function OrderStatusView({ initialOrder }: { initialOrder: OrderR
                 )}
               </div>
               <span className="font-mono text-muted-foreground font-medium">
-                {item.price * item.quantity > 0 ? `${(item.price * item.quantity).toFixed(2)} ETB` : "Free"}
+                {item.price * item.quantity > 0 ? `${(item.price * item.quantity).toFixed(2)} ${priceUnit}` : t("order.free")}
               </span>
             </div>
           ))}
         </div>
 
         <div className="pt-4 border-t border-border flex items-center justify-between">
-          <span className="font-bold text-foreground text-base">Total</span>
+          <span className="font-bold text-foreground text-base">{t("order.total")}</span>
           <span className="font-mono font-bold text-xl text-primary font-playfair">
-            {order.totalAmount.toFixed(2)} ETB
+            {order.totalAmount.toFixed(2)} {priceUnit}
           </span>
         </div>
       </div>
@@ -214,7 +222,7 @@ export default function OrderStatusView({ initialOrder }: { initialOrder: OrderR
           className="flex-1 py-3.5 px-6 rounded-2xl bg-primary text-primary-foreground font-bold text-sm text-center hover:bg-primary transition-all flex items-center justify-center gap-2"
         >
           <ShoppingBag className="w-4 h-4" />
-          <span>Add More Dishes</span>
+          <span>{t("order.add_more")}</span>
         </Link>
       </div>
     </div>

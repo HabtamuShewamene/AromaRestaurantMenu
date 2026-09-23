@@ -5,7 +5,6 @@ import { X, Plus, Minus, ShoppingBag, Check } from "lucide-react";
 import Image from "next/image";
 import { MenuItemRecord } from "@/shared/types/app";
 import { useCart } from "@/components/providers/CartProvider";
-
 import { useLanguage } from "@/components/providers/LanguageProvider";
 
 type MenuItemDetailProps = {
@@ -21,14 +20,12 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
   const [justAdded, setJustAdded] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
 
-  // Focus trap and Escape-to-close accessibility
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
     };
     window.addEventListener("keydown", handleKeyDown);
     
-    // Auto-focus modal wrapper for screen readers / keyboard nav
     if (modalRef.current) {
       modalRef.current.focus();
     }
@@ -36,13 +33,13 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [onClose]);
 
-  // Handle clicking outside modal to close
   const handleBackdropClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
       onClose();
     }
   };
 
+  // Fallback to English if no Amharic translation
   const categoryName = typeof item.category === "string" 
     ? item.category 
     : (locale === "am" && item.category.nameAm ? item.category.nameAm : item.category.name);
@@ -63,6 +60,8 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
       onClose();
     }, 1200);
   };
+
+  const priceUnit = locale === "am" ? "ብር" : "ETB";
 
   return (
     <div 
@@ -87,10 +86,8 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
             sizes="(max-width: 768px) 100vw, 800px"
             className="object-cover"
           />
-          {/* Gradient fade to blend into background */}
           <div className="absolute inset-0 bg-gradient-to-t from-[#292C2B] via-[#292C2B]/20 to-transparent" />
           
-          {/* Close button layered on top of image */}
           <button
             onClick={onClose}
             className="absolute top-4 right-4 sm:top-5 sm:right-5 z-30 rounded-full bg-background/40 backdrop-blur-md p-2.5 text-foreground/90 hover:bg-background/60 hover:text-foreground hover:scale-105 active:scale-95 transition-all shadow-lg border border-border"
@@ -110,12 +107,11 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
                 <p className="text-[10px] sm:text-xs uppercase tracking-[0.25em] text-primary font-bold mb-1.5">{categoryName}</p>
                 <h2 id="modal-title" className={`text-lg sm:text-2xl font-bold text-foreground leading-tight line-clamp-3 ${locale === "am" ? "font-amharic" : "font-playfair"}`}>{itemName}</h2>
               </div>
-              <p className="text-xl sm:text-3xl font-bold text-primary font-playfair whitespace-nowrap">{item.price.toFixed(2)} ETB</p>
+              <p className="text-xl sm:text-3xl font-bold text-primary font-playfair whitespace-nowrap">{item.price.toFixed(2)} {priceUnit}</p>
             </div>
             
             {/* Rating Summary & Badges */}
             <div className="flex flex-wrap items-center gap-3 pt-1">
-              {/* Mock compact rating summary */}
               <div className="flex items-center gap-1 bg-foreground/5 px-2.5 py-1 rounded-lg border border-border w-fit shadow-inner">
                 <span className="text-primary text-sm leading-none">★</span>
                 <span className="text-foreground text-sm font-bold leading-none">4.8</span>
@@ -129,10 +125,10 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
                     : "bg-red-500/15 text-red-400 border border-red-500/30"
                 }`}
               >
-                {item.isAvailable ? "In Stock" : "Sold Out"}
+                {item.isAvailable ? t("menu.in_stock") : t("menu.sold_out")}
               </span>
               
-              {/* Dietary Tags */}
+              {/* Allergen Tags */}
               {item.allergens?.map((alg, i) => (
                 <span key={i} className="rounded-full px-3 py-1 font-bold text-[10px] sm:text-xs uppercase tracking-wider bg-orange-500/10 text-orange-400 border border-orange-500/20">
                   {alg}
@@ -140,14 +136,14 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
               ))}
             </div>
 
-            <p className="text-muted-foreground text-sm leading-relaxed mt-2">{itemDescription}</p>
+            <p className={`text-muted-foreground text-sm leading-relaxed mt-2 ${locale === "am" ? "font-amharic" : ""}`}>{itemDescription}</p>
           </div>
 
-          {/* Special Requests */}
+          {/* Special Instructions */}
           <div className="pt-4 border-t border-border space-y-3">
             <div className="flex items-center justify-between">
-              <label htmlFor="special-instructions" className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
-                Special Instructions
+              <label htmlFor="special-instructions" className={`text-xs font-bold text-muted-foreground uppercase tracking-wider ${locale === "am" ? "font-amharic normal-case tracking-normal" : ""}`}>
+                {t("menu.special_instructions")}
               </label>
               <span className={`text-[10px] font-bold tracking-wider ${notes.length > 130 ? 'text-red-400' : 'text-muted-foreground'}`}>
                 {notes.length}/150
@@ -158,8 +154,8 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
               value={notes}
               maxLength={150}
               onChange={(e) => setNotes(e.target.value)}
-              placeholder="e.g. Extra hot, no cinnamon, sauce on side..."
-              className="w-full bg-card/80 border border-border rounded-xl px-4 py-3.5 text-sm text-foreground placeholder-zinc-600 outline-none focus:border-primary focus:bg-card transition-colors resize-none h-24 shadow-inner"
+              placeholder={t("menu.instructions_placeholder")}
+              className={`w-full bg-card/80 border border-border rounded-xl px-4 py-3.5 text-sm text-foreground placeholder-zinc-600 outline-none focus:border-primary focus:bg-card transition-colors resize-none h-24 shadow-inner ${locale === "am" ? "font-amharic" : ""}`}
             />
           </div>
         </div>
@@ -167,7 +163,7 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
         {/* Sticky Glassmorphism Footer */}
         <div className="flex-shrink-0 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-primary/20 bg-card/95 backdrop-blur-xl px-5 sm:px-7 py-4 pb-8 sm:pb-5 sm:py-5 z-30 relative">
           
-          {/* Quantity Controls - Large Touch Targets */}
+          {/* Quantity Controls */}
           <div className="flex items-center justify-between w-full sm:w-auto bg-card p-1.5 rounded-2xl border border-border shadow-inner">
             <button
               type="button"
@@ -204,12 +200,12 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
             {justAdded ? (
               <>
                 <Check className="w-5 h-5 sm:w-4 sm:h-4 stroke-[2.5]" />
-                <span>Added to Cart ({totalPrice.toFixed(2)} ETB)</span>
+                <span className={locale === "am" ? "font-amharic" : ""}>{t("menu.added")} ({totalPrice.toFixed(2)} {priceUnit})</span>
               </>
             ) : (
               <>
                 <ShoppingBag className="w-5 h-5 sm:w-4 sm:h-4" />
-                <span>{t("menu.add_to_cart")} • {totalPrice.toFixed(2)} ETB</span>
+                <span className={locale === "am" ? "font-amharic" : ""}>{t("menu.add_to_cart")} • {totalPrice.toFixed(2)} {priceUnit}</span>
               </>
             )}
           </button>
