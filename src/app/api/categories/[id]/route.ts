@@ -20,7 +20,13 @@ export async function PUT(request: NextRequest, context: RouteContext) {
       where: { id },
       data: {
         name: body.name,
+        nameAm: body.nameAm,
         slug: slugify(String(body.slug ?? body.name)),
+        image: body.image,
+        description: body.description,
+        descriptionAm: body.descriptionAm,
+        status: body.status ?? true,
+        orderIndex: body.orderIndex ?? 0,
       },
       include: { menuItems: true },
     });

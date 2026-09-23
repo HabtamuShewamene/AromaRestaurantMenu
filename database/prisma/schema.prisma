@@ -3,7 +3,8 @@ datasource db {
 }
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
 }
 
 model User {
@@ -68,9 +69,11 @@ model TableSession {
 model Category {
   id          String     @id @default(uuid())
   name        String
+  nameAm      String?
   slug        String?    @unique
   image       String?
   description String?
+  descriptionAm String?
   orderIndex  Int        @default(0)
   status      Boolean    @default(true) // true = active, false = disabled
   menuItems   MenuItem[]
@@ -83,7 +86,9 @@ model MenuItem {
   categoryId  String
   category    Category         @relation(fields: [categoryId], references: [id])
   name        String
+  nameAm      String?
   description String?
+  descriptionAm String?
   image       String?
   videoUrl    String?          // TikTok or other video URL for hover preview
   price       Float

@@ -154,7 +154,7 @@ export default function TableManager() {
 
             <div className="bg-white p-6 rounded-2xl mb-6 mx-auto w-max shadow-inner">
               <QRCodeSVG
-                value={`${typeof window !== 'undefined' ? window.location.origin : ''}/table/${selectedQrTable.qrIdentifier || selectedQrTable.number}`}
+                value={`${process.env.NEXT_PUBLIC_APP_URL || (typeof window !== 'undefined' ? window.location.origin : '')}/table/${selectedQrTable.qrIdentifier || selectedQrTable.number}`}
                 size={200}
                 bgColor={"#ffffff"}
                 fgColor={"#000000"}

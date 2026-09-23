@@ -7,11 +7,13 @@ import { signOut, useSession } from "next-auth/react";
 import { useCart } from "@/components/providers/CartProvider";
 import { usePathname } from "next/navigation";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { data: session } = useSession();
   const { cartCount, setIsCartOpen } = useCart();
+  const { locale, setLocale, t } = useLanguage();
   const pathname = usePathname();
   const role = (session?.user as { role?: string } | undefined)?.role;
 
@@ -80,6 +82,13 @@ export default function Navbar() {
             )}
 
             <div className="ml-2 flex items-center gap-3 border-l border-border pl-6">
+              <button
+                onClick={() => setLocale(locale === "en" ? "am" : "en")}
+                className="flex items-center justify-center w-8 h-8 rounded-lg bg-foreground/5 text-xs font-bold hover:bg-primary/10 hover:text-primary transition-colors"
+                title="Toggle Language"
+              >
+                {locale === "en" ? "AM" : "EN"}
+              </button>
               <ThemeToggle />
               
               {/* Cart Button with Dynamic Badge */}
@@ -125,6 +134,12 @@ export default function Navbar() {
 
           {/* Mobile Actions */}
           <div className="flex items-center gap-4 md:hidden">
+            <button
+              onClick={() => setLocale(locale === "en" ? "am" : "en")}
+              className="flex items-center justify-center w-8 h-8 rounded-lg bg-foreground/5 text-xs font-bold hover:bg-primary/10 hover:text-primary transition-colors"
+            >
+              {locale === "en" ? "AM" : "EN"}
+            </button>
             <ThemeToggle />
             <button
               onClick={() => setIsCartOpen(true)}

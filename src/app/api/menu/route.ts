@@ -74,8 +74,10 @@ export async function POST(request: NextRequest) {
     const item = await prisma.menuItem.create({
       data: {
         name: body.name,
+        nameAm: body.nameAm,
         price: body.price,
         description: body.description,
+        descriptionAm: body.descriptionAm,
         categoryId,
         image: body.image,
         isAvailable: body.isAvailable ?? true,

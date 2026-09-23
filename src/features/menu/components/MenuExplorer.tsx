@@ -10,6 +10,7 @@ import SearchBar from "@/features/menu/components/SearchBar";
 import HeroSection from "@/features/menu/components/HeroSection";
 import BottomNavigation from "@/features/menu/components/BottomNavigation";
 import { CategoryRecord, MenuItemRecord } from "@/shared/types/app";
+import { useLanguage } from "@/components/providers/LanguageProvider";
 
 // ─── Skeleton Card ───────────────────────────────────────────────
 function SkeletonCard() {
@@ -43,6 +44,8 @@ export default function MenuExplorer({ showHero = false }: { showHero?: boolean 
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [selectedItem, setSelectedItem] = useState<MenuItemRecord | null>(null);
+  
+  const { locale, t } = useLanguage();
 
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
   const [filters, setFilters] = useState({
@@ -94,18 +97,30 @@ export default function MenuExplorer({ showHero = false }: { showHero?: boolean 
     return () => observer.disconnect();
   }, []);
 
+  // Helper to get localized category name
+  const getCatName = (cat: CategoryRecord | string) => {
+    if (typeof cat === "string") return cat;
+    return locale === "am" && cat.nameAm ? cat.nameAm : cat.name;
+  };
 
   // ── Filtering ──
   const filteredItems = items.filter((item) => {
-    const catName =
-      typeof item.category === "string" ? item.category : item.category.name;
-    const matchesCat = activeCategory === "All" || catName === activeCategory;
+    const catNameEN = typeof item.category === "string" ? item.category : item.category.name;
+    const catNameLocal = getCatName(item.category);
+    
+    const matchesCat = activeCategory === "All" || catNameEN === activeCategory || catNameLocal === activeCategory;
+    
     const q = search.trim().toLowerCase();
+    
+    const itemNameLocal = locale === "am" && item.nameAm ? item.nameAm : item.name;
+    const itemDescLocal = locale === "am" && item.descriptionAm ? item.descriptionAm : (item.description || "");
+
     const matchesSearch =
       q.length === 0 ||
       item.name.toLowerCase().includes(q) ||
-      (item.description ? item.description.toLowerCase().includes(q) : false) ||
-      catName.toLowerCase().includes(q);
+      itemNameLocal.toLowerCase().includes(q) ||
+      itemDescLocal.toLowerCase().includes(q) ||
+      catNameLocal.toLowerCase().includes(q);
 
     if (filters.vegetarian && !item.vegetarian) return false;
     if (filters.vegan && !item.vegan) return false;
@@ -118,13 +133,12 @@ export default function MenuExplorer({ showHero = false }: { showHero?: boolean 
     return matchesCat && matchesSearch;
   });
 
-  const filterCategories = ["All", ...categories.map((c) => c.name)];
+  const filterCategories = [t("menu.all_categories"), ...categories.map((c) => getCatName(c))];
 
   // Group filtered items by category for section headers
   const groupedItems: Record<string, MenuItemRecord[]> = {};
   filteredItems.forEach((item) => {
-    const catName =
-      typeof item.category === "string" ? item.category : item.category.name;
+    const catName = getCatName(item.category);
     if (!groupedItems[catName]) groupedItems[catName] = [];
     groupedItems[catName].push(item);
   });
@@ -132,7 +146,7 @@ export default function MenuExplorer({ showHero = false }: { showHero?: boolean 
   const popularSearches = [...items]
     .sort((a, b) => (b.viewCount || 0) - (a.viewCount || 0))
     .slice(0, 5)
-    .map((item) => item.name);
+    .map((item) => locale === "am" && item.nameAm ? item.nameAm : item.name);
 
   return (
     <div id="menu-explorer" className="relative min-h-screen bg-background">
@@ -163,10 +177,9 @@ export default function MenuExplorer({ showHero = false }: { showHero?: boolean 
                   <h4 className="text-xs font-semibold text-muted-foreground mb-3 uppercase tracking-wider">Properties & Diet</h4>
                   <div className="flex flex-wrap gap-2">
                     {[
-                      { key: 'vegetarian', label: 'Vegetarian', color: 'bg-green-500/10 text-green-400 border-green-500/30' },
-                      { key: 'vegan', label: 'Vegan', color: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30' },
-                      { key: 'spicy', label: 'Spicy', color: 'bg-red-500/10 text-red-400 border-red-500/30' },
-                      { key: 'sugarFree', label: 'Sugar Free', color: 'bg-blue-500/10 text-blue-400 border-blue-500/30' },
+                      { key: 'vegetarian', label: t("menu.vegetarian"), color: 'bg-green-500/10 text-green-400 border-green-500/30' },
+                      { key: 'vegan', label: t("menu.vegan"), color: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30' },
+                      { key: 'spicy', label: t("menu.spicy"), color: 'bg-red-500/10 text-red-400 border-red-500/30' },
                     ].map(prop => (
                       <button
                         key={prop.key}
@@ -228,7 +241,10 @@ export default function MenuExplorer({ showHero = false }: { showHero?: boolean 
           <FilterBar
             categories={filterCategories}
             activeCategory={activeCategory}
-            onSelect={setActiveCategory}
+            onSelect={(cat) => {
+              if (cat === t("menu.all_categories")) setActiveCategory("All");
+              else setActiveCategory(cat);
+            }}
           />
         </div>
       </div>
@@ -293,8 +309,7 @@ export default function MenuExplorer({ showHero = false }: { showHero?: boolean 
                 <div className="flex items-center gap-4 mb-6">
                   <div>
                     <h2
-                      className="text-2xl sm:text-3xl font-bold text-foreground tracking-tight"
-                      style={{ fontFamily: "var(--font-playfair, serif)" }}
+                      className={`text-2xl sm:text-3xl font-bold text-foreground tracking-tight ${locale === "am" ? "font-amharic" : "font-playfair"}`}
                     >
                       {category}
                     </h2>

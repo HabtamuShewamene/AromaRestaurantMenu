@@ -1,9 +1,11 @@
 export type CategoryRecord = {
   id: string;
   name: string;
+  nameAm?: string | null;
   slug?: string | null;
   image?: string | null;
   description?: string | null;
+  descriptionAm?: string | null;
   orderIndex: number;
   status: boolean;
 };
@@ -31,7 +33,9 @@ export type FoodIngredientRecord = {
 export type MenuItemRecord = {
   id: string;
   name: string;
+  nameAm?: string | null;
   description?: string | null;
+  descriptionAm?: string | null;
   price: number;
   image?: string | null;
   videoUrl?: string | null;

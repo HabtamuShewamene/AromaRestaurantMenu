@@ -6,6 +6,8 @@ import Image from "next/image";
 import { MenuItemRecord } from "@/shared/types/app";
 import { useCart } from "@/components/providers/CartProvider";
 
+import { useLanguage } from "@/components/providers/LanguageProvider";
+
 type MenuItemDetailProps = {
   item: MenuItemRecord;
   onClose: () => void;
@@ -13,6 +15,7 @@ type MenuItemDetailProps = {
 
 export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
   const { addToCart } = useCart();
+  const { locale, t } = useLanguage();
   const [quantity, setQuantity] = useState(1);
   const [notes, setNotes] = useState("");
   const [justAdded, setJustAdded] = useState(false);
@@ -40,7 +43,13 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
     }
   };
 
-  const categoryName = typeof item.category === "string" ? item.category : item.category.name;
+  const categoryName = typeof item.category === "string" 
+    ? item.category 
+    : (locale === "am" && item.category.nameAm ? item.category.nameAm : item.category.name);
+    
+  const itemName = locale === "am" && item.nameAm ? item.nameAm : item.name;
+  const itemDescription = locale === "am" && item.descriptionAm ? item.descriptionAm : item.description;
+
   const totalPrice = item.price * quantity;
 
   const canAddToCart = item.isAvailable;
@@ -63,7 +72,7 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
       <div 
         ref={modalRef}
         tabIndex={-1}
-        className="relative flex flex-col w-full max-w-xl max-h-[85vh] overflow-hidden rounded-[2rem] sm:rounded-3xl bg-card shadow-[0_0_40px_rgba(182,141,64,0.15)] border border-primary/20 outline-none"
+        className={`relative flex flex-col w-full max-w-xl max-h-[85vh] overflow-hidden rounded-[2rem] sm:rounded-3xl bg-card shadow-[0_0_40px_rgba(182,141,64,0.15)] border border-primary/20 outline-none ${locale === "am" ? "font-amharic" : ""}`}
         role="dialog"
         aria-modal="true"
         aria-labelledby="modal-title"
@@ -72,7 +81,7 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
         <div className="relative h-48 sm:h-64 w-full flex-shrink-0">
           <Image
             src={item.image || "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800&q=80"}
-            alt={item.name}
+            alt={itemName}
             fill
             priority
             sizes="(max-width: 768px) 100vw, 800px"
@@ -99,7 +108,7 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
             <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2 sm:gap-4">
               <div>
                 <p className="text-[10px] sm:text-xs uppercase tracking-[0.25em] text-primary font-bold mb-1.5">{categoryName}</p>
-                <h2 id="modal-title" className="text-lg sm:text-2xl font-bold text-foreground font-playfair leading-tight line-clamp-3">{item.name}</h2>
+                <h2 id="modal-title" className={`text-lg sm:text-2xl font-bold text-foreground leading-tight line-clamp-3 ${locale === "am" ? "font-amharic" : "font-playfair"}`}>{itemName}</h2>
               </div>
               <p className="text-xl sm:text-3xl font-bold text-primary font-playfair whitespace-nowrap">{item.price.toFixed(2)} ETB</p>
             </div>
@@ -131,7 +140,7 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
               ))}
             </div>
 
-            <p className="text-muted-foreground text-sm leading-relaxed mt-2">{item.description}</p>
+            <p className="text-muted-foreground text-sm leading-relaxed mt-2">{itemDescription}</p>
           </div>
 
           {/* Special Requests */}
@@ -200,7 +209,7 @@ export default function MenuItemDetail({ item, onClose }: MenuItemDetailProps) {
             ) : (
               <>
                 <ShoppingBag className="w-5 h-5 sm:w-4 sm:h-4" />
-                <span>Add to Cart • {totalPrice.toFixed(2)} ETB</span>
+                <span>{t("menu.add_to_cart")} • {totalPrice.toFixed(2)} ETB</span>
               </>
             )}
           </button>

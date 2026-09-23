@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
-import { Inter, Playfair_Display } from "next/font/google";
+import { Inter, Playfair_Display, Noto_Sans_Ethiopic } from "next/font/google";
 import "./globals.css";
 import NextAuthProvider from "@/components/providers/SessionProvider";
 import { CartProvider } from "@/components/providers/CartProvider";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
+import { LanguageProvider } from "@/components/providers/LanguageProvider";
 import CartModal from "@/features/cart/components/CartModal";
 
 const inter = Inter({
@@ -17,6 +18,13 @@ const playfair = Playfair_Display({
   variable: "--font-playfair",
   display: "swap",
   weight: ["400", "500", "600", "700", "800", "900"],
+});
+
+const notoSansEthiopic = Noto_Sans_Ethiopic({
+  subsets: ["ethiopic"],
+  variable: "--font-ethiopic",
+  display: "swap",
+  weight: ["400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
@@ -35,7 +43,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning data-scroll-behavior="smooth">
       <body
         suppressHydrationWarning
-        className={`${inter.variable} ${playfair.variable} font-inter bg-background text-foreground min-h-screen antialiased`}
+        className={`${inter.variable} ${playfair.variable} ${notoSansEthiopic.variable} font-inter bg-background text-foreground min-h-screen antialiased`}
       >
         <ThemeProvider
           attribute="class"
@@ -43,12 +51,14 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <NextAuthProvider>
-            <CartProvider>
-              {children}
-              <CartModal />
-            </CartProvider>
-          </NextAuthProvider>
+          <LanguageProvider>
+            <NextAuthProvider>
+              <CartProvider>
+                {children}
+                <CartModal />
+              </CartProvider>
+            </NextAuthProvider>
+          </LanguageProvider>
         </ThemeProvider>
       </body>
     </html>

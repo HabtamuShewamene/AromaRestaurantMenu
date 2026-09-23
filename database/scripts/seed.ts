@@ -1,5 +1,4 @@
 import { PrismaClient } from "@prisma/client";
-import { PrismaPg } from "@prisma/adapter-pg";
 import bcrypt from "bcryptjs";
 import fs from "fs";
 import path from "path";
@@ -24,9 +23,7 @@ if (!rawConnectionString) {
 }
 
 const connectionString = rawConnectionString.replace(/^["']|["']$/g, "");
-const adapter = new PrismaPg({ connectionString });
-const prisma = new PrismaClient({ adapter });
-
+const prisma = new PrismaClient();
 async function main() {
   console.log("🌱 Starting Aroma Restaurant Phase 1 database seed...");
 

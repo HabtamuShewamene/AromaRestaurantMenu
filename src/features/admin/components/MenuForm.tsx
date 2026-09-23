@@ -13,8 +13,10 @@ type MenuFormProps = {
   submitLabel: string;
   onSubmit: (payload: {
     name: string;
+    nameAm?: string;
     price: number;
     description: string;
+    descriptionAm?: string;
     image: string;
     category?: string;
     categoryName?: string;
@@ -34,8 +36,10 @@ export default function MenuForm({
   onCancel,
 }: MenuFormProps) {
   const [name, setName] = useState(initialValues?.name ?? "");
+  const [nameAm, setNameAm] = useState(initialValues?.nameAm ?? "");
   const [price, setPrice] = useState(initialValues?.price?.toString() ?? "");
   const [description, setDescription] = useState(initialValues?.description ?? "");
+  const [descriptionAm, setDescriptionAm] = useState(initialValues?.descriptionAm ?? "");
   const [image, setImage] = useState(initialValues?.image ?? "");
   const [category, setCategory] = useState(initialCategoryId);
   const [categoryName, setCategoryName] = useState("");
@@ -114,8 +118,10 @@ export default function MenuForm({
 
       await onSubmit({
         name: name.trim(),
+        nameAm: nameAm.trim() || undefined,
         price: Number(price),
         description: description.trim(),
+        descriptionAm: descriptionAm.trim() || undefined,
         image,
         category: category || undefined,
         categoryName: category ? undefined : categoryName.trim() || undefined,
@@ -127,8 +133,10 @@ export default function MenuForm({
       if (!initialValues?.id) {
         // Only clear if creating a new item
         setName("");
+        setNameAm("");
         setPrice("");
         setDescription("");
+        setDescriptionAm("");
         setImage("");
         setCategory("");
         setCategoryName("");
@@ -189,14 +197,24 @@ export default function MenuForm({
           </h3>
           
           <div className="grid gap-5 md:grid-cols-2">
-            <div className="space-y-1.5 md:col-span-2">
-              <label className="text-xs font-semibold text-[#A7ABB0]">Item Name *</label>
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold text-[#A7ABB0]">Item Name (English) *</label>
               <input
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="e.g. Avocado Toast"
                 className="w-full rounded-xl border border-[#3A3D40] bg-[#111111] px-4 py-3 text-sm text-[#F7F7F2] outline-none transition-all focus:border-primary focus:ring-1 focus:ring-primary/50"
                 required
+              />
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold text-[#A7ABB0]">Item Name (Amharic)</label>
+              <input
+                value={nameAm}
+                onChange={(e) => setNameAm(e.target.value)}
+                placeholder="e.g. አቮካዶ ቶስት"
+                className="w-full rounded-xl border border-[#3A3D40] bg-[#111111] px-4 py-3 text-sm text-[#F7F7F2] outline-none transition-all focus:border-primary focus:ring-1 focus:ring-primary/50 font-amharic"
               />
             </div>
 
@@ -243,13 +261,24 @@ export default function MenuForm({
             )}
 
             <div className="space-y-1.5 md:col-span-2">
-              <label className="text-xs font-semibold text-[#A7ABB0]">Description</label>
+              <label className="text-xs font-semibold text-[#A7ABB0]">Description (English)</label>
               <textarea
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                placeholder="Describe the dish..."
-                rows={3}
+                placeholder="Describe the dish in English..."
+                rows={2}
                 className="w-full rounded-xl border border-[#3A3D40] bg-[#111111] px-4 py-3 text-sm text-[#F7F7F2] outline-none transition-all focus:border-primary focus:ring-1 focus:ring-primary/50 resize-none"
+              />
+            </div>
+
+            <div className="space-y-1.5 md:col-span-2">
+              <label className="text-xs font-semibold text-[#A7ABB0]">Description (Amharic)</label>
+              <textarea
+                value={descriptionAm}
+                onChange={(e) => setDescriptionAm(e.target.value)}
+                placeholder="ስለ ምግቡ በአማርኛ ይግለጹ..."
+                rows={2}
+                className="w-full rounded-xl border border-[#3A3D40] bg-[#111111] px-4 py-3 text-sm text-[#F7F7F2] outline-none transition-all focus:border-primary focus:ring-1 focus:ring-primary/50 resize-none font-amharic"
               />
             </div>
           </div>

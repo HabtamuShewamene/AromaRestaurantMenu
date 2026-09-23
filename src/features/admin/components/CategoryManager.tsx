@@ -13,8 +13,10 @@ export default function CategoryManager() {
 
   // Form State
   const [name, setName] = useState("");
+  const [nameAm, setNameAm] = useState("");
   const [image, setImage] = useState("");
   const [description, setDescription] = useState("");
+  const [descriptionAm, setDescriptionAm] = useState("");
   const [status, setStatus] = useState(true);
   const [orderIndex, setOrderIndex] = useState("0");
 
@@ -57,8 +59,10 @@ export default function CategoryManager() {
   const openNewForm = () => {
     setEditingCategory(null);
     setName("");
+    setNameAm("");
     setImage("");
     setDescription("");
+    setDescriptionAm("");
     setStatus(true);
     setOrderIndex("0");
     setIsFormOpen(true);
@@ -67,8 +71,10 @@ export default function CategoryManager() {
   const openEditForm = (category: CategoryRecord) => {
     setEditingCategory(category);
     setName(category.name);
+    setNameAm(category.nameAm ?? "");
     setImage(category.image ?? "");
     setDescription(category.description ?? "");
+    setDescriptionAm(category.descriptionAm ?? "");
     setStatus(category.status ?? true);
     setOrderIndex(category.orderIndex?.toString() ?? "0");
     setIsFormOpen(true);
@@ -86,8 +92,10 @@ export default function CategoryManager() {
 
     const payload = {
       name: name.trim(),
+      nameAm: nameAm.trim() || undefined,
       image: image.trim(),
       description: description.trim(),
+      descriptionAm: descriptionAm.trim() || undefined,
       status,
       orderIndex: parseInt(orderIndex, 10) || 0,
     };
@@ -252,13 +260,23 @@ export default function CategoryManager() {
             <div className="flex-1 overflow-y-auto p-4 md:p-6">
               <form id="category-form" onSubmit={handleSubmit} className="space-y-5">
                 <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-[#A7ABB0]">Name *</label>
+                  <label className="text-xs font-semibold text-[#A7ABB0]">Name (English) *</label>
                   <input value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Main Course" className="w-full rounded-xl border border-[#3A3D40] bg-[#111111] px-4 py-3 text-sm text-[#F7F7F2] outline-none transition-all focus:border-primary" required />
                 </div>
                 
                 <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-[#A7ABB0]">Description (Optional)</label>
+                  <label className="text-xs font-semibold text-[#A7ABB0]">Name (Amharic)</label>
+                  <input value={nameAm} onChange={(e) => setNameAm(e.target.value)} placeholder="e.g. ዋና ምግብ" className="w-full rounded-xl border border-[#3A3D40] bg-[#111111] px-4 py-3 text-sm text-[#F7F7F2] outline-none transition-all focus:border-primary font-amharic" />
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="text-xs font-semibold text-[#A7ABB0]">Description (English)</label>
                   <textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Brief description of this section" rows={2} className="w-full rounded-xl border border-[#3A3D40] bg-[#111111] px-4 py-3 text-sm text-[#F7F7F2] outline-none transition-all focus:border-primary resize-none" />
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="text-xs font-semibold text-[#A7ABB0]">Description (Amharic)</label>
+                  <textarea value={descriptionAm} onChange={(e) => setDescriptionAm(e.target.value)} placeholder="የዚህ ክፍል አጭር መግለጫ" rows={2} className="w-full rounded-xl border border-[#3A3D40] bg-[#111111] px-4 py-3 text-sm text-[#F7F7F2] outline-none transition-all focus:border-primary resize-none font-amharic" />
                 </div>
 
                 <div className="space-y-1.5">

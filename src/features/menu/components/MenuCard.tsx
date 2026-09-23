@@ -7,6 +7,8 @@ import { useState, useRef, useCallback } from "react";
 import { MenuItemRecord } from "@/shared/types/app";
 import { useCart } from "@/components/providers/CartProvider";
 
+import { useLanguage } from "@/components/providers/LanguageProvider";
+
 type MenuCardProps = {
   item: MenuItemRecord & { averageRating?: number; totalReviews?: number };
   onViewDetails?: (item: MenuItemRecord) => void;
@@ -25,6 +27,7 @@ function isPhotoPost(url: string | null | undefined): boolean {
 
 export default function MenuCard({ item, onViewDetails, index = 0 }: MenuCardProps) {
   const { addToCart } = useCart();
+  const { locale, t } = useLanguage();
   const [justAdded, setJustAdded] = useState(false);
   const [showVideo, setShowVideo] = useState(false);
   const [videoLoaded, setVideoLoaded] = useState(false);
@@ -32,7 +35,12 @@ export default function MenuCard({ item, onViewDetails, index = 0 }: MenuCardPro
 
   const rating = item.averageRating || 0;
   const reviewCount = item.totalReviews || 0;
-  const categoryName = typeof item.category === "string" ? item.category : item.category.name;
+  const categoryName = typeof item.category === "string" 
+    ? item.category 
+    : (locale === "am" && item.category.nameAm ? item.category.nameAm : item.category.name);
+    
+  const itemName = locale === "am" && item.nameAm ? item.nameAm : item.name;
+  const itemDescription = locale === "am" && item.descriptionAm ? item.descriptionAm : item.description;
 
   const tiktokId = getTikTokVideoId(item.videoUrl);
   const isPhoto = isPhotoPost(item.videoUrl);
@@ -67,7 +75,7 @@ export default function MenuCard({ item, onViewDetails, index = 0 }: MenuCardPro
       onClick={() => onViewDetails?.(item)}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      className="group relative cursor-pointer overflow-hidden rounded-2xl sm:rounded-[1.75rem] flex flex-col h-full"
+      className={`group relative cursor-pointer overflow-hidden rounded-2xl sm:rounded-[1.75rem] flex flex-col h-full ${locale === "am" ? "font-amharic" : ""}`}
       style={{
         background: "rgba(16,16,16,0.9)",
         backdropFilter: "blur(20px)",
@@ -80,7 +88,7 @@ export default function MenuCard({ item, onViewDetails, index = 0 }: MenuCardPro
       <div className="relative h-32 sm:h-44 md:h-48 overflow-hidden rounded-t-2xl sm:rounded-t-[1.75rem]">
         <Image
           src={item.image || "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800&q=80"}
-          alt={item.name}
+          alt={itemName}
           fill
           sizes="(max-width: 768px) 50vw, 33vw"
           className="object-cover transition-transform duration-700 group-hover:scale-105"
@@ -191,8 +199,8 @@ export default function MenuCard({ item, onViewDetails, index = 0 }: MenuCardPro
 
       <div className="flex flex-col flex-1 p-2.5 sm:p-4 pt-2.5 sm:pt-3.5">
         <p className="text-[9px] sm:text-[10px] uppercase tracking-[0.15em] text-primary font-semibold mb-0.5 truncate">{categoryName}</p>
-        <h3 className="font-semibold text-foreground text-xs sm:text-base leading-snug mb-1 line-clamp-1 font-playfair group-hover:text-brand-300 transition-colors">{item.name}</h3>
-        <p className="text-[10px] sm:text-xs text-muted-foreground leading-relaxed line-clamp-2 mb-2.5 sm:mb-4 flex-1">{item.description}</p>
+        <h3 className={`font-semibold text-foreground text-xs sm:text-base leading-snug mb-1 line-clamp-1 group-hover:text-brand-300 transition-colors ${locale === "am" ? "font-amharic" : "font-playfair"}`}>{itemName}</h3>
+        <p className="text-[10px] sm:text-xs text-muted-foreground leading-relaxed line-clamp-2 mb-2.5 sm:mb-4 flex-1">{itemDescription}</p>
 
         <div className="mt-auto pt-2 sm:pt-3 border-t border-border flex items-center justify-between gap-1.5">
           <button
@@ -200,7 +208,7 @@ export default function MenuCard({ item, onViewDetails, index = 0 }: MenuCardPro
             onClick={(e) => { e.stopPropagation(); onViewDetails?.(item); }}
             className="text-[10px] sm:text-xs font-semibold text-muted-foreground hover:text-foreground transition-colors uppercase tracking-wider py-1 px-1 sm:px-2 rounded hover:bg-foreground/5"
           >
-            Details
+            {t("menu.view_details")}
           </button>
           <button
             type="button"
@@ -211,7 +219,7 @@ export default function MenuCard({ item, onViewDetails, index = 0 }: MenuCardPro
             {justAdded ? (
               <><Check className="w-3 h-3 stroke-[2.5]" /><span>Added</span></>
             ) : (
-              <><Plus className="w-3 h-3 stroke-[2.5]" /><span>Add</span></>
+              <><Plus className="w-3 h-3 stroke-[2.5]" /><span>{t("menu.add_to_cart")}</span></>
             )}
           </button>
         </div>

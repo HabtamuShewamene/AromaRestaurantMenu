@@ -1,0 +1,46 @@
+{
+  "navigation": {
+    "menu": "Menu",
+    "categories": "Categories",
+    "cart": "Cart",
+    "login": "Login",
+    "logout": "Logout",
+    "dashboard": "Dashboard"
+  },
+  "menu": {
+    "our_menu": "Our Menu",
+    "search_placeholder": "Search menu...",
+    "all_categories": "All",
+    "add_to_cart": "Add to Cart",
+    "featured": "Featured",
+    "vegetarian": "Vegetarian",
+    "vegan": "Vegan",
+    "spicy": "Spicy",
+    "view_details": "View Details"
+  },
+  "cart": {
+    "title": "Your Cart",
+    "empty": "Your cart is empty",
+    "total": "Total",
+    "checkout": "Checkout",
+    "place_order": "Place Order",
+    "subtotal": "Subtotal"
+  },
+  "table": {
+    "welcome": "Welcome to Table",
+    "start_session": "Start Ordering",
+    "call_waiter": "Call Waiter",
+    "request_bill": "Request Bill"
+  },
+  "admin": {
+    "add_item": "Add Item",
+    "edit_item": "Edit Item",
+    "name_en": "Name (English)",
+    "name_am": "Name (Amharic)",
+    "desc_en": "Description (English)",
+    "desc_am": "Description (Amharic)",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete"
+  }
+}

@@ -30,7 +30,16 @@ export async function POST(request: NextRequest) {
     const slug = slugify(String(body.slug ?? body.name));
 
     const category = await prisma.category.create({
-      data: { name: body.name, slug, image: body.image },
+      data: {
+        name: body.name,
+        nameAm: body.nameAm,
+        slug,
+        image: body.image,
+        description: body.description,
+        descriptionAm: body.descriptionAm,
+        status: body.status ?? true,
+        orderIndex: body.orderIndex ?? 0,
+      },
     });
 
     return NextResponse.json(category, { status: 201 });

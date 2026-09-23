@@ -1,0 +1,46 @@
+{
+  "navigation": {
+    "menu": "ምናሌ",
+    "categories": "ምድቦች",
+    "cart": "ዘንቢል",
+    "login": "ግባ",
+    "logout": "ውጣ",
+    "dashboard": "ዳሽቦርድ"
+  },
+  "menu": {
+    "our_menu": "የእኛ ምናሌ",
+    "search_placeholder": "ምግብ ይፈልጉ...",
+    "all_categories": "ሁሉም",
+    "add_to_cart": "ወደ ዘንቢል አክል",
+    "featured": "ልዩ",
+    "vegetarian": "የአትክልት",
+    "vegan": "ቪጋን",
+    "spicy": "የሚያቃጥል",
+    "view_details": "ዝርዝር ይመልከቱ"
+  },
+  "cart": {
+    "title": "የእርስዎ ዘንቢል",
+    "empty": "ዘንቢልዎ ባዶ ነው",
+    "total": "ጠቅላላ",
+    "checkout": "ይዘዙ",
+    "place_order": "ትዕዛዝ ያስገቡ",
+    "subtotal": "ንዑስ ድምር"
+  },
+  "table": {
+    "welcome": "እንኳን ደህና መጡ! ጠረጴዛ",
+    "start_session": "ትዕዛዝ ይጀምሩ",
+    "call_waiter": "አስተናጋጅ ይጥሩ",
+    "request_bill": "ሂሳብ ይጠይቁ"
+  },
+  "admin": {
+    "add_item": "አዲስ አክል",
+    "edit_item": "አስተካክል",
+    "name_en": "ስም (በእንግሊዝኛ)",
+    "name_am": "ስም (በአማርኛ)",
+    "desc_en": "መግለጫ (በእንግሊዝኛ)",
+    "desc_am": "መግለጫ (በአማርኛ)",
+    "save": "አስቀምጥ",
+    "cancel": "ተወው",
+    "delete": "ሰርዝ"
+  }
+}

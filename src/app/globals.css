@@ -23,6 +23,7 @@
 
   --font-playfair: "Playfair Display", serif;
   --font-inter: "Inter", sans-serif;
+  --font-ethiopic: "Noto Sans Ethiopic", sans-serif;
 }
 
 @layer base {
@@ -165,6 +166,10 @@
 
 .font-playfair {
   font-family: "Playfair Display", serif;
+}
+
+.font-amharic {
+  font-family: var(--font-ethiopic), "Noto Sans Ethiopic", sans-serif;
 }
 
 /* ── Gradient Backgrounds ── */
