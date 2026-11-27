@@ -11,7 +11,14 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  const token = await getToken({ req: request, secret: process.env.NEXTAUTH_SECRET });
+  const hasSecureCookie = request.cookies.has("__Secure-next-auth.session-token");
+  const token = await getToken({
+    req: request,
+    secret: process.env.NEXTAUTH_SECRET,
+    cookieName: hasSecureCookie
+      ? "__Secure-next-auth.session-token"
+      : "next-auth.session-token",
+  });
 
   if (!token) {
     const loginUrl = new URL("/login", request.url);
